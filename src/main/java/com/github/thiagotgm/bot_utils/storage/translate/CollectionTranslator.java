@@ -138,8 +138,8 @@ public abstract class CollectionTranslator<E,T extends Collection<E>> implements
 	/**
 	 * Decodes the collection from a list-typed Data instance.
 	 * <p>
-	 * The elements are inserted into an instance obtained from {@link #newInstance()},
-	 * in the order that they appear in the data list, using the
+	 * The elements are inserted into an instance obtained from the instance supplier
+	 * specified at construction, in the order that they appear in the data list, using the
 	 * {@link Collection#add(Object) add(E)} method of the collection. If the specific
 	 * collection type being used has some restriction that prevents one or more elements
 	 * from being inserted (i.e. the add(E) call returns <tt>false</tt>), those values

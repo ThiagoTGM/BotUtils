@@ -43,15 +43,16 @@ public class XMLTestHelper {
 	
 	/**
      * Writes a generic element to a byte array using the given translator.<br>
-     * Uses {@link XMLTranslator#write(XMLStreamWriter,T)} with an output that directs to a 
+     * Uses {@link XMLTranslator#write(XMLStreamWriter,Object)
+     * XMLTranslator.write(XMLStreamWriter,T)} with an output that directs to a 
      * ByteArrayOutputStream, returning the bytes that were written.
      *
      * @param elem Element to write.
      * @param translator The translator to write the element with.
+     * @param <T> The type of the element.
      * @return The destination byte array.
      * @throws XMLStreamException if an error happened.
      * @throws IOException if an error happened.
-     * @param <T> The type of the element.
      */
 	public static <T> byte[] toByteArray( T elem, XMLTranslator<T> translator )
 			throws XMLStreamException, IOException {
@@ -89,10 +90,10 @@ public class XMLTestHelper {
      *
      * @param translator The translator to read the element with.
      * @param data The data bytes to read from.
+     * @param <T> The type of the element.
      * @return The read element.
      * @throws XMLStreamException if an error happened.
      * @throws IOException if an error happened.
-     * @param <T> The type of the element.
      */
     public static <T> T fromByteArray( XMLTranslator<T> translator, byte[] data )
     		throws XMLStreamException, IOException {

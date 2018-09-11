@@ -147,7 +147,7 @@ public interface Graph<K,V> {
     V set( V value, List<K> path ) throws UnsupportedOperationException, NullPointerException, IllegalArgumentException;
     
     /**
-     * Varargs version of {@link #set(V, List)}.
+     * Varargs version of {@link #set(Object, List) set(V, List)}.
      *
      * @param value The value to be stored on the path.
      * @param path The sequence of keys that map to the value.
@@ -183,7 +183,7 @@ public interface Graph<K,V> {
 			throws UnsupportedOperationException, NullPointerException, IllegalArgumentException;
 	
 	/**
-     * Varargs version of {@link #add(V, List)}.
+     * Varargs version of {@link #add(Object, List) add(V, List)}.
      *
      * @param value The value to be stored on the path.
      * @param path The sequence of keys that map to the value.

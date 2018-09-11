@@ -58,7 +58,8 @@ import com.github.thiagotgm.bot_utils.utils.Tree;
  * thrown.
  * <p>
  * <b>NOTE:</b> For the trees and maps obtained from this database, whenever an operation is called
- * that changes a value (such as {@link Map#put(Object,V)}, {@link Tree#add(V,List)}, etc),
+ * that changes a value (such as {@link Map#put(Object,Object) Map.put(Object,V)},
+ * {@link Tree#add(Object,List) Tree.add(V,List)}, etc),
  * it is only guaranteed that the <i>current</i> state of the value will be stored. If the
  * value is an object and it is later modified, the value in the database may or may not
  * change to reflect it. As such, it is recommended to set/put the value in the database again
@@ -88,6 +89,8 @@ public interface Database extends Closeable {
 	 * @param treeName The name of the tree.
 	 * @param keyTranslator The translator to use to convert keys into strings.
 	 * @param valueTranslator The translator to use to convert values into strings.
+	 * @param <K> The type of the keys that define connections on the tree.
+	 * @param <V> The type of the values stored in the tree.
 	 * @return The tree.
 	 * @throws NullPointerException if the tree name or either of the translators is null.
 	 * @throws IllegalStateException if the database hasn't been successfully loaded yet or
@@ -96,8 +99,6 @@ public interface Database extends Closeable {
 	 *                                  a tree with the given name already exists and it
 	 *                                  uses incompatible translator types.
 	 * @throws DatabaseException if an error occurred while obtaining the tree.
-	 * @param <K> The type of the keys that define connections on the tree.
-	 * @param <V> The type of the values stored in the tree.
 	 */
 	<K,V> Tree<K,V> getDataTree( String treeName,
 			Translator<K> keyTranslator, Translator<V> valueTranslator )
@@ -110,6 +111,8 @@ public interface Database extends Closeable {
 	 * @param mapName The name of the map.
 	 * @param keyTranslator The translator to use to convert keys into strings.
 	 * @param valueTranslator The translator to use to convert values into strings.
+	 * @param <K> The type of the keys that define connections on the map.
+	 * @param <V> The type of the values stored in the map.
 	 * @return The map.
 	 * @throws NullPointerException If the map name or either of the translators is null.
 	 * @throws IllegalStateException if the database hasn't been successfully loaded yet or
@@ -118,8 +121,6 @@ public interface Database extends Closeable {
 	 *                                  a map with the given name already exists and it
 	 *                                  uses incompatible translator types.
 	 * @throws DatabaseException if an error occurred while obtaining the map.
-	 * @param <K> The type of the keys that define connections on the map.
-	 * @param <V> The type of the values stored in the map.
 	 */
 	<K,V> Map<K,V> getDataMap( String mapName,
 			Translator<K> keyTranslator, Translator<V> valueTranslator )
@@ -218,7 +219,7 @@ public interface Database extends Closeable {
 		 * Initializes an argument that has the given name
 		 * and is a pick between the given options (text input if <tt>null</tt>.
 		 * 
-		 * @param names The parameter name.
+		 * @param name The parameter name.
 		 * @param choices The choices to pick from, or <tt>null</tt> if text input.
 		 */
 		public Parameter( String name, List<String> choices ) {
@@ -243,7 +244,7 @@ public interface Database extends Closeable {
 		 * Initializes an argument that has the given name
 		 * and is a text input.
 		 * 
-		 * @param names The parameter name.
+		 * @param name The parameter name.
 		 */
 		public Parameter( String name ) {
 			
@@ -268,7 +269,7 @@ public interface Database extends Closeable {
 		/**
 		 * Initializes a boolean argument that has the given name.
 		 * 
-		 * @param names The parameter name.
+		 * @param name The parameter name.
 		 * @param yesNo If <tt>true</tt>, the choices will be "yes" and "no".
 		 *              If <tt>false</tt>, they will be "true" and "false".
 		 */

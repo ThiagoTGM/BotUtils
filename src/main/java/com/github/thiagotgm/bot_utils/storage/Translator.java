@@ -33,7 +33,7 @@ public interface Translator<T> {
 	
 	/**
 	 * Used to convert Data to strings (and vice versa) in the default implementations of
-	 * {@link #encode(T)} and {@link #decode(String)}.
+	 * {@link #encode(Object) encode(T)} and {@link #decode(String)}.
 	 */
 	static final Gson GSON = new GsonBuilder().serializeNulls()
 			.registerTypeAdapter( Data.class, new Data.DataAdapter() ).create();
@@ -71,8 +71,8 @@ public interface Translator<T> {
 	/**
 	 * Converts the given object into a String format.
 	 * <p>
-	 * By default, this just encodes the return of {@link #toData(T)} into a
-	 * JSON format. If this is overriden, {@link #decode(String)} must be
+	 * By default, this just encodes the return of {@link #toData(Object) toData(T)}
+	 * into a JSON format. If this is overriden, {@link #decode(String)} must be
 	 * overriden as well.
 	 * 
 	 * @param obj The object to be encoded.

@@ -104,10 +104,10 @@ public class XMLTreeGraph<K,V> extends TreeGraph<K,V> implements XMLGraph<K,V> {
      * 
      * @param keyTranslator The translator for element keys.
      * @param valueTranslator The translator for element values.
-     * @return The constructed tree.
-     * @throws NullPointerException if either translator is <tt>null</tt>.
      * @param <K> The type of the keys.
      * @param <V> The type of the values.
+     * @return The constructed tree.
+     * @throws NullPointerException if either translator is <tt>null</tt>.
      */
     public static <K extends XMLElement,V> XMLTreeGraph<K,V>
     		newTree( XMLElement.Translator<K> keyTranslator, XMLTranslator<V> valueTranslator )
@@ -124,10 +124,10 @@ public class XMLTreeGraph<K,V> extends TreeGraph<K,V> implements XMLGraph<K,V> {
      * 
      * @param keyTranslator The translator for element keys.
      * @param valueTranslator The translator for element values.
-     * @return The constructed tree.
-     * @throws NullPointerException if either translator is <tt>null</tt>.
      * @param <K> The type of the keys.
      * @param <V> The type of the values.
+     * @return The constructed tree.
+     * @throws NullPointerException if either translator is <tt>null</tt>.
      */
     public static <K,V extends XMLElement> XMLTreeGraph<K,V>
 			newTree( XMLTranslator<K> keyTranslator, XMLElement.Translator<V> valueTranslator )
@@ -144,10 +144,10 @@ public class XMLTreeGraph<K,V> extends TreeGraph<K,V> implements XMLGraph<K,V> {
      * 
      * @param keyTranslator The translator for element keys.
      * @param valueTranslator The translator for element values.
-     * @return The constructed tree.
-     * @throws NullPointerException if either translator is <tt>null</tt>.
      * @param <K> The type of the keys.
      * @param <V> The type of the values.
+     * @return The constructed tree.
+     * @throws NullPointerException if either translator is <tt>null</tt>.
      */
     public static <K extends XMLElement,V extends XMLElement> XMLTreeGraph<K,V>
 			newTree( XMLElement.Translator<K> keyTranslator, XMLElement.Translator<V> valueTranslator )

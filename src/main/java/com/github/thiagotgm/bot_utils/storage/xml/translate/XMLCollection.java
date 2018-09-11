@@ -48,6 +48,8 @@ public class XMLCollection<E> extends AbstractXMLCollection<E,Collection<E>> {
      *
      * @param collectionClass The class of collection to instantiate.
      * @param translator The translator to use for the collection elements.
+     * @throws IllegalArgumentException if the given class does not have a functioning no-args
+     *                                  constructor.
      */
     public XMLCollection( Class<? extends Collection<E>> collectionClass, XMLTranslator<E> translator )
     		throws IllegalArgumentException {
@@ -65,7 +67,7 @@ public class XMLCollection<E> extends AbstractXMLCollection<E,Collection<E>> {
      * @param translator The translator to use for the collection elements.
      */
     @SuppressWarnings("unchecked")
-	public XMLCollection( XMLTranslator<E> translator ) throws IllegalArgumentException {
+	public XMLCollection( XMLTranslator<E> translator ) {
     	
     	this( (Class<Collection<E>>) (Class<?>) LinkedList.class, translator );
     	

@@ -34,6 +34,7 @@ import com.github.thiagotgm.bot_utils.utils.Utils;
  * @version 1.0
  * @author ThiagoTGM
  * @since 2017-08-18
+ * @param <T> The type being serialized.
  */
 public class XMLSerializer<T extends Serializable> implements XMLTranslator<T> {
 

@@ -218,6 +218,9 @@ public class DatabaseManager {
 	/**
 	 * Starts up and loads the database.
 	 * 
+	 * @return <tt>true</tt> if the database was loaded successfully.
+	 *         <tt>false</tt> if there was an issue that prevented it from
+	 *         starting up.
 	 * @throws IllegalStateException if the database is currently running.
 	 */
 	public static boolean startup() throws IllegalStateException {
@@ -266,7 +269,6 @@ public class DatabaseManager {
 	 * <p>
 	 * If a database change was requested, it will be performed before the database closes.
 	 * 
-	 * @return The database to use for storage.
 	 * @throws IllegalStateException if the database is not currently running.
 	 */
 	public static synchronized void shutdown() throws IllegalStateException {

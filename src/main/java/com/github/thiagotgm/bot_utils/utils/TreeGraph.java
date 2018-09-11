@@ -810,7 +810,7 @@ public class TreeGraph<K,V> extends AbstractGraph<K,V> implements Tree<K,V>, Ser
     /**
      * Retrieves the set of path-value mappings <i>currently</i> stored in this
      * graph. Changes to the graph are <i>not</i> reflected in the set and vice-versa,
-     * except for the {@link Entry#setValue(V)} method.
+     * except for the {@link Graph.Entry#setValue(Object) Entry.setValue(V)} method.
      * 
      * @return The current entry set.
      */

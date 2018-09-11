@@ -48,6 +48,8 @@ public class XMLList<E> extends AbstractXMLCollection<E,List<E>> {
      *
      * @param listClass The class of list to instantiate.
      * @param translator The translator to use for the list elements.
+     * @throws IllegalArgumentException if the given class does not have a functioning no-args
+     *                                  constructor.
      */
     public XMLList( Class<? extends List<E>> listClass, XMLTranslator<E> translator )
     		throws IllegalArgumentException {

@@ -263,7 +263,7 @@ public class AsyncTools {
      * @param handler The handler to run if an uncaught exception happens.
      * @param daemon Whether the threads to be used should be daemon threads.
      * @return The keyed executor with the given parameters.
-     * @throws IllegalArgumentException if <tt>nThreads <= 0</tt>.
+     * @throws IllegalArgumentException if <tt>nThreads {@literal <}= 0</tt>.
      */
     public static KeyedExecutorService createKeyedThreadPool( int nThreads, ThreadGroup group,
             UncaughtExceptionHandler handler, boolean daemon ) throws IllegalArgumentException {
@@ -297,7 +297,7 @@ public class AsyncTools {
      * @param group The group to place the threads in.
      * @param handler The handler to run if an uncaught exception happens.
      * @return The keyed executor with the given parameters.
-     * @throws IllegalArgumentException if <tt>nThreads <= 0</tt>.
+     * @throws IllegalArgumentException if <tt>nThreads {@literal <}= 0</tt>.
      */
     public static KeyedExecutorService createKeyedThreadPool( int nThreads, ThreadGroup group,
             UncaughtExceptionHandler handler ) throws IllegalArgumentException {

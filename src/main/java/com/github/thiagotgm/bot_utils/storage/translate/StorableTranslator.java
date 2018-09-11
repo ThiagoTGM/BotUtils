@@ -32,6 +32,7 @@ import com.github.thiagotgm.bot_utils.storage.Translator;
  * @version 1.0
  * @author ThiagoTGM
  * @since 2018-09-02
+ * @param <T> The type that is being translated.
  */
 public class StorableTranslator<T extends Storable> implements Translator<T> {
 

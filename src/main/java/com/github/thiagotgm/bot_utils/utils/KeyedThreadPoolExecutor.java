@@ -54,7 +54,7 @@ public class KeyedThreadPoolExecutor extends AbstractExecutorService implements 
 	 * 
 	 * @param nThreads The number of threads that the executor should use.
 	 * @param threadFactory The factory to obtain threads from.
-	 * @throws IllegalArgumentException if <tt>nThreads <= 0</tt>.
+	 * @throws IllegalArgumentException if <tt>nThreads {@literal <}= 0</tt>.
 	 */
 	public KeyedThreadPoolExecutor( int nThreads, ThreadFactory threadFactory )
 			throws IllegalArgumentException {

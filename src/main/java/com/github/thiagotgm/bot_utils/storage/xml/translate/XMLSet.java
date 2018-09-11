@@ -49,6 +49,8 @@ public class XMLSet<E extends XMLElement> extends AbstractXMLCollection<E,Set<E>
      *
      * @param setClass The class of set to instantiate.
      * @param translator The translator to use for the set elements.
+     * @throws IllegalArgumentException if the given class does not have a functioning no-args
+     *                                  constructor.
      */
     public XMLSet( Class<? extends Set<E>> setClass, XMLTranslator<E> translator )
     		throws IllegalArgumentException {
@@ -66,7 +68,7 @@ public class XMLSet<E extends XMLElement> extends AbstractXMLCollection<E,Set<E>
      * @param translator The translator to use for the set elements.
      */
     @SuppressWarnings("unchecked")
-	public XMLSet( XMLTranslator<E> translator ) throws IllegalArgumentException {
+	public XMLSet( XMLTranslator<E> translator ) {
     	
     	this( (Class<Set<E>>) (Class<?>) HashSet.class, translator );
     	

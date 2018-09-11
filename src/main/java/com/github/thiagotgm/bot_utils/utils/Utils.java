@@ -197,7 +197,8 @@ public abstract class Utils {
      * translated using the given XML translator. Uses the
      * {@link #DEFAULT_ENCODING default character encoding}.
      * <p>
-     * Same as calling {@link #writeXMLDocument(OutputStream, T, XMLTranslator, String)} with
+     * Same as calling {@link #writeXMLDocument(OutputStream, Object, XMLTranslator, String)
+     * writeXMLDocument(OutputStream, T, XMLTranslator, String)} with
      * fourth parameter {@value #DEFAULT_ENCODING}.
      *
      * @param out The stream to write to.
@@ -261,6 +262,7 @@ public abstract class Utils {
      * @param translator The translator that will decode the document's content.
      * @param encoding The character encoding of the stream.
      * @param <T> The type of element that will be read.
+     * @return The read element.
      * @throws XMLStreamException if an error is encountered while reading.
      */
     public static <T> T readXMLDocument( InputStream in, XMLTranslator<T> translator, String encoding )
@@ -288,8 +290,8 @@ public abstract class Utils {
      *
      * @param in The stream to read to.
      * @param translator The translator that will decode the document's content.
-     * @param encoding The character encoding of the stream.
      * @param <T> The type of element that will be read.
+     * @return The read element.
      * @throws XMLStreamException if an error is encountered while reading.
      */
     public static <T> T readXMLDocument( InputStream in, XMLTranslator<T> translator )
@@ -312,6 +314,7 @@ public abstract class Utils {
      * @param translator The translator that will decode the document's content.
      * @param encoding The character encoding of the stream.
      * @param <T> The type of XML element that will be read.
+     * @return The read element.
      * @throws XMLStreamException if an error is encountered while reading.
      */
     public static <T extends XMLElement> T readXMLDocument( InputStream in, XMLElement.Translator<T> translator,
@@ -336,8 +339,8 @@ public abstract class Utils {
      *
      * @param in The stream to read to.
      * @param translator The translator that will decode the document's content.
-     * @param encoding The character encoding of the stream.
      * @param <T> The type of XML element that will be read.
+     * @return The read element.
      * @throws XMLStreamException if an error is encountered while reading.
      */
     public static <T extends XMLElement> T readXMLDocument( InputStream in, XMLElement.Translator<T> translator )
@@ -359,6 +362,7 @@ public abstract class Utils {
      * @param content The element that will read the document's content.
      * @param encoding The character encoding of the stream.
      * @param <T> The type of the XML element.
+     * @return The read element (the <tt>content</tt> argument).
      * @throws XMLStreamException if an error is encountered while reading.
      */
     public static <T extends XMLElement> T readXMLDocument( InputStream in, T content, String encoding )
@@ -376,8 +380,8 @@ public abstract class Utils {
      * Reads an XML document from a stream, where the content of the document is to be read
      * by the given XMLElement. Uses the {@link #DEFAULT_ENCODING default character encoding}.
      * <p>
-     * Same as calling {@link #readXMLDocument(InputStream, T, String)} with third parameter
-     * {@value #DEFAULT_ENCODING}.
+     * Same as calling {@link #readXMLDocument(InputStream, XMLTranslator, String)} with
+     * third parameter {@value #DEFAULT_ENCODING}.
      * <p>
      * If there is any content after what is read by the given XMLElement, that extra content
      * is ignored. This means that the stream will always be read until the end of the document
@@ -386,6 +390,7 @@ public abstract class Utils {
      * @param in The stream to read to.
      * @param content The element that will read the document's content.
      * @param <T> The type of the XML element.
+     * @return The read element (the <tt>content</tt> argument).
      * @throws XMLStreamException if an error is encountered while reading.
      */
     public static <T extends XMLElement> T readXMLDocument( InputStream in, T content )
@@ -469,7 +474,11 @@ public abstract class Utils {
      * Character used to mark the beginning of special expressions in
      * sanitized strings.
      */
-    public static final String SPECIAL_CHARACTER = "&";
+    public static final char SPECIAL_CHARACTER = '&';
+    /**
+     * Needs to exist so javadoc stops fucking over itself.
+     */
+    private static final String SPECIAL_CHARACTER_S = SPECIAL_CHARACTER + "";
     /**
      * Expression that marks an occurrence of {@value #SPECIAL_CHARACTER} in a 
      * sanitized string.
@@ -510,7 +519,7 @@ public abstract class Utils {
 		} else if ( str.isEmpty() ) { // Empty string.
 			return EMPTY_MARKER;
 		} else { // Regular string.
-    		return str.replace( SPECIAL_CHARACTER, SPECIAL_CHARACTER_MARKER ) // Replace special char.
+    		return str.replace( SPECIAL_CHARACTER_S, SPECIAL_CHARACTER_MARKER ) // Replace special char.
     				  .replace( SEPARATOR, SEPARATOR_MARKER ); // Replace separator.
 		}
     	
@@ -531,7 +540,7 @@ public abstract class Utils {
 			return "";
 		} else { // Regular string.
 			return str.replace( SEPARATOR_MARKER, SEPARATOR ) // Restore separator.
-					  .replace( SPECIAL_CHARACTER_MARKER, SPECIAL_CHARACTER ); // Restore special char.
+					  .replace( SPECIAL_CHARACTER_MARKER, SPECIAL_CHARACTER_S ); // Restore special char.
 		}
     	
     }

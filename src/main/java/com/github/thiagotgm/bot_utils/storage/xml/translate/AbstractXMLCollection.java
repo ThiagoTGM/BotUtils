@@ -52,6 +52,8 @@ public abstract class AbstractXMLCollection<E,T extends Collection<E>> implement
      *
      * @param collectionClass The class of collection to instantiate.
      * @param translator The translator to use for the collection elements.
+     * @throws IllegalArgumentException if the given class does not have a functioning no-args
+     *                                  constructor.
      */
     public AbstractXMLCollection( Class<? extends T> collectionClass, XMLTranslator<E> translator )
     		throws IllegalArgumentException {

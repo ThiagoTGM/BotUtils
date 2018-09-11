@@ -33,6 +33,8 @@ import com.google.common.collect.HashBiMap;
  * @version 1.0
  * @author ThiagoTGM
  * @since 2018-08-09
+ * @param <K> Type of keys in the cache.
+ * @param <V> Type of values stored in the cache.
  */
 public class Cache<K,V> {
 	
