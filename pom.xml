@@ -1,0 +1,183 @@
+<?xml version="1.0"?>
+
+<!--
+  ~     This file is part of BotUtils.
+  ~
+  ~     BotUtils is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU Lesser General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     BotUtils is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU Lesser General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU Lesser General Public License
+  ~     along with BotUtils.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+  
+<project
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+    xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <groupId>com.github.ThiagoTGM</groupId>
+    <artifactId>BotUtils</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+    
+    <name>BotUtils</name>
+    <url>https://github.com/ThiagoTGM/BotUtils</url>
+    <description>Assorted tools and utilities for Discord bots that use the Discord4J library.</description>
+    
+    <properties>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.testTarget>1.8</maven.compiler.testTarget>
+        <maven.compiler.testSource>1.8</maven.compiler.testSource>
+        <discord4J.version>2.10.1</discord4J.version> <!-- Version of Discord4J being used -->
+
+    </properties>
+
+    <licenses>
+
+        <license>
+            <name>GNU LGPLv3 License</name>
+            <url>https://www.gnu.org/licenses/lgpl-3.0.en.html</url>
+            <distribution>repo</distribution>
+        </license>
+
+    </licenses>
+    
+    <repositories>
+
+        <repository>
+            <id>jcenter</id>
+            <url>http://jcenter.bintray.com</url>
+        </repository>
+
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+
+    </repositories>
+
+    <dependencyManagement>
+        <dependencies>
+        
+            <dependency>
+                <groupId>com.amazonaws</groupId>
+                <artifactId>aws-java-sdk-bom</artifactId>
+                <version>1.11.327</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            
+        </dependencies>
+    </dependencyManagement>
+    
+    <dependencies>
+        
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.25</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.1.7</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.austinv11</groupId>
+            <artifactId>Discord4J</artifactId>
+            <version>${discord4J.version}</version>
+        </dependency>
+    
+        <dependency>
+            <groupId>com.fasterxml.woodstox</groupId>
+            <artifactId>woodstox-core</artifactId>
+            <version>5.0.3</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>23.0</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-dynamodb</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.5</version>
+        </dependency>
+        
+    </dependencies>
+    
+    <build>
+
+        <plugins>
+        
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.4</version>
+                <executions>
+
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+
+                            <goal>jar</goal>
+
+                        </goals>
+                        <configuration>
+                            <additionalparam>-Xdoclint:none</additionalparam>
+                        </configuration>
+                    </execution>
+
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+
+                            <goal>jar</goal>
+
+                        </goals>
+                    </execution>
+
+                </executions>
+            </plugin>
+
+        </plugins>
+
+    </build>
+    
+</project>
