@@ -29,6 +29,9 @@ import com.github.thiagotgm.bot_utils.utils.TreeGraph;
 
 /**
  * Extension of the tree graph that is also capable of being stored in an XML format.
+ * <p>
+ * The tree will support <tt>null</tt> keys (elements in the path)
+ * and values if the used translators do.
  *
  * @version 1.0
  * @author ThiagoTGM
@@ -183,7 +186,9 @@ public class XMLTreeGraph<K,V> extends TreeGraph<K,V> implements XMLGraph<K,V> {
         }
         
         K key = null;
+        boolean foundKey = false;
         V value = null;
+        boolean hasValue = false;
         Collection<Node> children = new LinkedList<>();
         
         boolean reading = false;
@@ -206,21 +211,23 @@ public class XMLTreeGraph<K,V> extends TreeGraph<K,V> implements XMLGraph<K,V> {
                             break;
                             
                         case KEY_TAG: // Node's key.
-                            if ( key != null ) {
+                            if ( foundKey ) {
                                 throw new XMLStreamException( "More than one key found." );
                             }
                             reading = true; // Move to start of key element.
                             while ( in.next() != XMLStreamConstants.START_ELEMENT );
                             key = keyTranslator.read( in );
+                            foundKey = true;
                             break;
                             
                         case VALUE_TAG: // Node's value.
-                            if ( value != null ) {
+                            if ( hasValue ) {
                                 throw new XMLStreamException( "More than one value found." );
                             }
                             reading = true; // Move to start of value element.
                             while ( in.next() != XMLStreamConstants.START_ELEMENT );
                             value = valueTranslator.read( in );
+                            hasValue = true;
                             break;
                             
                         default: // Unrecognized.
@@ -238,7 +245,8 @@ public class XMLTreeGraph<K,V> extends TreeGraph<K,V> implements XMLGraph<K,V> {
                                         "Reached end of node while an element was being read." );
                             } else { // Done reading.
                             	try {
-                            		return new Node( key, value, children );
+                            		return hasValue ? new Node( key, value, children ) :
+                            			              new Node( key, children );
                             	} catch ( IllegalArgumentException e ) {
                             		throw new XMLStreamException(
                             				"Read multiple children nodes with the same key" );
@@ -246,17 +254,17 @@ public class XMLTreeGraph<K,V> extends TreeGraph<K,V> implements XMLGraph<K,V> {
                             }
                             
                         case KEY_TAG:
-                            if ( key == null ) {
+                            if ( !foundKey ) {
                                 throw new XMLStreamException(
-                                        "Reached end of key element without a value." );
+                                        "Reached end of key element without starting it." );
                             }
                             reading = false;
                             break;
                             
                         case VALUE_TAG:
-                            if ( value == null ) {
+                            if ( !hasValue ) {
                                 throw new XMLStreamException(
-                                        "Reached end of value element without a value." );
+                                        "Reached end of value element without starting it." );
                             }
                             nMappings++; // Read a value, so one mapping found.
                             reading = false;
@@ -335,13 +343,13 @@ public class XMLTreeGraph<K,V> extends TreeGraph<K,V> implements XMLGraph<K,V> {
 
         out.writeStartElement( NODE_TAG );
         
-        if ( node.getKey() != null ) { // Write key if there is one.
+        if ( node != root ) { // Write key if not root.
             out.writeStartElement( KEY_TAG );
             keyTranslator.write( out, node.getKey() );
             out.writeEndElement();
         }
         
-        if ( node.getValue() != null ) { // Write value if there is one.
+        if ( node.hasValue() ) { // Write value if there is one.
             out.writeStartElement( VALUE_TAG );
             valueTranslator.write( out, node.getValue() );
             out.writeEndElement();

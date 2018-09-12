@@ -181,25 +181,6 @@ public class TreeGraphTest {
     }
     
     @Test
-    public void testExceptions() {
-
-        try {
-            graph.add( null, "i" );
-            fail( "Should have thrown an exception." );
-        } catch ( NullPointerException e ) {
-            // Expected.
-        }
-        
-        try {
-            graph.set( null, "i" );
-            fail( "Should have thrown an exception." );
-        } catch ( NullPointerException e ) {
-            // Expected.
-        }
-        
-    }
-    
-    @Test
     public void testSerialize() {
 
         String encoded = Utils.serializableToString( graph );

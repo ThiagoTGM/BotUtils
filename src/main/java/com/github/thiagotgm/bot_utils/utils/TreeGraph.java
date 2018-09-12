@@ -1211,6 +1211,32 @@ public class TreeGraph<K,V> extends AbstractGraph<K,V> implements Tree<K,V>, Ser
 			this.hasValue = false;
 
 		}
+		
+		/**
+		 * Constructs a Node with the given key and children, but no value.
+		 *
+		 * @param key The key of the node. 
+		 * @param children The initial children of the node, If <tt>null</tt>, the
+		 *                 node is initialized with no children (same as if given an
+		 *                 empty Collection).
+		 * @throws IllegalArgumentException if there are two or more children in the given
+		 *                                  Collection with the same key.
+		 */
+		public Node( K key, Collection<Node> children ) throws IllegalArgumentException {
+			
+			this.key = key;
+			
+			if ( children != null ) { // Received children. 
+				for ( Node child : children ) { // Add all children.
+					
+					if ( this.children.put( child.getKey(), child ) != null ) {
+						throw new IllegalArgumentException( "Multiple children with the same key." );
+					}
+					
+				}
+			}
+			
+		}
 
 		/**
 		 * Constructs a Node with the given value and key, and no children.
@@ -1237,19 +1263,9 @@ public class TreeGraph<K,V> extends AbstractGraph<K,V> implements Tree<K,V>, Ser
 		 */
 		public Node( K key, V value, Collection<Node> children ) throws IllegalArgumentException {
 			
-			this.key = key;
+			this( key, children );
 			this.value = value;
 			this.hasValue = true;
-			
-			if ( children != null ) { // Received children. 
-				for ( Node child : children ) { // Add all children.
-					
-					if ( this.children.put( child.getKey(), child ) != null ) {
-						throw new IllegalArgumentException( "Multiple children with the same key." );
-					}
-					
-				}
-			}
 			
 		}
 		
