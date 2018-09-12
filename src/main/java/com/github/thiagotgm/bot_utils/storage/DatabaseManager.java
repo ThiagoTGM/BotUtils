@@ -49,11 +49,19 @@ public class DatabaseManager {
 	private static final String DB_TYPE_SETTING = "Database Service";
 	private static final String DB_ARGS_SETTING = "Database Args";
 	
+	/**
+	 * Types of databases supported by the manager.
+	 * 
+	 * @version 1.0
+	 * @author ThiagoTGM
+	 * @since 2018-08-08
+	 */
 	public enum DatabaseType {
 		
 		/** Stores data in local XML files. */
 		XML( "Local XML Files", () -> { return new XMLDatabase(); } ),
 		
+		/** Stores data in a DynamoDB backed (AWS or local). */
 		DYNAMO_DB( "DynamoDB (AWS)", () -> { return new DynamoDBDatabase(); } );
 		
 		private final String name;
@@ -223,7 +231,7 @@ public class DatabaseManager {
 	 *         starting up.
 	 * @throws IllegalStateException if the database is currently running.
 	 */
-	public static boolean startup() throws IllegalStateException {
+	public static synchronized boolean startup() throws IllegalStateException {
 		
 		if ( db != null ) {
 			throw new IllegalStateException( "Database currently running." );
@@ -254,7 +262,7 @@ public class DatabaseManager {
 	 * @return The database to use for storage.
 	 * @throws IllegalStateException if the database is not currently running.
 	 */
-	public static Database getDatabase() throws IllegalStateException {
+	public static synchronized Database getDatabase() throws IllegalStateException {
 		
 		if ( db == null ) {
 			throw new IllegalStateException( "Database not currently running." );

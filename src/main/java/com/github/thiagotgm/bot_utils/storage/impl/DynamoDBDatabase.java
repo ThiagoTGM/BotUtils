@@ -144,6 +144,20 @@ public class DynamoDBDatabase extends TableDatabase {
 		
 	}
 
+	/**
+	 * Loads the database.
+	 * <p>
+	 * The parameters are, in this order:
+	 * <ul>
+	 * 	<li>Whether to use a local DynamoDB instance ("yes" or "no"). If "no", then the AWS service is used.</li>
+	 *  <li>If using a local instance, the port where the local instance is connected to. If using AWS, the
+	 *      Access Key of the user to connect with.</li>
+	 *  <li>If using AWS, the Secret Key of the user to connect with. If local, this argument is ignored (but
+	 *      should still be present. An empty string is fine).</li>
+	 *  <li>If using AWS, the region to connect to. Must be the name of one of the values of the {@link Regions}
+	 *      enum. If local, this argument is ignored (but should still be present. An empty string is fine).</li>
+	 * </ul>
+	 */
 	@Override
 	public synchronized boolean load( List<String> args ) throws IllegalStateException, IllegalArgumentException {
 		

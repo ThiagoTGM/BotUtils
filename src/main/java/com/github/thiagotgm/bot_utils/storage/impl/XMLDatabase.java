@@ -85,6 +85,9 @@ public class XMLDatabase extends AbstractDatabase implements Saveable {
 		
 	}
 
+	/**
+	 * Loads the database. The only argument is the path where the data files are stored.
+	 */
 	@Override
 	public synchronized boolean load( List<String> args ) throws IllegalStateException, IllegalArgumentException {
 
