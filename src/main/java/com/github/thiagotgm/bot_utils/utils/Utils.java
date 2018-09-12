@@ -487,7 +487,12 @@ public abstract class Utils {
     /**
      * Character used to join lists of strings.
      */
-    public static final String SEPARATOR = ":";
+    public static final char SEPARATOR = ':';
+    /**
+     * Did it for {@link #SPECIAL_CHARACTER}, might as well keep it
+     * consistent.
+     */
+    private static final String SEPARATOR_S = SEPARATOR + "";
     /**
      * Expression that marks an occurrence of {@value #SEPARATOR} in a 
      * sanitized string.
@@ -520,7 +525,7 @@ public abstract class Utils {
 			return EMPTY_MARKER;
 		} else { // Regular string.
     		return str.replace( SPECIAL_CHARACTER_S, SPECIAL_CHARACTER_MARKER ) // Replace special char.
-    				  .replace( SEPARATOR, SEPARATOR_MARKER ); // Replace separator.
+    				  .replace( SEPARATOR_S, SEPARATOR_MARKER ); // Replace separator.
 		}
     	
     }
@@ -539,7 +544,7 @@ public abstract class Utils {
 		} else if ( str.equals( EMPTY_MARKER ) ) { // Empty string.
 			return "";
 		} else { // Regular string.
-			return str.replace( SEPARATOR_MARKER, SEPARATOR ) // Restore separator.
+			return str.replace( SEPARATOR_MARKER, SEPARATOR_S ) // Restore separator.
 					  .replace( SPECIAL_CHARACTER_MARKER, SPECIAL_CHARACTER_S ); // Restore special char.
 		}
     	
@@ -563,7 +568,7 @@ public abstract class Utils {
     		sanitized.add( sanitize( elem ) );
     		
     	}
-    	return String.join( SEPARATOR, sanitized ); // Join sanitized strings.
+    	return String.join( SEPARATOR_S, sanitized ); // Join sanitized strings.
     	
     }
     
@@ -575,7 +580,7 @@ public abstract class Utils {
      */
     public static List<String> decodeList( String str ) {
     	
-    	List<String> sanitized = Arrays.asList( str.split( SEPARATOR ) ); // Split sanitized strings.
+    	List<String> sanitized = Arrays.asList( str.split( SEPARATOR_S ) ); // Split sanitized strings.
     	List<String> list = new ArrayList<>( sanitized.size() );
     	for ( String elem : sanitized ) { // Un-sanitize each element.
     		
