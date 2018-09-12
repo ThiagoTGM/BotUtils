@@ -105,7 +105,8 @@ public abstract class AbstractGraph<K,V> implements Graph<K,V> {
             
             Entry<?,?> entry = (Entry<?,?>) obj;
             return this.getPath().equals( entry.getPath() ) &&
-                   this.getValue().equals( entry.getValue() );
+                 ( this.getValue() == null ? entry.getValue() == null :
+                	                         this.getValue().equals( entry.getValue() ) );
             
         }
         

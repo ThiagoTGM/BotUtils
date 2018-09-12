@@ -25,9 +25,8 @@ import java.util.Set;
 
 /**
  * Represents a graph that links sequences of keys to values. The empty
- * path may or may not be valid depending on implementation.
- * <p>
- * Does not allow storing <tt>null</tt> values.
+ * path may or may not be valid depending on implementation. It is also up to
+ * the implementation whether <tt>null</tt> values are allowed.
  *
  * @version 1.0
  * @author ThiagoTGM
@@ -46,11 +45,7 @@ public interface Graph<K,V> {
 	 * @return <tt>true</tt> if there is a mapping in the graph with such
 	 *         a path. <tt>false</tt> otherwise.
 	 */
-	default boolean containsPath( List<K> path ) {
-		
-		return get( path ) != null;
-		
-	}
+	boolean containsPath( List<K> path );
 	
 	/**
 	 * Varargs version of {@link #containsPath(List)}.
@@ -80,10 +75,16 @@ public interface Graph<K,V> {
      * <p>
      * A mapping will be matched if, for the corresponding values <tt>p</tt>
      * and <tt>m</tt> at each step in the path and mapping,
-     * <tt>p==null ? m==null : p.equals(m)</tt>. 
+     * <tt>p==null ? m==null : p.equals(m)</tt>.
+     * <p>
+     * The return value will be <tt>null</tt> if no mapping exists for the given path.
+     * However, if the implementation being used allows <tt>null</tt> values, then
+     * a return value of <tt>null</tt> does not necessarily indicate that there is
+     * no mapping, it may just be the value <tt>null</tt>. In that situation,
+     * {@link #containsPath(List)} should be used to differentiate those cases.
      *
      * @param path The sequence of keys that map to the value.
-     * @return The value linked to the given path, or null if there is none.
+     * @return The value linked to the given path, or <tt>null</tt> if there is none.
      * @throws IllegalArgumentException if the path is empty but such a path
      *         is not valid under the current implementation.
      */
@@ -93,7 +94,7 @@ public interface Graph<K,V> {
 	 * Varargs version of {@link #get(List)}.
 	 * 
 	 * @param path The sequence of keys that map to the value.
-     * @return The value linked to the given path, or null if there is none.
+     * @return The value linked to the given path, or <tt>null</tt> if there is none.
      * @throws IllegalArgumentException if the path is empty but such a path
      *         is not valid under the current implementation.
 	 */
@@ -134,17 +135,25 @@ public interface Graph<K,V> {
      * Maps a value to a sequence of keys, replacing the value currently mapped
      * to the path, if any.<br>
      * Optional operation.
+     * <p>
+     * The return value will be <tt>null</tt> if no mapping existed for the given path.
+     * However, if the implementation being used allows <tt>null</tt> values, then
+     * a return value of <tt>null</tt> does not necessarily indicate that there was
+     * no mapping, it may just be the value <tt>null</tt>. In that situation,
+     * {@link #containsPath(List)} should be used beforehand to differentiate those cases.
      *
      * @param value The value to be stored on the path.
      * @param path The sequence of keys that map to the value.
      * @return The value previously mapped to that path, or <tt>null</tt> if there
      *         was none.
      * @throws UnsupportedOperationException if the set operation is not supported by this graph.
-     * @throws NullPointerException if the value given is null.
+     * @throws NullPointerException if the value given is <tt>null</tt>, and the current implementation
+     *                              does not allow <tt>null</tt> values.
      * @throws IllegalArgumentException if the path is empty but such a path
      *         is not valid under the current implementation.
      */
-    V set( V value, List<K> path ) throws UnsupportedOperationException, NullPointerException, IllegalArgumentException;
+    V set( V value, List<K> path )
+    		throws UnsupportedOperationException, NullPointerException, IllegalArgumentException;
     
     /**
      * Varargs version of {@link #set(Object, List) set(V, List)}.
@@ -154,7 +163,8 @@ public interface Graph<K,V> {
      * @return The value previously mapped to that path, or <tt>null</tt> if there
      *         was none.
      * @throws UnsupportedOperationException if the set operation is not supported by this graph.
-     * @throws NullPointerException if the value given is null.
+     * @throws NullPointerException if the value given is <tt>null</tt>, and the current implementation
+     *                              does not allow <tt>null</tt> values.
      * @throws IllegalArgumentException if the path is empty but such a path
      *         is not valid under the current implementation.
      */
@@ -175,7 +185,8 @@ public interface Graph<K,V> {
      * @return <tt>true</tt> if the value was added to the graph.<br>
      *         <tt>false</tt> if there is already a value mapped to the given path.
      * @throws UnsupportedOperationException if the add operation is not supported by this graph.
-     * @throws NullPointerException if the value given is null.
+     * @throws NullPointerException if the value given is <tt>null</tt>, and the current implementation
+     *                              does not allow <tt>null</tt> values.
      * @throws IllegalArgumentException if the path is empty but such a path
      *         is not valid under the current implementation.
      */
@@ -190,7 +201,8 @@ public interface Graph<K,V> {
      * @return <tt>true</tt> if the value was added to the graph.<br>
      *         <tt>false</tt> if there is already a value mapped to the given path.
      * @throws UnsupportedOperationException if the add operation is not supported by this graph.
-     * @throws NullPointerException if the value given is null.
+     * @throws NullPointerException if the value given is <tt>null</tt>, and the current implementation
+     *                              does not allow <tt>null</tt> values.
      * @throws IllegalArgumentException if the path is empty but such a path
      *         is not valid under the current implementation.
      */
@@ -204,6 +216,12 @@ public interface Graph<K,V> {
     /**
      * Removes a mapping from this graph.<br>
      * Optional operation.
+     * <p>
+     * The return value will be <tt>null</tt> if no mapping existed for the given path.
+     * However, if the implementation being used allows <tt>null</tt> values, then
+     * a return value of <tt>null</tt> does not necessarily indicate that there was
+     * no mapping, it may just be the value <tt>null</tt>. In that situation,
+     * {@link #containsPath(List)} should be used beforehand to differentiate those cases.
      *
      * @param path The sequence of keys that map to the value to be removed.
      * @return The removed value, or <tt>null</tt> if there is no mapping for the
@@ -391,7 +409,8 @@ public interface Graph<K,V> {
          *
          * @param value The value to set for this entry.
          * @return The previous value.
-         * @throws NullPointerException if the value given is null.
+         * @throws NullPointerException if the value given is <tt>null</tt>, and the current
+         *                              implementation does not allow <tt>null</tt> values.
          */
         @Override
         V setValue( V value ) throws NullPointerException;

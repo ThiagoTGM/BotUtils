@@ -33,7 +33,8 @@ import java.util.Set;
 import java.util.Stack;
 
 /**
- * Implementation of the {@link Tree} interface. The root node (empty path) is accessible.
+ * Implementation of the {@link Tree} interface. The root node (empty path) is accessible
+ * and <tt>null</tt> values are allowed.
  * <p>
  * Can only be serialized properly if all the values stored are also Serializable.
  *
@@ -217,6 +218,14 @@ public class TreeGraph<K,V> extends AbstractGraph<K,V> implements Tree<K,V>, Ser
     }
     
     @Override
+    public boolean containsPath( List<K> path ) {
+		
+    	Node node = getDescendant( path );
+        return ( node == null ) ? false : node.hasValue();
+		
+	}
+    
+    @Override
     public V get( List<K> path ) {
         
         Node node = getDescendant( path );
@@ -246,11 +255,7 @@ public class TreeGraph<K,V> extends AbstractGraph<K,V> implements Tree<K,V>, Ser
     }
     
     @Override
-    public V set( V value, List<K> path ) throws NullPointerException {
-        
-        if ( value == null ) {
-            throw new NullPointerException( "Value cannot be null." );
-        }
+    public V set( V value, List<K> path ) {
         
         V old = getOrCreateDescendant( path ).setValue( value );
         if ( old == null ) { // There wasn't a mapping to this path yet,
@@ -261,11 +266,7 @@ public class TreeGraph<K,V> extends AbstractGraph<K,V> implements Tree<K,V>, Ser
     }
     
     @Override
-    public boolean add( V value, List<K> path ) throws NullPointerException {
-        
-        if ( value == null ) {
-            throw new NullPointerException( "Value cannot be null." );
-        }
+    public boolean add( V value, List<K> path ) {
         
         Node node = getOrCreateDescendant( path );
         if ( node.getValue() != null ) {
@@ -293,15 +294,14 @@ public class TreeGraph<K,V> extends AbstractGraph<K,V> implements Tree<K,V>, Ser
             
         }
         
-        V value = cur.getValue(); // Store the value of the node of the full path.
-        if ( value == null ) {
+        if ( !cur.hasValue() ) {
             return null; // There is already no value for this path.
         }
-        cur.setValue( null ); // Delete its value.
+        V value = cur.removeValue(); // Delete its value.
         
         for ( int i = path.size() - 1; i >= 0; i-- ) { // Cleans up any nodes that became irrelevant.
             
-            if ( ( cur.getValue() == null ) && cur.getChildren().isEmpty() ) {
+            if ( !cur.hasValue() && cur.getChildren().isEmpty() ) {
                 cur = nodes.pop(); // Node has no value or children now, so delete it.
                 cur.removeChild( path.get( i ) );
             } else {
@@ -673,7 +673,7 @@ public class TreeGraph<K,V> extends AbstractGraph<K,V> implements Tree<K,V>, Ser
 				if ( contains( o ) ) {
 					@SuppressWarnings("unchecked")
 					V value = (V) o; // Being in graph implies right type.
-					remove( root.findValue( value, new Stack<K>() ) );
+					TreeGraph.this.remove( root.findValue( value, new Stack<K>() ) );
 					return true; // Removed entry.
 				} else {
 					return false; // Not contained in graph.
@@ -1060,13 +1060,17 @@ public class TreeGraph<K,V> extends AbstractGraph<K,V> implements Tree<K,V>, Ser
 				StringBuilder builder = new StringBuilder();
 				
 				builder.append( '[' );
+				boolean hasElem = false;
 				for ( Entry<K,V> elem : this ) {
 					
 					builder.append( elem.toString() );
 					builder.append( ", " );
+					hasElem = true;
 					
 				}
-				builder.delete( builder.length() - 2, builder.length() );
+				if ( hasElem ) {
+					builder.delete( builder.length() - 2, builder.length() );
+				}
 				builder.append( ']' );
 				
 				return builder.toString();
@@ -1090,6 +1094,57 @@ public class TreeGraph<K,V> extends AbstractGraph<K,V> implements Tree<K,V>, Ser
         
         this.root = new Node(); // Delete all nodes.
         this.nMappings = 0; // Reset counter.
+        
+    }
+    
+    /**
+     * Writes the state of this instance to a stream.
+     *
+     * @param out The stream to write data to.
+     * @throws IOException if there is an error while writing the state.
+     */
+    private void writeObject( java.io.ObjectOutputStream out ) throws IOException {
+        
+    	out.writeObject( root );
+    	out.writeInt( nMappings );
+        
+    }
+    
+    /**
+     * Reads the state of this instance from a stream.
+     *
+     * @param in The stream to read data from.
+     * @throws IOException if there is an error while reading the state.
+     * @throws ClassNotFoundException if the class of a serialized value object cannot
+     *                                be found.
+     * @see #writeObject(java.io.ObjectOutputStream)
+     */
+    @SuppressWarnings("unchecked")
+	private void readObject( java.io.ObjectInputStream in )
+            throws IOException, ClassNotFoundException {
+    	
+    	try { // Make a copy so the outer reference is set correctly.
+            this.root = new Node( (Node) in.readObject() );
+        } catch ( ClassCastException e ) {
+            throw new IOException( "Deserialized node value is not of the expected type.", e );
+        }
+    	this.nMappings = in.readInt();
+        
+    }
+    
+    /**
+     * Initializes instance data when this class is needed for deserialization
+     * but there is no data available.
+     * <p>
+     * Key and value are initialized to null, and the map of children is empty.
+     *
+     * @throws ObjectStreamException if an error occurred.
+     */
+    @SuppressWarnings( "unused" )
+    private void readObjectNoData() throws ObjectStreamException {
+        
+        this.root = new Node();
+        this.nMappings = 0;
         
     }
     
@@ -1118,18 +1173,29 @@ public class TreeGraph<K,V> extends AbstractGraph<K,V> implements Tree<K,V>, Ser
 		 * Value stored inside this Node.
 		 */
 		protected V value;
+		
+		/**
+		 * Whether this node has a value.
+		 */
+		protected boolean hasValue;
 
 		/**
 		 * Children nodes of this Node.
 		 */
 		protected Map<K,Node> children;
+		
+		{
+			
+			this.children = new HashMap<>();
+			
+		}
 
 		/**
-		 * Constructs a Node with no value, key, or children.
+		 * Constructs a Node with no value or children, and the key <tt>null</tt>.
 		 */
 		public Node() {
 
-			this( null );
+			this( (K) null );
 
 		}
 
@@ -1140,7 +1206,9 @@ public class TreeGraph<K,V> extends AbstractGraph<K,V> implements Tree<K,V>, Ser
 		 */
 		public Node( K key ) {
 
-			this( key, null );
+			this.key = key;
+			this.value = null;
+			this.hasValue = false;
 
 		}
 
@@ -1171,7 +1239,7 @@ public class TreeGraph<K,V> extends AbstractGraph<K,V> implements Tree<K,V>, Ser
 			
 			this.key = key;
 			this.value = value;
-			this.children = new HashMap<>();
+			this.hasValue = true;
 			
 			if ( children != null ) { // Received children. 
 				for ( Node child : children ) { // Add all children.
@@ -1181,6 +1249,28 @@ public class TreeGraph<K,V> extends AbstractGraph<K,V> implements Tree<K,V>, Ser
 					}
 					
 				}
+			}
+			
+		}
+		
+		/**
+		 * Instantiates a node that is a copy of the given nodes.
+		 * <p>
+		 * This is a deep copy, so children nodes will also be copies (not just
+		 * the same references).
+		 * 
+		 * @param n The node to copy.
+		 */
+		public Node( Node n ) {
+			
+			this.key = n.key;
+			this.value = n.value;
+			this.hasValue = n.hasValue;
+			
+			for ( Map.Entry<K,Node> child : n.children.entrySet() ) {
+				
+				this.children.put( child.getKey(), new Node( child.getValue() ) );
+				
 			}
 			
 		}
@@ -1198,6 +1288,10 @@ public class TreeGraph<K,V> extends AbstractGraph<K,V> implements Tree<K,V>, Ser
         
         /**
          * Retrieves the value of the node.
+         * <p>
+         * <b>NOTE:</b> A return value of <tt>null</tt> does not necessarily indicate
+         * the lack of a value, it can just be the value <tt>null</tt>.
+         * {@link #hasValue()} should be used to determine if this node has a value.
          *
          * @return The value of the node, or <tt>null</tt> if none.
          */
@@ -1208,7 +1302,22 @@ public class TreeGraph<K,V> extends AbstractGraph<K,V> implements Tree<K,V>, Ser
         }
         
         /**
+         * Determines whether this node currently stores a value.
+         * 
+         * @return <tt>true</tt> if this node is storing a value.
+         */
+        public boolean hasValue() {
+        	
+        	return hasValue;
+        	
+        }
+        
+        /**
          * Sets the value of the node.
+         * <p>
+         * <b>NOTE:</b> A return value of <tt>null</tt> does not necessarily indicate
+         * that no value existed, it can just be the value <tt>null</tt>.
+         * {@link #hasValue()} should be used beforehand to determine if this node has a value.
          *
          * @param value The new value of the node.
          * @return The previous value of the node, or <tt>null</tt> if none.
@@ -1217,6 +1326,25 @@ public class TreeGraph<K,V> extends AbstractGraph<K,V> implements Tree<K,V>, Ser
             
             V oldValue = this.value;
             this.value = value;
+            this.hasValue = true; // Has a value now.
+            return oldValue;
+            
+        }
+        
+        /**
+         * Removes the value of the node.
+         * <p>
+         * <b>NOTE:</b> A return value of <tt>null</tt> does not necessarily indicate
+         * that no value existed, it can just be the value <tt>null</tt>.
+         * {@link #hasValue()} should be used beforehand to determine if this node has a value.
+         *
+         * @return The previous value of the node, or <tt>null</tt> if none.
+         */
+        public V removeValue() {
+            
+            V oldValue = this.value;
+            this.value = null;
+            this.hasValue = false; // Does not have a value now.
             return oldValue;
             
         }
@@ -1320,19 +1448,15 @@ public class TreeGraph<K,V> extends AbstractGraph<K,V> implements Tree<K,V>, Ser
          *             root of the full tree).
          * @return The path to the node that contains the given value, or <tt>null</tt>
          *         if there is no node in this subtree with that value.
-         * @throws NullPointerException if value is <tt>null</tt>.
          */
-        public List<K> findValue( V value, Stack<K> path ) throws NullPointerException {
+        public List<K> findValue( V value, Stack<K> path ) {
         	
-        	if ( value == null ) {
-        		throw new NullPointerException( "Value to find cannot be null." );
-        	}
-        	
-        	if ( getKey() != null ) {
+        	if ( this != root ) { // Root doesn't have a path.
                 path.push( getKey() ); // Add this node's path.
             }
             
-            if ( value.equals( getValue() ) ) { // This node has the value.
+        	// This node has the value.
+            if ( hasValue && ( value == null ? getValue() == null : value.equals( getValue() ) ) ) {
                 return new ArrayList<>( path ); // Return current path.
             }
             
@@ -1346,7 +1470,7 @@ public class TreeGraph<K,V> extends AbstractGraph<K,V> implements Tree<K,V>, Ser
                 
             }
             
-            if ( getKey() != null ) {
+            if ( this != root ) {
                 path.pop(); // Remove this node's path.
             }
             
@@ -1364,11 +1488,11 @@ public class TreeGraph<K,V> extends AbstractGraph<K,V> implements Tree<K,V>, Ser
          */
         public void getEntries( Set<Entry<K,V>> entries, Stack<K> path ) {
             
-            if ( getKey() != null ) {
+            if ( this != root ) { // Root doesn't have a path.
                 path.push( getKey() ); // Add this node's path.
             }
             
-            if ( getValue() != null ) { // This node represents a mapping.
+            if ( hasValue() ) { // This node represents a mapping.
                 entries.add( new TreeGraphEntry( path, this ) );
             }
             
@@ -1379,7 +1503,7 @@ public class TreeGraph<K,V> extends AbstractGraph<K,V> implements Tree<K,V>, Ser
                 
             }
             
-            if ( getKey() != null ) {
+            if ( this != root ) {
                 path.pop(); // Remove this node's path.
             }
             
@@ -1399,17 +1523,21 @@ public class TreeGraph<K,V> extends AbstractGraph<K,V> implements Tree<K,V>, Ser
         private void writeObject( java.io.ObjectOutputStream out ) throws IOException {
             
             if ( this.key != null ) {
-                out.writeBoolean( true ); // Mark that node has a key.
+                out.writeBoolean( true ); // Mark that node has a non-null key.
                 out.writeObject( key ); // Write the key.
             } else {
-                out.writeBoolean( false ); // Mark that node does not have a key.
+                out.writeBoolean( false ); // Mark that node has a null key.
             }
-            if ( this.value != null ) {
-                out.writeBoolean( true ); // Mark that node has a value.
-                out.writeObject( this.value ); // Write the value.
-            } else {
-                out.writeBoolean( false ); // Mark that node does not have a value.
+            out.writeBoolean( this.hasValue ); // Mark whether node has a value.
+            if ( this.hasValue ) {
+	            if ( this.value != null ) {
+	                out.writeBoolean( true ); // Mark that node has a non-null value.
+	                out.writeObject( this.value ); // Write the value.
+	            } else {
+	                out.writeBoolean( false ); // Mark that node has a null value.
+	            }
             }
+            
             
             /* Write children */
             Collection<Node> children = getChildren();
@@ -1434,7 +1562,7 @@ public class TreeGraph<K,V> extends AbstractGraph<K,V> implements Tree<K,V>, Ser
         private void readObject( java.io.ObjectInputStream in )
                 throws IOException, ClassNotFoundException {
             
-            if ( in.readBoolean() ) { // Check if a key is stored.
+            if ( in.readBoolean() ) { // Non-null key.
                 try {
                     @SuppressWarnings( "unchecked" )
                     K key = (K) in.readObject();
@@ -1442,15 +1570,22 @@ public class TreeGraph<K,V> extends AbstractGraph<K,V> implements Tree<K,V>, Ser
                 } catch ( ClassCastException e ) {
                     throw new IOException( "Deserialized node key is not of the expected type.", e );
                 }
+            } else { // Null key.
+            	this.key = null;
             }
-            if ( in.readBoolean() ) { // Check if a value is stored.
-                try {
-                    @SuppressWarnings( "unchecked" )
-                    V value = (V) in.readObject();
-                    this.value = value;
-                } catch ( ClassCastException e ) {
-                    throw new IOException( "Deserialized node value is not of the expected type.", e );
-                }
+            this.hasValue = in.readBoolean(); // Check if a value is stored.
+            if ( this.hasValue ) { 
+            	if ( in.readBoolean() ) { // Non-null value.
+	                try {
+	                    @SuppressWarnings( "unchecked" )
+	                    V value = (V) in.readObject();
+	                    this.value = value;
+	                } catch ( ClassCastException e ) {
+	                    throw new IOException( "Deserialized node value is not of the expected type.", e );
+	                }
+            	} else { // Null value.
+            		this.value = null;
+            	}
             }
             
             /* Read children */
@@ -1486,6 +1621,7 @@ public class TreeGraph<K,V> extends AbstractGraph<K,V> implements Tree<K,V>, Ser
             this.children = new HashMap<>();
             this.key = null;
             this.value = null;
+            this.hasValue = false;
             
         }
         
@@ -1525,10 +1661,6 @@ public class TreeGraph<K,V> extends AbstractGraph<K,V> implements Tree<K,V>, Ser
         @Override
         public V setValue( V value ) throws NullPointerException {
 
-            if ( value == null ) {
-                throw new NullPointerException( "Value cannot be null." );
-            }
-            
             return node.setValue( value );
             
         }
