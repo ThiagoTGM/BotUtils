@@ -123,8 +123,7 @@ public class Settings implements SaveManager.Saveable {
             input.close();
             LOG.info( "Loaded bot properties." );
         } catch ( FileNotFoundException e ) {
-            LOG.error(
-                    "Properties file not found. A new one will be created." );
+            LOG.warn( "Properties file not found. A new one will be created." );
         } catch ( IOException e ) {
             LOG.error( "Error reading properties file.", e );
             System.exit( FILE_ERROR );

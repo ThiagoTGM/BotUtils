@@ -18,6 +18,7 @@
 package com.github.thiagotgm.bot_utils.storage.impl;
 
 import static org.junit.Assert.*;
+import static org.junit.Assume.assumeTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -78,7 +79,7 @@ public class DynamoDBDatabaseTest {
 	public void setUp() {
 		
 		db = new DynamoDBDatabase();
-		assertTrue( db.load( Arrays.asList( "yes", "8000", "", "" ) ) );
+		assumeTrue( db.load( Arrays.asList( "yes", "8000", "", "" ) ) );
 		map = db.newMap( "BlakeBotTest", new StringTranslator(), new DataTranslator() );
 		
 	}
