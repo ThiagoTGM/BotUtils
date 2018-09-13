@@ -20,6 +20,8 @@ package com.github.thiagotgm.bot_utils.storage.xml.translate;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
+import java.util.function.Supplier;
+
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
@@ -36,15 +38,38 @@ import com.github.thiagotgm.bot_utils.storage.xml.XMLTranslator;
  * @param <E> The type of elements being stored in the collection.
  * @param <T> The specific collection type.
  */
-public abstract class AbstractXMLCollection<E,T extends Collection<E>> implements XMLTranslator<T> {
+public abstract class AbstractXMLCollection<E,T extends Collection<E>> extends AbstractXMLTranslator<T> {
 
     /**
      * UID that represents this class.
      */
     private static final long serialVersionUID = -5857045540745890723L;
     
-    private final Constructor<? extends T> collectionCtor;
+    private final Supplier<? extends T> instanceSupplier;
     private final XMLTranslator<E> translator;
+    
+    /**
+     * Instantiates an collection translator that uses instances given by the given supplier and
+     * uses the given translator for the elements.
+     *
+     * @param instanceSupplier The supplier to use to get instances.
+     * @param translator The translator to use for the collection elements.
+     * @throws NullPointerException if either argument is <tt>null</tt>.
+     */
+    public AbstractXMLCollection( Supplier<? extends T> instanceSupplier, XMLTranslator<E> translator )
+    		throws NullPointerException {
+    	
+    	if ( instanceSupplier == null ) {
+    		throw new NullPointerException( "Instance supplier cannot be null." );
+    	}
+    	if ( translator == null ) {
+    		throw new NullPointerException( "Translator cannot be null." );
+    	}
+        
+    	this.instanceSupplier = instanceSupplier;
+        this.translator = translator;
+        
+    }
 
     /**
      * Instantiates an collection translator that uses instances of the given colletion class and
@@ -54,14 +79,25 @@ public abstract class AbstractXMLCollection<E,T extends Collection<E>> implement
      * @param translator The translator to use for the collection elements.
      * @throws IllegalArgumentException if the given class does not have a functioning no-args
      *                                  constructor.
+     * @throws NullPointerException if either argument is <tt>null</tt>.
      */
     public AbstractXMLCollection( Class<? extends T> collectionClass, XMLTranslator<E> translator )
-    		throws IllegalArgumentException {
+    		throws IllegalArgumentException, NullPointerException {
+    	
+    	if ( collectionClass == null ) {
+    		throw new NullPointerException( "Collection class cannot be null." );
+    	}
+    	if ( translator == null ) {
+    		throw new NullPointerException( "Translator cannot be null." );
+    	}
         
+    	Constructor<? extends T> collectionCtor;
+    	
         try { // Get collection ctor.
 			collectionCtor = collectionClass.getConstructor();
 		} catch ( NoSuchMethodException | SecurityException e ) {
-			throw new IllegalArgumentException( "Collection class does not have a public no-args constructor.", e );
+			throw new IllegalArgumentException(
+					"Collection class does not have a public no-args constructor.", e );
 		}
         
         try { // Check that ctor works.
@@ -72,36 +108,25 @@ public abstract class AbstractXMLCollection<E,T extends Collection<E>> implement
 					"Collection class cannot be initialized using no-arg constructor.", e );
 		}
         
+        this.instanceSupplier = () -> {
+        	
+        	try { // Use the ctor.
+    			return collectionCtor.newInstance();
+    		} catch ( InstantiationException | IllegalAccessException | IllegalArgumentException
+    				| InvocationTargetException e ) {
+    			throw new IllegalArgumentException(
+    					"Collection class cannot be initialized using no-arg constructor.", e );
+    		}
+        	
+        };
         this.translator = translator;
         
     }
     
-    /**
-     * Retrieves the tag that identifies the collection object.
-     *
-     * @return The object tag.
-     */
-    public abstract String getTag();
-
-    /**
-     * Reads the elements of the collection from an XML stream. The collection is cleared before
-     * reading, so any pre-existing elements are removed.
-     */
     @Override
-    public T read( XMLStreamReader in ) throws XMLStreamException {
+    public T readContent( XMLStreamReader in ) throws XMLStreamException {
 
-        if ( ( in.getEventType() != XMLStreamConstants.START_ELEMENT ) ||
-              !in.getLocalName().equals( getTag() ) ) {
-            throw new XMLStreamException( "Did not find element start." );
-        }
-        
-        T collection;
-		try {
-			collection = collectionCtor.newInstance();
-		} catch ( InstantiationException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException e ) {
-			throw new XMLStreamException( "Could not create new element instance.", e );
-		}
+        T collection = instanceSupplier.get();
         while ( in.hasNext() ) { // Read each element.
             
             switch ( in.next() ) {
@@ -125,15 +150,13 @@ public abstract class AbstractXMLCollection<E,T extends Collection<E>> implement
     }
 
     @Override
-    public void write( XMLStreamWriter out, T instance ) throws XMLStreamException {
+    public void writeContent( XMLStreamWriter out, T instance ) throws XMLStreamException {
 
-        out.writeStartElement( getTag() );
-        for ( E elem : instance ) { // Write each element.
+    	for ( E elem : instance ) { // Write each element.
             
             translator.write( out, elem );
             
         }
-        out.writeEndElement();
 
     }
 

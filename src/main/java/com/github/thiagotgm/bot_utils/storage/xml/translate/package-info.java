@@ -17,6 +17,9 @@
 
 /**
  * Provides XML translators for multiple types that may be used in a bot.
+ * <p>
+ * Unless specified otherwise, all translators provided in this package
+ * support encoding/decoding <tt>null</tt> instances.
  *
  * @version 1.0
  * @author ThiagoTGM

@@ -25,7 +25,6 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 
-import com.github.thiagotgm.bot_utils.storage.xml.XMLTranslator;
 import com.github.thiagotgm.bot_utils.utils.Utils;
 
 /**
@@ -36,7 +35,7 @@ import com.github.thiagotgm.bot_utils.utils.Utils;
  * @since 2017-08-18
  * @param <T> The type being serialized.
  */
-public class XMLSerializer<T extends Serializable> implements XMLTranslator<T> {
+public class XMLSerializer<T extends Serializable> extends AbstractXMLTranslator<T> {
 
     /**
      * UID that represents this class.
@@ -47,14 +46,16 @@ public class XMLSerializer<T extends Serializable> implements XMLTranslator<T> {
      * Local XML name that identifies this element.
      */
     public static final String SERIALIZED_TAG = "serialized";
+    
+    @Override
+    public String getTag() {
+    	
+    	return SERIALIZED_TAG;
+    	
+    }
 
     @Override
-    public T read( XMLStreamReader in ) throws XMLStreamException {
-        
-        if ( ( in.getEventType() != XMLStreamConstants.START_ELEMENT ) ||
-                in.getLocalName().equals( SERIALIZED_TAG ) ) { // Check start tag.
-            throw new XMLStreamException( "Did not find element start." );
-        }
+    public T readContent( XMLStreamReader in ) throws XMLStreamException {
         
         String encoded = in.getElementText(); // Get encoded text.
         
@@ -74,15 +75,13 @@ public class XMLSerializer<T extends Serializable> implements XMLTranslator<T> {
     }
     
     @Override
-    public void write( XMLStreamWriter out, T instance ) throws XMLStreamException {
+    public void writeContent( XMLStreamWriter out, T instance ) throws XMLStreamException {
         
-        out.writeStartElement( SERIALIZED_TAG );
         try { // Encode into a Serializable string.
             out.writeCharacters( Utils.encode( instance ) );
         } catch ( NotSerializableException e ) {
             throw new XMLStreamException( "Element could not be serialized for encoding." );
         }
-        out.writeEndElement();
         
     }
 

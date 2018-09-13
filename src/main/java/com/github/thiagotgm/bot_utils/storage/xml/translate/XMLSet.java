@@ -19,6 +19,7 @@ package com.github.thiagotgm.bot_utils.storage.xml.translate;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import com.github.thiagotgm.bot_utils.storage.xml.XMLElement;
 import com.github.thiagotgm.bot_utils.storage.xml.XMLTranslator;
@@ -42,6 +43,21 @@ public class XMLSet<E extends XMLElement> extends AbstractXMLCollection<E,Set<E>
      * Local name of the XML element.
      */
     public static final String TAG = "set";
+    
+    /**
+     * Instantiates an set translator that uses instances given by the given supplier and
+     * uses the given translator for the elements.
+     *
+     * @param instanceSupplier The supplier to use to get instances.
+     * @param translator The translator to use for the set elements.
+     * @throws NullPointerException if either argument is <tt>null</tt>.
+     */
+    public XMLSet( Supplier<? extends Set<E>> instanceSupplier, XMLTranslator<E> translator )
+    		throws NullPointerException {
+    	
+    	super( instanceSupplier, translator );
+        
+    }
     
     /**
      * Instantiates an set translator that uses instances of the given Set class and

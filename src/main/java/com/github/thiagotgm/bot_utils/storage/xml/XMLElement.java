@@ -18,9 +18,13 @@
 package com.github.thiagotgm.bot_utils.storage.xml;
 
 import java.io.Serializable;
+
+import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
+
+import com.github.thiagotgm.bot_utils.storage.xml.translate.AbstractXMLTranslator;
 
 /**
  * Type of object that can be stored in an XML format.
@@ -56,6 +60,8 @@ public interface XMLElement extends Serializable {
      * stream, that delegates reading and writing to the natural methods of the object.
      * <p>
      * Only necessary operation is creating new instances of the object.
+     * <p>
+     * This translator supports <tt>null</tt> instances.
      *
      * @version 1.0
      * @author ThiagoTGM
@@ -64,6 +70,14 @@ public interface XMLElement extends Serializable {
      */
     @FunctionalInterface
     static interface Translator<T extends XMLElement> extends XMLTranslator<T> {
+    	
+    	/**
+    	 * Local name that indicates a <tt>null</tt> instance. If a class that implements
+    	 * XMLElement also uses this as the tag, then its translator cannot use this
+    	 * interface and must implement XMLTranslator (or extend
+    	 * {@link AbstractXMLTranslator}) directly.
+    	 */
+    	static final String NULL_TAG = "null";
         
         /**
          * Creates a new instance.
@@ -75,6 +89,16 @@ public interface XMLElement extends Serializable {
         @Override
         default T read( XMLStreamReader in ) throws XMLStreamException {
         	
+        	if ( in.isStartElement() && in.getLocalName().equals( NULL_TAG ) ) {
+        		if ( in.next() != XMLStreamConstants.END_ELEMENT ) {
+        			throw new XMLStreamException( "Null element is not empty." );
+        		}
+        		if ( !in.getLocalName().equals( NULL_TAG ) ) {
+        			throw new XMLStreamException( "Null element not closed." );
+        		}
+        		return null; // Null element.
+        	}
+        	
         	T instance = newInstance();
         	instance.read( in );
         	
@@ -85,7 +109,11 @@ public interface XMLElement extends Serializable {
         @Override
         default void write( XMLStreamWriter out, T instance ) throws XMLStreamException {
         	
-        	instance.write( out );
+        	if ( instance == null ) {
+        		out.writeEmptyElement( NULL_TAG );
+        	} else {
+        		instance.write( out );
+        	}
         	
         }
         

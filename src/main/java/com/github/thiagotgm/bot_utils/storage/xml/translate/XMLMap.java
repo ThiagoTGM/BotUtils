@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
@@ -42,7 +43,7 @@ import com.github.thiagotgm.bot_utils.storage.xml.XMLTranslator;
  * @param <K> The type of keys in the map.
  * @param <V> The type of the values to be stored.
  */
-public class XMLMap<K,V> implements XMLTranslator<Map<K,V>> {
+public class XMLMap<K,V> extends AbstractXMLTranslator<Map<K,V>> {
 	
 	/**
 	 * UID that represents this class.
@@ -54,8 +55,30 @@ public class XMLMap<K,V> implements XMLTranslator<Map<K,V>> {
      */
     public static final String TAG = "map";
 	
-    private final Constructor<? extends Map<K,V>> mapCtor;
+    private final Supplier<? extends Map<K,V>> instanceSupplier;
 	private final XMLTranslator<Map.Entry<K,V>> entryTranslator;
+	
+	/**
+     * Instantiates an map translator that uses instances obtained from the given supplier and
+     * uses the given translators for keys and values.
+     *
+     * @param instanceSupplier The supplier to get map instances from.
+     * @param keyTranslator The translator to use for the map keys.
+     * @param valueTranslator The translator to use for the map values.
+     * @throws IllegalArgumentException if the given class does not have an accessible no-arg constructor.
+     * @throws NullPointerException if any of the arguments is <tt>null</tt>.
+     */
+	public XMLMap( Supplier<? extends Map<K,V>> instanceSupplier, XMLTranslator<K> keyTranslator,
+			XMLTranslator<V> valueTranslator ) throws NullPointerException {
+		
+		if ( ( instanceSupplier == null ) || ( keyTranslator == null ) || ( valueTranslator == null ) ) {
+			throw new NullPointerException( "Arguments cannot be null." );
+		}
+		
+		this.instanceSupplier = instanceSupplier;
+		this.entryTranslator = new XMLMapEntry( keyTranslator, valueTranslator );
+		
+	}
 	
 	/**
      * Instantiates an map translator that uses instances of the given map class and
@@ -74,6 +97,7 @@ public class XMLMap<K,V> implements XMLTranslator<Map<K,V>> {
 			throw new NullPointerException( "Arguments cannot be null." );
 		}
 		
+		Constructor<? extends Map<K,V>> mapCtor;
 		try { // Get collection ctor.
 			mapCtor = mapClass.getConstructor();
 		} catch ( NoSuchMethodException | SecurityException e ) {
@@ -87,6 +111,18 @@ public class XMLMap<K,V> implements XMLTranslator<Map<K,V>> {
 			throw new IllegalArgumentException(
 					"Map class cannot be initialized using no-arg constructor.", e );
 		}
+        
+        this.instanceSupplier = () -> {
+        	
+        	try {
+    			return mapCtor.newInstance();
+    		} catch ( InstantiationException | IllegalAccessException | IllegalArgumentException
+    				| InvocationTargetException e ) {
+    			throw new IllegalArgumentException( "Map class could be initialized using no-arg "
+    					+ "constructor.", e );
+    		}
+        	
+        };
 		
 		entryTranslator = new XMLMapEntry( keyTranslator, valueTranslator );
 		
@@ -111,19 +147,18 @@ public class XMLMap<K,V> implements XMLTranslator<Map<K,V>> {
 		
 	}
 	
-	/**
-	 * Reads a map from an XML stream, placing read mappings into the given map instance.
-	 * 
-	 * @param in The stream to read from.
-	 * @param map The instance to place mappings into.
-	 * @throws XMLStreamException if an error occurred.
-	 */
-	private void read( XMLStreamReader in, Map<K,V> map ) throws XMLStreamException {
+	@Override
+	public String getTag() {
 		
-		if ( ( in.getEventType() != XMLStreamConstants.START_ELEMENT ) ||
-	              !in.getLocalName().equals( TAG ) ) {
-			throw new XMLStreamException( "Did not find element start." );
-	    }
+		return TAG;
+		
+	}
+	
+	@Override
+	public Map<K,V> readContent( XMLStreamReader in ) throws XMLStreamException {
+		
+		Map<K,V> map = instanceSupplier.get(); // Make map instance.
+		
 		while ( in.hasNext() ) { // Read each mapping.
             
             switch ( in.next() ) {
@@ -139,7 +174,7 @@ public class XMLMap<K,V> implements XMLTranslator<Map<K,V>> {
                     
                 case XMLStreamConstants.END_ELEMENT:
                 	if ( in.getLocalName().equals( TAG ) ) {
-                		return; // Finished reading.
+                		return map; // Finished reading.
                 	} else {
                 		throw new XMLStreamException( "Unexpected end element." );
                 	}
@@ -152,34 +187,13 @@ public class XMLMap<K,V> implements XMLTranslator<Map<K,V>> {
 	}
 
 	@Override
-	public Map<K,V> read( XMLStreamReader in ) throws XMLStreamException {
-		
-		Map<K,V> map; // Make map instance.
-		try {
-			map = mapCtor.newInstance();
-		} catch ( InstantiationException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException e ) {
-			throw new XMLStreamException( "Could not create new map instance.", e );
-		}
-		
-		read( in, map ); // Read map.
-		
-		return map;
+	public void writeContent( XMLStreamWriter out, Map<K,V> instance ) throws XMLStreamException {
 
-	}
-
-	@Override
-	public void write( XMLStreamWriter out, Map<K,V> instance ) throws XMLStreamException {
-
-		out.writeStartElement( TAG );
-		
 		for ( Map.Entry<K,V> entry : instance.entrySet() ) {
 			
 			entryTranslator.write( out, entry ); // Write each mapping.
 			
 		}
-		
-		out.writeEndElement();
 		
 	}
 	
@@ -187,6 +201,8 @@ public class XMLMap<K,V> implements XMLTranslator<Map<K,V>> {
 	
 	/**
 	 * Translator for converting mappings in the map.
+	 * <p>
+	 * Does not accept <tt>null</tt> instances.
 	 * 
 	 * @version 1.0
 	 * @author ThiagoTGM
@@ -419,12 +435,27 @@ public class XMLMap<K,V> implements XMLTranslator<Map<K,V>> {
 			
 			this.translator = new XMLMap<>( mapClass, keyTranslator, valueTranslator );
 			
-			try { // Make backing instance.
-				this.backing = translator.mapCtor.newInstance();
-			} catch ( InstantiationException | IllegalAccessException | IllegalArgumentException
-					| InvocationTargetException e ) {
-				throw new IllegalArgumentException( "Could not create backing map instance.", e );
-			}
+			this.backing = translator.instanceSupplier.get();
+			
+		}
+		
+		/**
+		 * Instantiates a wrapper using the given map as backing map.
+		 * 
+		 * @param backing The backing map to use.
+		 * @param keyTranslator The translator to use for keys.
+		 * @param valueTranslator The translator to use for values.
+		 * @throws IllegalArgumentException if the given class does not have an accessible no-arg constructor.
+		 * @throws NullPointerException if any of the arguments is <tt>null</tt>.
+		 */
+		@SuppressWarnings("unchecked")
+		public WrappedMap( Map<K,V> backing, XMLTranslator<K> keyTranslator,
+				XMLTranslator<V> valueTranslator ) throws IllegalArgumentException, NullPointerException {
+			
+			this.translator = new XMLMap<>( (Class<? extends Map<K,V>>) backing.getClass(),
+					keyTranslator, valueTranslator );
+			
+			this.backing = backing;
 			
 		}
 
@@ -506,7 +537,7 @@ public class XMLMap<K,V> implements XMLTranslator<Map<K,V>> {
 		}
 
 		@Override
-		public Set<Entry<K, V>> entrySet() {
+		public Set<Entry<K,V>> entrySet() {
 			
 			return backing.entrySet();
 			
@@ -515,12 +546,13 @@ public class XMLMap<K,V> implements XMLTranslator<Map<K,V>> {
 		@Override
 		public void read( XMLStreamReader in ) throws XMLStreamException {
 
-			translator.read( in, backing );
+			backing.clear();
+			backing.putAll( translator.read( in ) );
 			
 		}
 
 		@Override
-		public void write(XMLStreamWriter out) throws XMLStreamException {
+		public void write( XMLStreamWriter out ) throws XMLStreamException {
 
 			translator.write( out, backing );
 			

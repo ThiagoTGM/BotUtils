@@ -17,12 +17,9 @@
 
 package com.github.thiagotgm.bot_utils.storage.xml.translate;
 
-import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
-
-import com.github.thiagotgm.bot_utils.storage.xml.XMLTranslator;
 
 /**
  * Common implementation for translators that encode/decode objects in XML format by converting
@@ -34,19 +31,12 @@ import com.github.thiagotgm.bot_utils.storage.xml.XMLTranslator;
  * @since 2017-08-29
  * @param <T> The type of object being translated.
  */
-public abstract class XMLTextData<T> implements XMLTranslator<T> {
+public abstract class XMLTextData<T> extends AbstractXMLTranslator<T> {
     
     /**
      * UID that represents this class.
      */
     private static final long serialVersionUID = -987321998278933537L;
-
-    /**
-     * Retrieves the tag that identifies the object.
-     *
-     * @return The object tag.
-     */
-    public abstract String getTag();
     
     /**
      * Converts the given string to an object that will be wrapped.
@@ -58,12 +48,7 @@ public abstract class XMLTextData<T> implements XMLTranslator<T> {
     protected abstract T fromString( String str );
 
     @Override
-    public T read( XMLStreamReader in ) throws XMLStreamException {
-
-        if ( ( in.getEventType() != XMLStreamConstants.START_ELEMENT ) ||
-              !in.getLocalName().equals( getTag() ) ) {
-            throw new XMLStreamException( "Did not find element start." );
-        }
+    public T readContent( XMLStreamReader in ) throws XMLStreamException {
 
         T obj = fromString( in.getElementText() );
         if ( obj == null ) {
@@ -83,11 +68,9 @@ public abstract class XMLTextData<T> implements XMLTranslator<T> {
     protected abstract String toString( T obj );
 
     @Override
-    public void write( XMLStreamWriter out, T instance ) throws XMLStreamException {
+    public void writeContent( XMLStreamWriter out, T instance ) throws XMLStreamException {
     	
-        out.writeStartElement( getTag() );
         out.writeCharacters( toString( instance ) );
-        out.writeEndElement();
         
     }
 

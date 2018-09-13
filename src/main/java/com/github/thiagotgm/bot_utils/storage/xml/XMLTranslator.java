@@ -26,6 +26,8 @@ import javax.xml.stream.XMLStreamWriter;
 /**
  * Provides a way to write an object to an XML stream, or reconstruct an
  * object from an XML stream.
+ * <p>
+ * It is up to the implementation whether the value <tt>null</tt> is supported.
  * 
  * @version 1.0
  * @author ThiagoTGM

@@ -51,6 +51,8 @@ public class XMLIIDLinkedObject implements XMLTranslator<IIDLinkedObject> {
      */
     private static final long serialVersionUID = 6752712491496563108L;
     
+    private static final String NULL_TAG = "null";
+    
     /**
      * Client to use for obtaining objects from their IDs.
      */
@@ -116,12 +118,29 @@ public class XMLIIDLinkedObject implements XMLTranslator<IIDLinkedObject> {
             throw new XMLStreamException( "Stream not in start element." );
         }
     	
-    	return tagMap.get( in.getLocalName() ).read( in );
+    	String tag = in.getLocalName();
+    	if ( tag.equals( NULL_TAG ) ) { // Null element.
+    		if ( in.next() != XMLStreamConstants.END_ELEMENT ) {
+    			throw new XMLStreamException( "Null element is not empty." );
+    		}
+    		if ( !in.getLocalName().equals( NULL_TAG ) ) {
+    			throw new XMLStreamException( "Null element not closed." );
+    		}
+    		return null;
+    	}
+    	
+    	return tagMap.get( tag ).read( in );
 
     }
 
     @Override
     public void write( XMLStreamWriter out, IIDLinkedObject instance ) throws XMLStreamException {
+    	
+    	if ( instance == null ) {
+    		out.writeStartElement( NULL_TAG );
+    		out.writeEndElement();
+    		return;
+    	}
 
         for ( Map.Entry<Class<? extends IIDLinkedObject>,
 			AbstractXMLIDLinkedTranslator<? extends IIDLinkedObject>> entry : classMap.entrySet() ) {

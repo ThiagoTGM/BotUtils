@@ -27,6 +27,11 @@ import com.github.thiagotgm.bot_utils.storage.xml.XMLTranslator;
 
 /**
  * Translator that stores and loads Data instances to/from an XML format.
+ * <p>
+ * This translator does <i>not</i> allow encoding of <tt>null</tt> instances,
+ * although {@link Data#nullData() <tt>null</tt>-<i>valued</i>} Data instances
+ * are acceptable. Due to this, decoding will never return <tt>null</tt>, but
+ * may return <tt>null</tt>-valued Data.
  * 
  * @version 1.0
  * @author ThiagoTGM
@@ -86,9 +91,13 @@ public class XMLData implements XMLTranslator<Data> {
 		
 	}
 
+	/**
+	 * @throws NullPointerException if the given instance is <tt>null</tt>.
+	 */
 	@Override
-	public void write( XMLStreamWriter out, Data instance ) throws XMLStreamException {
-
+	public void write( XMLStreamWriter out, Data instance )
+			throws XMLStreamException, NullPointerException {
+		
 		switch ( instance.getType() ) { // Write depending on data type.
 		
 			case STRING:

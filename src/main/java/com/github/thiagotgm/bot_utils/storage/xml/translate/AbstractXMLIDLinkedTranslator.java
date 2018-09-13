@@ -22,8 +22,6 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 
-import com.github.thiagotgm.bot_utils.storage.xml.XMLTranslator;
-
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IIDLinkedObject;
@@ -38,7 +36,7 @@ import sx.blah.discord.handle.obj.IIDLinkedObject;
  * @since 2017-09-02
  * @param <T> Type of object being translated.
  */
-abstract class AbstractXMLIDLinkedTranslator<T extends IIDLinkedObject> implements XMLTranslator<T> {
+abstract class AbstractXMLIDLinkedTranslator<T extends IIDLinkedObject> extends AbstractXMLTranslator<T> {
     
     /**
      * UID that represents this class.
@@ -76,12 +74,7 @@ abstract class AbstractXMLIDLinkedTranslator<T extends IIDLinkedObject> implemen
     protected abstract T getObject( long id, IGuild guild );
     
     @Override
-    public T read( XMLStreamReader in ) throws XMLStreamException {
-
-        if ( ( in.getEventType() != XMLStreamConstants.START_ELEMENT ) ||
-              !in.getLocalName().equals( getTag() ) ) {
-            throw new XMLStreamException( "Did not find element start." );
-        }
+    public T readContent( XMLStreamReader in ) throws XMLStreamException {
 
         /* Get guild, if any */
         String guildID = in.getAttributeValue( null, GUILD_ATTRIBUTE );
@@ -122,13 +115,6 @@ abstract class AbstractXMLIDLinkedTranslator<T extends IIDLinkedObject> implemen
     }
     
     /**
-     * Retrieves the tag that identifies the object.
-     *
-     * @return The object tag.
-     */
-    public abstract String getTag();
-    
-    /**
      * Retrieves the class that is translated.
      * 
      * @return The supported class.
@@ -147,15 +133,13 @@ abstract class AbstractXMLIDLinkedTranslator<T extends IIDLinkedObject> implemen
     protected abstract IGuild getGuild( T obj );
 
     @Override
-    public void write( XMLStreamWriter out, T instance ) throws XMLStreamException {
+    public void writeContent( XMLStreamWriter out, T instance ) throws XMLStreamException {
 
-    	out.writeStartElement( getTag() );
         IGuild guild = getGuild( instance );
         if ( guild != null ) {
             out.writeAttribute( GUILD_ATTRIBUTE, Long.toUnsignedString( guild.getLongID() ) );
         }
         out.writeAttribute( ID_ATTRIBUTE, Long.toUnsignedString( instance.getLongID() ) );
-        out.writeEndElement();
         
     }
     

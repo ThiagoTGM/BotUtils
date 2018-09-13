@@ -19,6 +19,7 @@ package com.github.thiagotgm.bot_utils.storage.xml.translate;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Supplier;
 
 import com.github.thiagotgm.bot_utils.storage.xml.XMLTranslator;
 
@@ -41,6 +42,21 @@ public class XMLList<E> extends AbstractXMLCollection<E,List<E>> {
      * Local name of the XML element.
      */
     public static final String TAG = "list";
+    
+    /**
+     * Instantiates a list translator that uses instances given by the given supplier and
+     * uses the given translator for the elements.
+     *
+     * @param instanceSupplier The supplier to use to get instances.
+     * @param translator The translator to use for the list elements.
+     * @throws NullPointerException if either argument is <tt>null</tt>.
+     */
+    public XMLList( Supplier<? extends List<E>> instanceSupplier, XMLTranslator<E> translator )
+    		throws NullPointerException {
+    	
+    	super( instanceSupplier, translator );
+        
+    }
     
     /**
      * Instantiates an list translator that uses instances of the given List class and
