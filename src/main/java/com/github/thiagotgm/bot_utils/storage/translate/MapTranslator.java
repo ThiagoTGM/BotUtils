@@ -158,6 +158,10 @@ public class MapTranslator<K,V> implements Translator<Map<K,V>> {
 
 	@Override
 	public Data toData( Map<K,V> obj ) throws TranslationException {
+		
+		if ( obj == null ) {
+			return Data.nullData(); // Null instance.
+		}
 
 		Map<String,Data> translatedMap = new HashMap<>();
 		for ( Map.Entry<K,V> entry : obj.entrySet() ) { // Translate each entry.
@@ -172,6 +176,10 @@ public class MapTranslator<K,V> implements Translator<Map<K,V>> {
 
 	@Override
 	public Map<K,V> fromData( Data data ) throws TranslationException {
+		
+		if ( data.isNull() ) {
+			return null; // Null instance.
+		}
 		
 		if ( !data.isMap() ) {
 			throw new TranslationException( "Given data is not a map." );

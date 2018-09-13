@@ -98,6 +98,10 @@ public class StorableTranslator<T extends Storable> implements Translator<T> {
 	
 	@Override
 	public Data toData( T obj ) throws TranslationException {
+		
+		if ( obj == null ) {
+			return Data.nullData(); // Null instance.
+		}
 
 		return obj.toData();
 		
@@ -106,6 +110,10 @@ public class StorableTranslator<T extends Storable> implements Translator<T> {
 	@Override
 	public T fromData( Data data ) throws TranslationException {
 
+		if ( data.isNull() ) {
+			return null; // Null instance.
+		}
+		
 		T obj = instanceProducer.get();
 		obj.fromData( data );
 		return obj;

@@ -17,6 +17,9 @@
 
 /**
  * Provides translators for common types.
+ * <p>
+ * Unless specified otherwise, all translators provided in this package
+ * support encoding/decoding <tt>null</tt> instances.
  * 
  * @version 1.0
  * @author ThiagoTGM

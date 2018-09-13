@@ -73,9 +73,15 @@ import com.github.thiagotgm.bot_utils.utils.Tree;
  * <ul>
  * 	<li>Obtaining the size of a map or tree, or their Set or Collection views.</li>
  * 	<li>Checking if a map or tree contains a value (either directly or through the value 
- *      Collection view.</li>
+ *      Collection view).</li>
  *  <li>Iterating over any of the Set or Collection views of a tree or map.
  * </ul>
+ * <p>
+ * <b>NOTE 3:</b> Whether <tt>null</tt> is an acceptable value for a key or value depends
+ * only on whether the associated Translator supports it. However, depending on the Database
+ * implementation, using <tt>null</tt> as a key/value when the translator does not support it
+ * may not fail immediately, so care should be taken to ensure that either the provided Translators
+ * support <tt>null</tt> instances or that <tt>null</tt> is never used as a key/value.
  * 
  * @version 1.0
  * @author ThiagoTGM

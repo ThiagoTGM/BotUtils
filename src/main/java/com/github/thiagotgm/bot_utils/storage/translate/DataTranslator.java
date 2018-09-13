@@ -22,6 +22,11 @@ import com.github.thiagotgm.bot_utils.storage.Translator;
 
 /**
  * Translator for Data objects that just acts as a pass-through.
+ * <p>
+ * However, if {@link #toData(Data)} is given <tt>null</tt> as
+ * argument, the return will be a {@link Data#nullData() NULL-valued}
+ * Data instead of <tt>null</tt> itself. It will <b>not</b> be unwrapped
+ * when calling {@link #fromData(Data)} afterwards.
  * 
  * @version 1.0
  * @author ThiagoTGM
@@ -32,7 +37,7 @@ public class DataTranslator implements Translator<Data> {
 	@Override
 	public Data toData( Data obj ) throws TranslationException {
 		
-		return obj;
+		return obj == null ? Data.nullData() : obj;
 		
 	}
 

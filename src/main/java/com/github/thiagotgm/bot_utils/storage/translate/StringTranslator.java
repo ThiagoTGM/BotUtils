@@ -48,6 +48,10 @@ public class StringTranslator implements Translator<String> {
 
 	@Override
 	public String fromData( Data data ) throws TranslationException {
+		
+		if ( data.isNull() ) {
+			return null; // Null instance.
+		}
 
 		if ( !data.isString() ) {
 			throw new TranslationException( "Given data is not a String." );

@@ -23,6 +23,9 @@ import com.google.gson.GsonBuilder;
 /**
  * Translates (converts) objects of a certain type to a JSON-compatible format
  * or a string, and vice-versa.
+ * <p>
+ * Whether <tt>null</tt> instances can be encoded and decoded is up to the
+ * implementation.
  * 
  * @version 2.0
  * @author ThiagoTGM
@@ -44,8 +47,11 @@ public interface Translator<T> {
 	 * @param obj The object to be encoded.
 	 * @return The data encoding of the object.
 	 * @throws TranslationException if an error was encountered while encoding.
+	 * @throws NullPointerException if <tt>obj</tt> is <tt>null</tt> and the
+	 *                              implementation in use does not support
+	 *                              <tt>null</tt> instances.
 	 */
-	Data toData( T obj ) throws TranslationException;
+	Data toData( T obj ) throws TranslationException, NullPointerException;
 	
 	/**
 	 * Attempts to convert the given object into a Data format. If the given
@@ -56,9 +62,12 @@ public interface Translator<T> {
 	 * @return The Data encoding of the object, or <tt>null</tt> if the given
 	 *         object is not of the supported type.
 	 * @throws TranslationException if an error was encountered while encoding.
+	 * @throws NullPointerException if <tt>obj</tt> is <tt>null</tt> and the
+	 *                              implementation in use does not support
+	 *                              <tt>null</tt> instances.
 	 */
 	@SuppressWarnings("unchecked")
-	default Data objToData( Object obj ) throws TranslationException {
+	default Data objToData( Object obj ) throws TranslationException, NullPointerException {
 		
 		try {
 			return toData( (T) obj ); // Attempt to translate.
@@ -78,8 +87,11 @@ public interface Translator<T> {
 	 * @param obj The object to be encoded.
 	 * @return The String encoding of the object.
 	 * @throws TranslationException if an error was encountered while encoding.
+	 * @throws NullPointerException if <tt>obj</tt> is <tt>null</tt> and the
+	 *                              implementation in use does not support
+	 *                              <tt>null</tt> instances.
 	 */
-	default String encode( T obj ) throws TranslationException {
+	default String encode( T obj ) throws TranslationException, NullPointerException {
 		
 		return GSON.toJson( toData( obj ) );
 		
@@ -112,8 +124,9 @@ public interface Translator<T> {
 	 * @param data The data to be decoded.
 	 * @return The translated object.
 	 * @throws TranslationException if an error was encountered while decoding.
+	 * @throws NullPointerException if the given data is <tt>null</tt>.
 	 */
-	T fromData( Data data ) throws TranslationException;
+	T fromData( Data data ) throws TranslationException, NullPointerException;
 	
 	/**
 	 * Restores an object from a String created using {@link #encode(Object)}.
@@ -121,8 +134,13 @@ public interface Translator<T> {
 	 * @param str The string to be decoded.
 	 * @return The translated object.
 	 * @throws TranslationException if an error was encountered while decoding.
+	 * @throws NullPointerException if the given string is <tt>null</tt>.
 	 */
-	default T decode( String str ) throws TranslationException {
+	default T decode( String str ) throws TranslationException, NullPointerException {
+		
+		if ( str == null ) {
+			throw new NullPointerException( "String cannot be null." );
+		}
 		
 		return fromData( GSON.fromJson( str, Data.class ) );
 		

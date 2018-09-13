@@ -61,6 +61,10 @@ public class XMLTranslator<T> implements Translator<T> {
 	@Override
 	public Data toData( T obj ) throws TranslationException {
 		
+		if ( obj == null ) { // Null instance.
+			return Data.nullData();
+		}
+		
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		try {
 			XMLStreamWriter outStream = XMLOutputFactory.newFactory().createXMLStreamWriter( out, ENCODING );
@@ -78,6 +82,10 @@ public class XMLTranslator<T> implements Translator<T> {
 
 	@Override
 	public T fromData( Data data ) throws TranslationException {
+		
+		if ( data.isNull() ) {
+			return null; // Null instance.
+		}
 		
 		if ( !data.isString() ) {
 			throw new TranslationException( "Given data is not a String." );

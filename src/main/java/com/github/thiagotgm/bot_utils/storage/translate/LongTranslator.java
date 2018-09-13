@@ -32,6 +32,10 @@ public class LongTranslator implements Translator<Long> {
 	@Override
 	public Data toData( Long obj ) throws TranslationException {
 		
+		if ( obj == null ) {
+			return Data.nullData(); // Null instance.
+		}
+		
 		return Data.numberData( obj );
 		
 	}
@@ -46,6 +50,10 @@ public class LongTranslator implements Translator<Long> {
 	 */
 	@Override
 	public Long fromData( Data data ) throws TranslationException {
+		
+		if ( data.isNull() ) {
+			return null; // Null instance.
+		}
 		
 		if ( !data.isNumber() ) {
 			throw new TranslationException( "Given data is not a number." );

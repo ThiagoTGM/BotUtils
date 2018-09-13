@@ -124,6 +124,10 @@ public abstract class CollectionTranslator<E,T extends Collection<E>> implements
 	 */
 	@Override
 	public Data toData( T obj ) throws TranslationException {
+		
+		if ( obj == null ) {
+			return Data.nullData(); // Null instance.
+		}
 
 		List<Data> list = new ArrayList<>( obj.size() );
 		for ( E elem : obj ) { // Translate each element.
@@ -150,6 +154,10 @@ public abstract class CollectionTranslator<E,T extends Collection<E>> implements
 	 */
 	@Override
 	public T fromData( Data data ) throws TranslationException {
+		
+		if ( data.isNull() ) {
+			return null; // Null instance.
+		}
 
 		if ( !data.isList() ) {
 			throw new TranslationException( "Given data is not a list." );
