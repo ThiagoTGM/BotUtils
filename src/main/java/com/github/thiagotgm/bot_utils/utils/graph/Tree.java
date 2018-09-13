@@ -15,7 +15,7 @@
  * along with BotUtils. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.github.thiagotgm.bot_utils.utils;
+package com.github.thiagotgm.bot_utils.utils.graph;
 
 import java.util.List;
 import java.util.Map;

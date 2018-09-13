@@ -15,7 +15,7 @@
  * along with BotUtils. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.github.thiagotgm.bot_utils.storage.xml;
+package com.github.thiagotgm.bot_utils.utils.graph;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -25,7 +25,9 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 
-import com.github.thiagotgm.bot_utils.utils.TreeGraph;
+import com.github.thiagotgm.bot_utils.storage.xml.XMLElement;
+import com.github.thiagotgm.bot_utils.storage.xml.XMLTranslator;
+import com.github.thiagotgm.bot_utils.storage.xml.XMLElement.Translator;
 
 /**
  * Extension of the tree graph that is also capable of being stored in an XML format.

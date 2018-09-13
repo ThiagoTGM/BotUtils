@@ -26,10 +26,10 @@ import javax.xml.stream.XMLStreamException;
 import org.junit.Test;
 
 import com.github.thiagotgm.bot_utils.storage.xml.XMLElement;
-import com.github.thiagotgm.bot_utils.storage.xml.XMLTreeGraph;
 import com.github.thiagotgm.bot_utils.storage.xml.translate.XMLInteger;
 import com.github.thiagotgm.bot_utils.storage.xml.translate.XMLString;
 import com.github.thiagotgm.bot_utils.utils.Utils;
+import com.github.thiagotgm.bot_utils.utils.graph.XMLTreeGraph;
 
 /**
  * Unit tests for {@link XMLTreeGraph}.

@@ -26,7 +26,7 @@ import java.util.Set;
 
 import com.github.thiagotgm.bot_utils.storage.Translator;
 import com.github.thiagotgm.bot_utils.storage.translate.ListTranslator;
-import com.github.thiagotgm.bot_utils.utils.Tree;
+import com.github.thiagotgm.bot_utils.utils.graph.Tree;
 
 /**
  * Superclass for table-based databases. Provides an implementation of Tree that

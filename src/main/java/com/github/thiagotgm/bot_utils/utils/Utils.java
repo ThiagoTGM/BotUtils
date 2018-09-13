@@ -48,6 +48,8 @@ import org.slf4j.LoggerFactory;
 
 import com.github.thiagotgm.bot_utils.storage.xml.XMLElement;
 import com.github.thiagotgm.bot_utils.storage.xml.XMLTranslator;
+import com.github.thiagotgm.bot_utils.utils.graph.Graph;
+import com.github.thiagotgm.bot_utils.utils.graph.Tree;
 
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.obj.ICategory;

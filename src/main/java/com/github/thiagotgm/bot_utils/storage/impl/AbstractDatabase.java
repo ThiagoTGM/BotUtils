@@ -30,7 +30,7 @@ import com.github.thiagotgm.bot_utils.storage.Cache;
 import com.github.thiagotgm.bot_utils.storage.Database;
 import com.github.thiagotgm.bot_utils.storage.DatabaseStats;
 import com.github.thiagotgm.bot_utils.storage.Translator;
-import com.github.thiagotgm.bot_utils.utils.Tree;
+import com.github.thiagotgm.bot_utils.utils.graph.Tree;
 
 /**
  * Provides implementation of behavior that is common to all Database

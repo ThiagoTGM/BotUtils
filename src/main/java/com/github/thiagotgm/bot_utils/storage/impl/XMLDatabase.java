@@ -47,11 +47,11 @@ import com.github.thiagotgm.bot_utils.storage.Translator;
 import com.github.thiagotgm.bot_utils.storage.Translator.TranslationException;
 import com.github.thiagotgm.bot_utils.storage.xml.XMLElement;
 import com.github.thiagotgm.bot_utils.storage.xml.XMLTranslator;
-import com.github.thiagotgm.bot_utils.storage.xml.XMLTreeGraph;
 import com.github.thiagotgm.bot_utils.storage.xml.translate.XMLData;
 import com.github.thiagotgm.bot_utils.storage.xml.translate.XMLMap;
-import com.github.thiagotgm.bot_utils.utils.Tree;
 import com.github.thiagotgm.bot_utils.utils.Utils;
+import com.github.thiagotgm.bot_utils.utils.graph.Tree;
+import com.github.thiagotgm.bot_utils.utils.graph.XMLTreeGraph;
 
 /**
  * Database that saves data in local XML files.

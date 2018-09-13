@@ -23,8 +23,8 @@ import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.github.thiagotgm.bot_utils.utils.TreeGraph;
 import com.github.thiagotgm.bot_utils.utils.Utils;
+import com.github.thiagotgm.bot_utils.utils.graph.TreeGraph;
 
 /**
  * Tester class for {@link TreeGraph}.

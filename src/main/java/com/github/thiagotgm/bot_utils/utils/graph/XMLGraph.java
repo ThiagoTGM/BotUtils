@@ -15,9 +15,9 @@
  * along with BotUtils. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.github.thiagotgm.bot_utils.storage.xml;
+package com.github.thiagotgm.bot_utils.utils.graph;
 
-import com.github.thiagotgm.bot_utils.utils.Graph;
+import com.github.thiagotgm.bot_utils.storage.xml.XMLElement;
 
 /**
  * A graph that is capable of being saved to an XML format, then loaded back up from it.

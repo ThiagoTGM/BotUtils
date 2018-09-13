@@ -25,8 +25,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.github.thiagotgm.bot_utils.storage.translate.StringTranslator;
-import com.github.thiagotgm.bot_utils.utils.Graph;
-import com.github.thiagotgm.bot_utils.utils.Tree;
+import com.github.thiagotgm.bot_utils.utils.graph.Graph;
+import com.github.thiagotgm.bot_utils.utils.graph.Tree;
 
 /**
  * Database that provides persistent data storage in the form of tree-graphs and maps.
