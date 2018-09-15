@@ -30,6 +30,14 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+/**
+ * Provides static methods for wrapping graph types to have certain
+ * functionality details.
+ * 
+ * @version 1.0
+ * @author ThiagoTGM
+ * @since 2018-09-15
+ */
 public class Graphs {
 
     /* Special wrappers for Graphs */
@@ -981,7 +989,7 @@ public class Graphs {
         return new SynchronizedTree<>( t );
 
     }
-    
+
     /**
      * Obtains a tree that is backed by the given map, by using the path list of
      * each mapping as a key into the given map.
