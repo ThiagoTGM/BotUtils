@@ -26,6 +26,7 @@ import java.util.Set;
 
 import com.github.thiagotgm.bot_utils.storage.Translator;
 import com.github.thiagotgm.bot_utils.storage.translate.ListTranslator;
+import com.github.thiagotgm.bot_utils.utils.graph.Graphs;
 import com.github.thiagotgm.bot_utils.utils.graph.Tree;
 
 /**
@@ -37,12 +38,12 @@ import com.github.thiagotgm.bot_utils.utils.graph.Tree;
  * @since 2018-08-10
  */
 public abstract class TableDatabase extends AbstractDatabase {
-
-	@Override
+    
+    @Override
 	protected <K,V> Tree<K,V> newTree( String dataName, Translator<K> keyTranslator,
 			Translator<V> valueTranslator ) throws DatabaseException {
 
-		return Tree.mappedTree( newMap( dataName, new ListTranslator<>( keyTranslator ), valueTranslator ) );
+		return Graphs.mappedTree( newMap( dataName, new ListTranslator<>( keyTranslator ), valueTranslator ) );
 		
 	}
 	

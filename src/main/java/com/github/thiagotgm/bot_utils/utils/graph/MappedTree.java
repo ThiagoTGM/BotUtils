@@ -18,459 +18,411 @@
 package com.github.thiagotgm.bot_utils.utils.graph;
 
 import java.lang.reflect.Array;
+import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 /**
  * Tree that uses a map as backing storage, by using the path list as a key.
+ * <p>
+ * This wrapper is thread-safe if the backing map is, with the exception of
+ * the entry set view (which is not thread-safe).
  * 
  * @version 1.0
  * @author ThiagoTGM
  * @since 2018-08-28
- * @param <K> The type of keys in the path.
- * @param <V> The type of values being stored.
+ * @param <K>
+ *            The type of keys in the path.
+ * @param <V>
+ *            The type of values being stored.
  */
-class MappedTree<K,V> implements Tree<K,V> {
-	
-	private final Map<List<K>,V> backing;
-	
-	/**
-	 * Instantiates a graph that is backed by the given map.
-	 * 
-	 * @param backing The backing map.
-	 */
-	public MappedTree( Map<List<K>,V> backing ) {
-		
-		this.backing = backing;
-		
-	}
-	
-	@Override
-	public boolean containsPath( List<K> path ) {
-		
-		return backing.containsKey( path );
-		
-	}
+class MappedTree<K, V> extends AbstractGraph<K, V> implements Tree<K, V> {
 
-	@Override
-	public boolean containsValue( V value ) {
+    private final Map<List<K>, V> backing;
 
-		return backing.containsValue( value );
-		
-	}
+    /**
+     * Instantiates a graph that is backed by the given map.
+     * 
+     * @param backing
+     *            The backing map.
+     */
+    public MappedTree( Map<List<K>, V> backing ) {
 
-	@Override
-	public V get( List<K> path ) throws IllegalArgumentException {
-		
-		return backing.get( path );
-		
-	}
+        this.backing = backing;
 
-	@Override
-	public List<V> getAll( List<K> path ) throws IllegalArgumentException {
+    }
 
-		List<V> result = new LinkedList<>();
-		for ( int i = 0; i <= path.size(); i++ ) { // Check each step.
-			
-			V value = get( path.subList( 0, i ) );
-			if ( value != null ) { // Found a value for this step.
-				result.add( value );
-			}
-			
-		}
-		return new ArrayList<>( result );
-		
-	}
+    @Override
+    public boolean containsPath( List<?> path ) {
 
-	@Override
-	public V set( V value, List<K> path )
-			throws UnsupportedOperationException, NullPointerException, IllegalArgumentException {
+        return backing.containsKey( path );
 
-		return backing.put( path, value );
-		
-	}
+    }
 
-	@Override
-	public boolean add( V value, List<K> path )
-			throws UnsupportedOperationException, NullPointerException, IllegalArgumentException {
+    @Override
+    public boolean containsValue( Object value ) {
 
-		if ( backing.containsKey( path ) ) { // Already has a mapping.
-			return false;
-		} else { // No mapping yet.
-			backing.put( path, value );
-			return true;
-		}
-		
-	}
+        return backing.containsValue( value );
 
-	@Override
-	public V remove( List<K> path ) throws UnsupportedOperationException, IllegalArgumentException {
+    }
 
-		return backing.remove( path );
-		
-	}
+    @Override
+    public V get( List<?> path ) throws IllegalArgumentException {
 
-	@Override
-	public Set<List<K>> pathSet() {
+        return backing.get( path );
 
-		return this.backing.keySet();
-		
-	}
+    }
 
-	@Override
-	public Collection<V> values() {
+    @Override
+    public List<V> getAll( List<?> path ) throws IllegalArgumentException {
 
-		return backing.values();
-		
-	}
+        List<V> result = new LinkedList<>();
+        for ( int i = 0; i <= path.size(); i++ ) { // Check each step.
 
-	@Override
-	public Set<Entry<K,V>> entrySet() {
+            V value = get( path.subList( 0, i ) );
+            if ( value != null ) { // Found a value for this step.
+                result.add( value );
+            }
 
-		final Set<Map.Entry<List<K>,V>> backing = this.backing.entrySet();
-		return new Set<Entry<K,V>>() {
-			
-			/**
-			 * Graph entry backed by a Map entry.
-			 * 
-			 * @version 1.0
-			 * @author ThiagoTGM
-			 * @since 2018-08-10
-			 * @param <GK> Type of the keys that form a path in the graph.
-			 * @param <GV> Type of values stored in the graph.
-			 */
-			final class BackedEntry<GK,GV> implements Entry<GK,GV>{
-				
-				private final Map.Entry<List<GK>,GV> backing;
-				
-				/**
-				 * Instantiates an entry backed by the given Map entry.
-				 * 
-				 * @param backing The backing entry.
-				 */
-				public BackedEntry( Map.Entry<List<GK>,GV> backing ) {
-					
-					this.backing = backing;
-					
-				}
+        }
+        return new ArrayList<>( result );
 
-				@Override
-				public List<GK> getPath() {
+    }
 
-					return backing.getKey();
-					
-				}
+    @Override
+    public V put( List<K> path, V value )
+            throws UnsupportedOperationException, NullPointerException, IllegalArgumentException {
 
-				@Override
-				public GV getValue() {
+        return backing.put( path, value );
 
-					return backing.getValue();
-					
-				}
+    }
 
-				@Override
-				public GV setValue( GV value ) throws NullPointerException {
+    @Override
+    public V remove( List<?> path ) throws UnsupportedOperationException, IllegalArgumentException {
 
-					return backing.setValue( value );
-					
-				}
-				
-				@Override
-				public boolean equals( Object o ) {
-					
-					return ( o instanceof Entry ) && getPath().equals( ( (Entry<?,?>) o ).getPath() )
-							&& getValue().equals( ( (Entry<?,?>) o ).getValue() );
-					
-				}
-				
-				@Override
-				public int hashCode() {
-					
-					return getPath().hashCode() ^ getValue().hashCode();
-					
-				}
-				
-			}
-			
-			/**
-			 * Map entry backed by a Graph entry.
-			 * 
-			 * @version 1.0
-			 * @author ThiagoTGM
-			 * @since 2018-08-10
-			 * @param <MK> Type of the keys in the map.
-			 * @param <MV> Type of values stored in the map.
-			 */
-			final class ReverseBackedEntry<MK,MV> implements Map.Entry<List<MK>,MV> {
+        return backing.remove( path );
 
-				private final Entry<MK,MV> backing;
-				
-				/**
-				 * Instantiates an entry backed by the given Graph entry.
-				 * 
-				 * @param backing The backing entry.
-				 */
-				public ReverseBackedEntry( Entry<MK,MV> backing ) {
-					
-					this.backing = backing;
-					
-				}
-				
-				@Override
-				public List<MK> getKey() {
+    }
 
-					return backing.getPath();
-					
-				}
+    @Override
+    public Set<List<K>> pathSet() {
 
-				@Override
-				public MV getValue() {
+        return this.backing.keySet();
 
-					return backing.getValue();
-					
-				}
+    }
 
-				@Override
-				public MV setValue( MV value ) {
+    @Override
+    public Collection<V> values() {
 
-					return backing.setValue( value );
-					
-				}
-				
-				@Override
-				public boolean equals( Object o ) {
-					
-					return ( o instanceof Map.Entry )
-							&& getKey().equals( ( (Map.Entry<?,?>) o ).getKey() )
-							&& getValue().equals( ( (Map.Entry<?,?>) o ).getValue() );
-					
-				}
-				
-				@Override
-				public int hashCode() {
-					
-					return getKey().hashCode() ^ getValue().hashCode();
-					
-				}
-				
-			}
+        return backing.values();
 
-			@Override
-			public int size() {
+    }
 
-				return backing.size();
-				
-			}
+    @Override
+    public Set<Entry<K, V>> entrySet() {
 
-			@Override
-			public boolean isEmpty() {
+        final Set<Map.Entry<List<K>, V>> backing = this.backing.entrySet();
+        return new AbstractSet<Entry<K, V>>() {
 
-				return backing.isEmpty();
-				
-			}
+            /**
+             * Graph entry backed by a Map entry.
+             * 
+             * @version 1.0
+             * @author ThiagoTGM
+             * @since 2018-08-10
+             */
+            final class BackedEntry extends AbstractEntry {
 
-			@Override
-			public boolean contains( Object o ) {
+                private final Map.Entry<List<K>, V> backing;
 
-				if ( !( o instanceof Entry ) ) {
-					return false; // Not an entry.
-				}
-				
-				return backing.contains( new ReverseBackedEntry<>( (Entry<?,?>) o ) );
-				
-			}
+                /**
+                 * Instantiates an entry backed by the given Map entry.
+                 * 
+                 * @param backing
+                 *            The backing entry.
+                 */
+                public BackedEntry( Map.Entry<List<K>, V> backing ) {
 
-			@Override
-			public Iterator<Entry<K,V>> iterator() {
+                    this.backing = backing;
 
-				final Iterator<Map.Entry<List<K>,V>> backingIter = backing.iterator();
-				return new Iterator<Entry<K,V>>() {
+                }
 
-					@Override
-					public boolean hasNext() {
+                @Override
+                public List<K> getPath() {
 
-						return backingIter.hasNext();
-						
-					}
+                    return backing.getKey();
 
-					@Override
-					public Entry<K,V> next() {
+                }
 
-						return new BackedEntry<>( backingIter.next() );
-						
-					}
-					
-					@Override
-					public void remove() {
-						
-						backingIter.remove();
-						
-					}
+                @Override
+                public V getValue() {
 
-				};
-				
-			}
+                    return backing.getValue();
 
-			@Override
-			public Object[] toArray() {
+                }
 
-				return toArray( new Object[0] );
-				
-			}
+                @Override
+                public V setValue( V value ) throws NullPointerException {
 
-			@SuppressWarnings("unchecked")
-			@Override
-			public <T> T[] toArray( T[] a ) {
-				
-				Object[] content = backing.toArray();
-				a = (T[]) Array.newInstance( a.getClass().getComponentType(), content.length );
-				for ( int i = 0; i < content.length; i++ ) {
-					
-					a[i] = (T) new BackedEntry<>( (Map.Entry<List<K>,V>) content[i] );
-					
-				}
-				return a;
-				
-				
-			}
+                    return backing.setValue( value );
 
-			@Override
-			public boolean add( Entry<K,V> e ) {
+                }
 
-				throw new UnsupportedOperationException();
-				
-			}
+            }
 
-			@Override
-			public boolean remove( Object o ) {
+            /**
+             * Map entry backed by a Graph entry.
+             * 
+             * @version 1.0
+             * @author ThiagoTGM
+             * @since 2018-08-10
+             * @param <MK>
+             *            Type of the keys in the map.
+             * @param <MV>
+             *            Type of values stored in the map.
+             */
+            final class ReverseBackedEntry<MK, MV> implements Map.Entry<List<MK>, MV> {
 
-				if ( !( o instanceof Entry ) ) {
-					return false; // Not an entry.
-				}
-				
-				return backing.remove( new ReverseBackedEntry<>( (Entry<?,?>) o ) );
-				
-			}
+                private final Entry<MK, MV> backing;
 
-			@Override
-			public boolean containsAll( Collection<?> c ) {
+                /**
+                 * Instantiates an entry backed by the given Graph entry.
+                 * 
+                 * @param backing
+                 *            The backing entry.
+                 */
+                public ReverseBackedEntry( Entry<MK, MV> backing ) {
 
-				for ( Object o : c ) {
-					
-					if ( !contains( o ) ) {
-						return false;
-					}
-					
-				}
-				return true;
-				
-			}
+                    this.backing = backing;
 
-			@Override
-			public boolean addAll( Collection<? extends Entry<K,V>> c ) {
-				
-				throw new UnsupportedOperationException();
-				
-			}
+                }
 
-			@Override
-			public boolean retainAll( Collection<?> c ) {
-				
-				Collection<Entry<K,V>> removalList = new LinkedList<>();
-				for ( Entry<K,V> e : this ) {
-					
-					if ( !c.contains( e ) ) {
-						removalList.add( e );
-					}
-					
-				}
-				for ( Entry<K,V> e : removalList ) {
-					
-					remove( e );
-					
-				}
-				return !removalList.isEmpty();
-				
-			}
+                @Override
+                public List<MK> getKey() {
 
-			@Override
-			public boolean removeAll( Collection<?> c ) {
-					
-				boolean changed = false;
-				for ( Object o : c ) {
-					
-					if ( remove( o ) ) {
-						changed = true;
-					}
-					
-				}
-				return changed;
-				
-			}
+                    return backing.getPath();
 
-			@Override
-			public void clear() {
+                }
 
-				backing.clear();
-				
-			}
-			
-			@Override
-			public boolean equals( Object o ) {
-				
-				return ( o instanceof Set ) && ( ( (Set<?>) o ).size() == size() )
-						&& containsAll( (Set<?>) o );
-				
-			}
-			
-			@Override
-			public int hashCode() {
-				
-				int code = 0;
-				for ( Entry<K,V> entry : this ) {
-					
-					code += entry.hashCode();
-					
-				}
-				return code;
-				
-			}
-			
-		};
-		
-	}
+                @Override
+                public MV getValue() {
 
-	@Override
-	public int size() {
-		
-		return backing.size();
-		
-	}
+                    return backing.getValue();
 
-	@Override
-	public void clear() {
+                }
 
-		backing.clear();
-		
-	}
-	
-	@Override
-	public boolean equals( Object o ) {
-		
-		return ( o instanceof Tree ) && entrySet().equals( ( (Tree<?,?>) o ).entrySet() );
-		
-	}
-	
-	@Override
-	public int hashCode() {
-		
-		return entrySet().hashCode();
-		
-	}
-	
+                @Override
+                public MV setValue( MV value ) {
+
+                    return backing.setValue( value );
+
+                }
+
+                @Override
+                public boolean equals( Object o ) {
+
+                    return ( o instanceof Map.Entry ) && getKey().equals( ( (Map.Entry<?, ?>) o ).getKey() )
+                            && getValue().equals( ( (Map.Entry<?, ?>) o ).getValue() );
+
+                }
+
+                @Override
+                public int hashCode() {
+
+                    return Objects.hashCode( getKey() ) ^ Objects.hashCode( getValue() );
+
+                }
+
+                @Override
+                public String toString() {
+
+                    return String.format( "%s=%s", Objects.toString( getKey() ), Objects.toString( getValue() ) );
+
+                }
+
+            }
+
+            @Override
+            public int size() {
+
+                return backing.size();
+
+            }
+
+            @Override
+            public boolean isEmpty() {
+
+                return backing.isEmpty();
+
+            }
+
+            @Override
+            public boolean contains( Object o ) {
+
+                if ( !( o instanceof Entry ) ) {
+                    return false; // Not an entry.
+                }
+
+                return backing.contains( new ReverseBackedEntry<>( (Entry<?, ?>) o ) );
+
+            }
+
+            @Override
+            public Iterator<Entry<K, V>> iterator() {
+
+                final Iterator<Map.Entry<List<K>, V>> backingIter = backing.iterator();
+                return new Iterator<Entry<K, V>>() {
+
+                    @Override
+                    public boolean hasNext() {
+
+                        return backingIter.hasNext();
+
+                    }
+
+                    @Override
+                    public Entry<K, V> next() {
+
+                        return new BackedEntry( backingIter.next() );
+
+                    }
+
+                    @Override
+                    public void remove() {
+
+                        backingIter.remove();
+
+                    }
+
+                };
+
+            }
+
+            @Override
+            public Object[] toArray() {
+
+                return toArray( new Object[0] );
+
+            }
+
+            @SuppressWarnings( "unchecked" )
+            @Override
+            public <T> T[] toArray( T[] a ) {
+
+                Object[] content = backing.toArray();
+                a = (T[]) Array.newInstance( a.getClass().getComponentType(), content.length );
+                for ( int i = 0; i < content.length; i++ ) {
+
+                    a[i] = (T) new BackedEntry( (Map.Entry<List<K>, V>) content[i] );
+
+                }
+                return a;
+
+            }
+
+            @Override
+            public boolean add( Entry<K, V> e ) {
+
+                throw new UnsupportedOperationException();
+
+            }
+
+            @Override
+            public boolean remove( Object o ) {
+
+                if ( !( o instanceof Entry ) ) {
+                    return false; // Not an entry.
+                }
+
+                return backing.remove( new ReverseBackedEntry<>( (Entry<?, ?>) o ) );
+
+            }
+
+            @Override
+            public boolean containsAll( Collection<?> c ) {
+
+                for ( Object o : c ) {
+
+                    if ( !contains( o ) ) {
+                        return false;
+                    }
+
+                }
+                return true;
+
+            }
+
+            @Override
+            public boolean addAll( Collection<? extends Entry<K, V>> c ) {
+
+                throw new UnsupportedOperationException();
+
+            }
+
+            @Override
+            public boolean retainAll( Collection<?> c ) {
+
+                Collection<Entry<K, V>> removalList = new LinkedList<>();
+                for ( Entry<K, V> e : this ) {
+
+                    if ( !c.contains( e ) ) {
+                        removalList.add( e );
+                    }
+
+                }
+                for ( Entry<K, V> e : removalList ) {
+
+                    remove( e );
+
+                }
+                return !removalList.isEmpty();
+
+            }
+
+            @Override
+            public boolean removeAll( Collection<?> c ) {
+
+                boolean changed = false;
+                for ( Object o : c ) {
+
+                    if ( remove( o ) ) {
+                        changed = true;
+                    }
+
+                }
+                return changed;
+
+            }
+
+            @Override
+            public void clear() {
+
+                backing.clear();
+
+            }
+
+        };
+
+    }
+
+    @Override
+    public int size() {
+
+        return backing.size();
+
+    }
+
+    @Override
+    public void clear() {
+
+        backing.clear();
+
+    }
+
 }

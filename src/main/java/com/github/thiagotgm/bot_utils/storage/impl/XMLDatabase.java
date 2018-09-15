@@ -51,7 +51,7 @@ import com.github.thiagotgm.bot_utils.storage.xml.translate.XMLData;
 import com.github.thiagotgm.bot_utils.storage.xml.translate.XMLMap;
 import com.github.thiagotgm.bot_utils.utils.Utils;
 import com.github.thiagotgm.bot_utils.utils.graph.Tree;
-import com.github.thiagotgm.bot_utils.utils.graph.XMLTreeGraph;
+import com.github.thiagotgm.bot_utils.utils.graph.XMLHashTree;
 
 /**
  * Database that saves data in local XML files.
@@ -188,7 +188,7 @@ public class XMLDatabase extends AbstractDatabase implements Saveable {
 		XMLTranslator<V> valueXMLTranslator = getXMLTranslator( valueTranslator );
 		
 		// Instantiate tree.
-		XMLTreeGraph<K,V> tree = new XMLTreeGraph<>( keyXMLTranslator, valueXMLTranslator );
+		XMLHashTree<K,V> tree = new XMLHashTree<>( keyXMLTranslator, valueXMLTranslator );
 		
 		// Load and register tree.
 		storage.add( load( dataName, tree ) );

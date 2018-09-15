@@ -20,16 +20,20 @@ package com.github.thiagotgm.bot_utils.utils.graph;
 import com.github.thiagotgm.bot_utils.storage.xml.XMLElement;
 
 /**
- * A graph that is capable of being saved to an XML format, then loaded back up from it.
+ * A graph that is capable of being saved to an XML format, then loaded back up
+ * from it.
  * <p>
- * The XML representation of a graph must be readable by a properly configured object of the same graph
- * type, but it is not required to be readable by instances of other graph implementations or by
- * instances of its own supertypes.
+ * The XML representation of a graph must be readable by a properly configured
+ * object of the same graph type, but it is not required to be readable by
+ * instances of other graph implementations or by instances of its own
+ * supertypes.
  *
  * @version 1.0
  * @author ThiagoTGM
  * @since 2017-08-23
- * @param <K> The type of the keys that define connections on the graph.
- * @param <V> The type of the values to be stored.
+ * @param <K>
+ *            The type of the keys that define connections on the graph.
+ * @param <V>
+ *            The type of the values to be stored.
  */
-public interface XMLGraph<K,V> extends XMLElement, Graph<K,V> {}
+public interface XMLGraph<K, V> extends XMLElement, Graph<K, V> {}

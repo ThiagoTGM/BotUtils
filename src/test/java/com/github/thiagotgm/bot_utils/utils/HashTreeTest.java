@@ -24,65 +24,64 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.github.thiagotgm.bot_utils.utils.Utils;
-import com.github.thiagotgm.bot_utils.utils.graph.TreeGraph;
+import com.github.thiagotgm.bot_utils.utils.graph.HashTree;
+import com.github.thiagotgm.bot_utils.utils.graph.Tree;
 
 /**
- * Tester class for {@link TreeGraph}.
+ * Tester class for {@link HashTree}.
  *
  * @version 1.0
  * @author ThiagoTGM
  * @since 2017-08-19
  */
-public class TreeGraphTest {
+public class HashTreeTest {
     
-    private TreeGraph<String,String> graph;
+    private HashTree<String,String> graph;
 
     @Before
     public void setUp() {
         
-        graph = new TreeGraph<>();
-        graph.add( "value 1", "hi", "i" );
-        graph.add( "value 2", "hi" );
-        graph.add( "value 3", "hi", "i", "am", "here" );
+        graph = new HashTree<>();
+        graph.put( "value 1", "hi", "i" );
+        graph.put( "value 2", "hi" );
+        graph.put( "value 3", "hi", "i", "am", "here" );
 
     }
 
     @Test
-    public void testAddAndGet() {
+    public void testPutAndGet() {
         
-        TreeGraph<Long,String> graph2 = new TreeGraph<>();
-        TreeGraph<String,Integer> graph3 = new TreeGraph<>();
-
-        /* Test adding */
-        assertTrue( "Could not add.", graph.add( "value 4", "potato" ) );
-        assertTrue( "Could not add.", graph.add( "value 5", "potato", "salad" ) );
-        assertTrue( "Could not add.", graph.add( "value 6", "potato", "salad", "with dressing" ) );
-        
-        assertTrue( "Could not add.", graph2.add( "value 1", 1990L, 420L ) );
-        assertTrue( "Could not add.", graph2.add( "value 2", 0L, -19L ) );
-        
-        assertTrue( "Could not add.", graph3.add( 90, "a", "number" ) );
-        assertTrue( "Could not add.", graph3.add( 404, "another", "number" ) );
-        assertTrue( "Could not add.", graph3.add( -1, "a", "nother", "number" ) );
-        
-        
-        
-        /* Test adding repeated */
-        assertFalse( "Added repeated value.", graph.add( "other", "hi", "i" ) );
-        assertFalse( "Added repeated value.", graph.add( "other", "hi" ) );
-        assertFalse( "Added repeated value.", graph.add( "other", "hi", "i", "am", "here" ) );
-        assertFalse( "Added repeated value.", graph.add( "other", "potato" ) );
-        assertFalse( "Added repeated value.", graph.add( "other", "potato", "salad" ) );
-        assertFalse( "Added repeated value.", graph.add( "other", "potato", "salad", "with dressing" ) );
-        
-        assertFalse( "Added repeated value.", graph2.add( "other", 1990L, 420L ) );
-        assertFalse( "Added repeated value.", graph2.add( "other", 0L, -19L ) );
-        
-        assertFalse( "Added repeated value.", graph3.add( 0, "a", "number" ) );
-        assertFalse( "Added repeated value.", graph3.add( 0, "another", "number" ) );
-        assertFalse( "Added repeated value.", graph3.add( 0, "a", "nother", "number" ) );
+        Tree<Long,String> graph2 = new HashTree<>();
+        Tree<String,Integer> graph3 = new HashTree<>();
         
         /* Test getting */
+        assertEquals( "Incorrect value retrieved.", "value 1", graph.get( "hi", "i" ) );
+        assertEquals( "Incorrect value retrieved.", "value 2", graph.get( "hi" ) );
+        assertEquals( "Incorrect value retrieved.", "value 3", graph.get( "hi", "i", "am", "here" ) );
+        assertEquals( "Incorrect value retrieved.", null, graph.get( "potato" ) );
+        assertEquals( "Incorrect value retrieved.", null, graph.get( "potato", "salad" ) );
+        assertEquals( "Incorrect value retrieved.", null, graph.get( "potato", "salad", "with dressing" ) );
+        
+        assertEquals( "Incorrect value retrieved.", null, graph2.get( 1990L, 420L ) );
+        assertEquals( "Incorrect value retrieved.", null, graph2.get( 0L, -19L ) );
+        
+        assertEquals( "Incorrect value retrieved.", null, graph3.get( "a", "number" ) );
+        assertEquals( "Incorrect value retrieved.", null, graph3.get( "another", "number" ) );
+        assertEquals( "Incorrect value retrieved.", null, graph3.get( "a", "nother", "number" ) );
+
+        /* Test putting */
+        assertNull( graph.put( "value 4", "potato" ) );
+        assertNull( graph.put( "value 5", "potato", "salad" ) );
+        assertNull( graph.put( "value 6", "potato", "salad", "with dressing" ) );
+        
+        assertNull( graph2.put( "value 1", 1990L, 420L ) );
+        assertNull( graph2.put( "value 2", 0L, -19L ) );
+        
+        assertNull( graph3.put( 90, "a", "number" ) );
+        assertNull( graph3.put( 404, "another", "number" ) );
+        assertNull( graph3.put( -1, "a", "nother", "number" ) );
+        
+        /* Test getting again */
         assertEquals( "Incorrect value retrieved.", "value 1", graph.get( "hi", "i" ) );
         assertEquals( "Incorrect value retrieved.", "value 2", graph.get( "hi" ) );
         assertEquals( "Incorrect value retrieved.", "value 3", graph.get( "hi", "i", "am", "here" ) );
@@ -97,18 +96,35 @@ public class TreeGraphTest {
         assertEquals( "Incorrect value retrieved.", new Integer( 404 ), graph3.get( "another", "number" ) );
         assertEquals( "Incorrect value retrieved.", new Integer( -1 ), graph3.get( "a", "nother", "number" ) );
         
-    }
-
-    @Test
-    public void testSet() {
-
-        assertEquals( "Incorrect old value.", "value 3",
-                graph.set( "overwrite", "hi", "i", "am", "here" ) );
-        assertNull( "There should be no old value.",
-                graph.set( "new", "new", "path" ) );
+        /* Test putting repeated */
+        assertEquals( "value 1", graph.put( "other", "hi", "i" ) );
+        assertEquals( "value 2", graph.put( "other", "hi" ) );
+        assertEquals( "value 3", graph.put( "other", "hi", "i", "am", "here" ) );
+        assertEquals( "value 4", graph.put( "other", "potato" ) );
+        assertEquals( "value 5", graph.put( "other", "potato", "salad" ) );
+        assertEquals( "value 6", graph.put( "other", "potato", "salad", "with dressing" ) );
         
-        assertEquals( "Incorrect value retrieved.", "overwrite", graph.get( "hi", "i", "am", "here" ) );
-        assertEquals( "Incorrect value retrieved.", "new", graph.get( "new", "path" ) );
+        assertEquals( "value 1", graph2.put( "other", 1990L, 420L ) );
+        assertEquals( "value 2", graph2.put( "other", 0L, -19L ) );
+        
+        assertEquals( new Integer( 90 ), graph3.put( 0, "a", "number" ) );
+        assertEquals( new Integer( 404 ), graph3.put( 0, "another", "number" ) );
+        assertEquals( new Integer( -1 ), graph3.put( 0, "a", "nother", "number" ) );
+        
+        /* Test getting new values */
+        assertEquals( "Incorrect value retrieved.", "other", graph.get( "hi", "i" ) );
+        assertEquals( "Incorrect value retrieved.", "other", graph.get( "hi" ) );
+        assertEquals( "Incorrect value retrieved.", "other", graph.get( "hi", "i", "am", "here" ) );
+        assertEquals( "Incorrect value retrieved.", "other", graph.get( "potato" ) );
+        assertEquals( "Incorrect value retrieved.", "other", graph.get( "potato", "salad" ) );
+        assertEquals( "Incorrect value retrieved.", "other", graph.get( "potato", "salad", "with dressing" ) );
+        
+        assertEquals( "Incorrect value retrieved.", "other", graph2.get( 1990L, 420L ) );
+        assertEquals( "Incorrect value retrieved.", "other", graph2.get( 0L, -19L ) );
+        
+        assertEquals( "Incorrect value retrieved.", new Integer( 0 ), graph3.get( "a", "number" ) );
+        assertEquals( "Incorrect value retrieved.", new Integer( 0 ), graph3.get( "another", "number" ) );
+        assertEquals( "Incorrect value retrieved.", new Integer( 0 ), graph3.get( "a", "nother", "number" ) );
         
     }
     
@@ -142,9 +158,7 @@ public class TreeGraphTest {
         graph.remove( "hi" );
         assertEquals( "Incorrect graph size.", 2, graph.size() );
         assertEquals( "Incorrect graph size.", 0,
-                new TreeGraph<String,String>().size() );
-        assertEquals( "Incorrect graph size.", 1,
-                new TreeGraph<String,String>( "one" ).size() );
+                new HashTree<String,String>().size() );
         
     }
     
@@ -153,9 +167,7 @@ public class TreeGraphTest {
         
         assertFalse( "Graph should not be empty.", graph.isEmpty() );
         assertTrue( "Graph should be empty.",
-                new TreeGraph<String,String>().isEmpty() );
-        assertFalse( "Graph should not be empty.",
-                new TreeGraph<String,String>( "one" ).isEmpty() );
+                new HashTree<String,String>().isEmpty() );
         
     }
     
@@ -172,11 +184,8 @@ public class TreeGraphTest {
 
         assertNull( "Graph root should be empty.", graph.get() );
         
-        graph.set( "string" );
+        graph.put( "string" );
         assertEquals( "Incorrect root value.", "string", graph.get() );
-        
-        TreeGraph<Integer,Double> otherGraph = new TreeGraph<>( 2.3339 );
-        assertEquals( "Incorrect root value.", 2.3339, otherGraph.get(), 0.0001 );
         
     }
     
@@ -184,7 +193,7 @@ public class TreeGraphTest {
     public void testSerialize() {
 
         String encoded = Utils.serializableToString( graph );
-        TreeGraph<String,String> decoded = Utils.stringToSerializable( encoded );
+        Tree<String,String> decoded = Utils.stringToSerializable( encoded );
         assertEquals( "Decoded graph not equal to original.", graph, decoded );
         
     }
@@ -193,49 +202,49 @@ public class TreeGraphTest {
     public void testEquals() {
         
         /* Test an equal graph */
-        TreeGraph<String,String> equalGraph = new TreeGraph<>();
-        equalGraph.add( "value 1", "hi", "i" );
-        equalGraph.add( "value 2", "hi" );
-        equalGraph.add( "value 3", "hi", "i", "am", "here" );
+        Tree<String,String> equalGraph = new HashTree<>();
+        equalGraph.put( "value 1", "hi", "i" );
+        equalGraph.put( "value 2", "hi" );
+        equalGraph.put( "value 3", "hi", "i", "am", "here" );
         
         assertTrue( "Graphs should be equal.", graph.equals( equalGraph ) );
         assertTrue( "Graphs should be equal.", equalGraph.equals( graph ) );
         
         /* Test a different graph */
-        TreeGraph<String,String> differentGraph1 = new TreeGraph<>();
-        differentGraph1.add( "other", "noob" );
+        Tree<String,String> differentGraph1 = new HashTree<>();
+        differentGraph1.put( "other", "noob" );
         
         assertFalse( "Graphs should not be equal.", graph.equals( differentGraph1 ) );
         assertFalse( "Graphs should not be equal.", differentGraph1.equals( graph ) );
         
         /* Test a different graph with the same keys */
-        TreeGraph<String,String> differentGraph2 = new TreeGraph<>();
-        differentGraph2.add( "other 1", "hi", "i" );
-        differentGraph2.add( "other 2", "hi" );
-        differentGraph2.add( "other 3", "hi", "i", "am", "here" );
+        Tree<String,String> differentGraph2 = new HashTree<>();
+        differentGraph2.put( "other 1", "hi", "i" );
+        differentGraph2.put( "other 2", "hi" );
+        differentGraph2.put( "other 3", "hi", "i", "am", "here" );
         
         assertFalse( "Graphs should not be equal.", graph.equals( differentGraph2 ) );
         assertFalse( "Graphs should not be equal.", differentGraph2.equals( graph ) );
         
         /* Test a different graph with the same values */
-        TreeGraph<String,String> differentGraph3 = new TreeGraph<>();
-        differentGraph3.add( "value 1", "other" );
-        differentGraph3.add( "value 2", "other", "key" );
-        differentGraph3.add( "value 3", "other", "key", "here" );
+        Tree<String,String> differentGraph3 = new HashTree<>();
+        differentGraph3.put( "value 1", "other" );
+        differentGraph3.put( "value 2", "other", "key" );
+        differentGraph3.put( "value 3", "other", "key", "here" );
         
         assertFalse( "Graphs should not be equal.", graph.equals( differentGraph3 ) );
         assertFalse( "Graphs should not be equal.", differentGraph3.equals( graph ) );
         
         /* Test a different graph with a single equal mapping */
-        TreeGraph<String,String> differentGraph4 = new TreeGraph<>();
-        differentGraph4.add( "value 1", "hi", "i" );
+        Tree<String,String> differentGraph4 = new HashTree<>();
+        differentGraph4.put( "value 1", "hi", "i" );
         
         assertFalse( "Graphs should not be equal.", graph.equals( differentGraph4 ) );
         assertFalse( "Graphs should not be equal.", differentGraph4.equals( graph ) );
         
         /* Test a different graph with different types */
-        TreeGraph<Long,Integer> differentGraphTypes = new TreeGraph<>();
-        differentGraphTypes.add( 90, 12L, 100L, 1L );
+        Tree<Long,Integer> differentGraphTypes = new HashTree<>();
+        differentGraphTypes.put( 90, 12L, 100L, 1L );
         
         assertFalse( "Graphs should not be equal.", graph.equals( differentGraphTypes ) );
         assertFalse( "Graphs should not be equal.", differentGraphTypes.equals( graph ) );
