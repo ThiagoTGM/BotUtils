@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import com.github.thiagotgm.bot_utils.storage.Data;
+import com.github.thiagotgm.bot_utils.storage.TranslationException;
 import com.github.thiagotgm.bot_utils.storage.Translator;
 
 /**

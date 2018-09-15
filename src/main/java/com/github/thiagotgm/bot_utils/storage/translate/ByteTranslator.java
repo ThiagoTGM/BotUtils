@@ -18,6 +18,7 @@
 package com.github.thiagotgm.bot_utils.storage.translate;
 
 import com.github.thiagotgm.bot_utils.storage.Data;
+import com.github.thiagotgm.bot_utils.storage.TranslationException;
 import com.github.thiagotgm.bot_utils.storage.Translator;
 
 /**

@@ -17,8 +17,6 @@
 
 package com.github.thiagotgm.bot_utils.storage;
 
-import com.github.thiagotgm.bot_utils.storage.Translator.TranslationException;
-
 /**
  * Interface for object types that are capable of translating themselves to and from
  * Data.

@@ -60,8 +60,8 @@ import com.amazonaws.services.dynamodbv2.model.ResourceInUseException;
 import com.amazonaws.services.dynamodbv2.model.ReturnValue;
 import com.amazonaws.services.dynamodbv2.model.ScalarAttributeType;
 import com.github.thiagotgm.bot_utils.storage.Data;
+import com.github.thiagotgm.bot_utils.storage.TranslationException;
 import com.github.thiagotgm.bot_utils.storage.Translator;
-import com.github.thiagotgm.bot_utils.storage.Translator.TranslationException;
 import com.github.thiagotgm.bot_utils.utils.Utils;
 
 /**

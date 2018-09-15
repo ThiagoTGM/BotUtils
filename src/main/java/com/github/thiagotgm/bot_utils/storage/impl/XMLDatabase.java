@@ -43,8 +43,8 @@ import org.slf4j.LoggerFactory;
 
 import com.github.thiagotgm.bot_utils.SaveManager;
 import com.github.thiagotgm.bot_utils.SaveManager.Saveable;
+import com.github.thiagotgm.bot_utils.storage.TranslationException;
 import com.github.thiagotgm.bot_utils.storage.Translator;
-import com.github.thiagotgm.bot_utils.storage.Translator.TranslationException;
 import com.github.thiagotgm.bot_utils.storage.xml.XMLElement;
 import com.github.thiagotgm.bot_utils.storage.xml.XMLTranslator;
 import com.github.thiagotgm.bot_utils.storage.xml.translate.XMLData;
