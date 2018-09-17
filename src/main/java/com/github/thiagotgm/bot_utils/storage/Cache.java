@@ -24,7 +24,7 @@ import com.google.common.collect.HashBiMap;
 
 /**
  * Class that provides a cache to avoid frequent calls to expensive query
- * operations in database implementations.
+ * operations in database implementations. <tt>null</tt> values are allowed.
  * <p>
  * The capacity of the cache is provided at startup. Whenever the cache is
  * currently at full capacity and an addition is requested, one of the currently
@@ -102,6 +102,12 @@ public class Cache<K, V> {
      * <p>
      * If there is a cached mapping, it is moved back to the end of the LRU deletion
      * list.
+     * <p>
+     * The return value will be <tt>null</tt> if no mapping exists for the given
+     * key. However, since this cache allows <tt>null</tt> values, a return value of
+     * <tt>null</tt> does not necessarily indicate that there is no mapping, it may
+     * just be the value <tt>null</tt>. In that situation,
+     * {@link #containsKey(Object)} should be used to differentiate those cases.
      * 
      * @param key
      *            The key to get the cached value for.
@@ -161,7 +167,7 @@ public class Cache<K, V> {
      * @param value
      *            The value of the mapping.
      * @return The value that was previously cached for the given key, or
-     *         <tt>null</tt> if there wasn't one (implies that no changes were
+     *         <tt>null</tt> if there wasn't one (in which case no changes were
      *         made).
      */
     public synchronized V update( K key, V value ) {
@@ -296,14 +302,8 @@ public class Cache<K, V> {
          * @param value
          *            The value to be added.
          * @return The node that stores the value.
-         * @throws NullPointerException
-         *             if the value is <tt>null</tt>.
          */
-        public synchronized Node add( V value ) throws NullPointerException {
-
-            if ( value == null ) {
-                throw new NullPointerException( "Value cannot be null." );
-            }
+        public synchronized Node add( V value ) {
 
             return new ListNode( value, head, head.getNext() ); // Add to head of list.
 
@@ -407,16 +407,10 @@ public class Cache<K, V> {
              * Sets the value stored by this node.
              * 
              * @param value
-             *            The value to be stored. Cannot be <tt>null</tt>.
+             *            The value to be stored.
              * @return The value that is currently stored, that got replaced.
-             * @throws NullPointerException
-             *             if the value is <tt>null</tt>.
              */
-            public V setValue( V value ) throws NullPointerException {
-
-                if ( value == null ) {
-                    throw new NullPointerException( "Value cannot be null." );
-                }
+            public V setValue( V value ) {
 
                 V old = this.value;
                 this.value = value;

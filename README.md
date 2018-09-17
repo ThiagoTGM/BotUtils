@@ -3,7 +3,7 @@ Assorted tools and utilities for Discord bots that use the Discord4J library.
 
 This library provides a bunch of tools and frameworks that help avoid the need to program large and complex backend systems, do the same code over and over again, or just overall make the code look nicer.
 
-The javadocs are available at https://jitpack.io/com/github/ThiagoTGM/BotUtils/@VERSION@/javadoc/, where `@VERSION@` should be replaced by the desired version. This README can't possibly explain everything in full detail, so definitely check them for more detailed information. [latest](https://jitpack.io/com/github/ThiagoTGM/BotUtils/1.0.1/javadoc/)
+The javadocs are available at https://jitpack.io/com/github/ThiagoTGM/BotUtils/@VERSION@/javadoc/, where `@VERSION@` should be replaced by the desired version. This README can't possibly explain everything in full detail, so definitely check them for more detailed information. [latest](https://jitpack.io/com/github/ThiagoTGM/BotUtils/1.0.2/javadoc/)
 
 ## How to Use
 There are 2 ways to use this library in your bot:
