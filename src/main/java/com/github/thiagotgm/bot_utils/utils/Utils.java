@@ -601,7 +601,7 @@ public abstract class Utils {
      *            The map that indicates what the special characters are and the
      *            expression that each of them should be encoded as. The format of
      *            an expression should be similar to
-     *            {@value #EXPRESSION_CHARACTER_MARKER}: a
+     *            {@link #EXPRESSION_CHARACTER_MARKER}: a
      *            '{@value #EXPRESSION_CHARACTER}', followed by a shortened name
      *            (only lowercase letters), followed by a ';'.
      * @return The sanitized string.

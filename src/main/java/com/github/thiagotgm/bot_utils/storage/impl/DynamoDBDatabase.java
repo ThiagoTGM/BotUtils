@@ -134,7 +134,13 @@ public class DynamoDBDatabase extends TableDatabase {
 	private static final ProvisionedThroughput DEFAULT_THROUGHPUT =
 			new ProvisionedThroughput( DEFAULT_READ_UNITS, DEFAULT_WRITE_UNITS );
 	
+	/**
+	 * Client used to interact with the DynamoDB service.
+	 */
 	protected AmazonDynamoDB client;
+	/**
+	 * The DynamoDB instance in use.
+	 */
 	protected DynamoDB dynamoDB;
 
 	@Override
