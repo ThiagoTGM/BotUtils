@@ -62,8 +62,8 @@ import com.github.thiagotgm.bot_utils.utils.graph.Tree;
  * map/tree.
  * <p>
  * The wrappers used for trees and maps are not thread-safe, and as a result
- * trees and maps obtained from the methods implemented here are not
- * thread-safe even if the underlying implementation of the database is.
+ * trees and maps obtained from the methods implemented here are not thread-safe
+ * even if the underlying implementation of the database is.
  * 
  * @version 1.0
  * @author ThiagoTGM
@@ -442,7 +442,7 @@ public abstract class AbstractDatabase implements Database {
      * caches it), and keeps statistics about the performance of fetch calls through
      * {@link DatabaseStats}.
      * <p>
-     * This extension of the cache class is also thread-safe. 
+     * This extension of the cache class is also thread-safe.
      * 
      * @version 1.0
      * @author ThiagoTGM
@@ -493,7 +493,7 @@ public abstract class AbstractDatabase implements Database {
                 value = fetcher.apply( key ); // Request fetch.
                 long elapsed = System.currentTimeMillis() - start;
 
-                if ( ( value == null ) && existenceCheck.test( key ) ) { // Fetch fail.
+                if ( ( value == null ) && !existenceCheck.test( key ) ) { // Fetch fail.
                     DatabaseStats.addDbFetchFailure( elapsed );
                 } else { // Fetch success.
                     DatabaseStats.addDbFetchSuccess( elapsed );
@@ -521,7 +521,7 @@ public abstract class AbstractDatabase implements Database {
      * closed. If it is, the call fails with a {@link IllegalStateException}. Else,
      * the call is passed through to the backing iterator.
      * <p>
-     * This wrapper is <b>not</b> thread-safe. 
+     * This wrapper is <b>not</b> thread-safe.
      * 
      * @version 1.0
      * @author ThiagoTGM
@@ -614,7 +614,7 @@ public abstract class AbstractDatabase implements Database {
      * closed. If it is, the call fails with a {@link IllegalStateException}. Else,
      * the call is passed through to the backing collection.
      * <p>
-     * This wrapper is <b>not</b> thread-safe. 
+     * This wrapper is <b>not</b> thread-safe.
      * 
      * @version 1.0
      * @author ThiagoTGM
@@ -831,7 +831,7 @@ public abstract class AbstractDatabase implements Database {
      * If it is, the call fails with a {@link IllegalStateException}. Else, the call
      * is passed through to the backing set.
      * <p>
-     * This wrapper is <b>not</b> thread-safe. 
+     * This wrapper is <b>not</b> thread-safe.
      * 
      * @version 1.0
      * @author ThiagoTGM
@@ -869,7 +869,7 @@ public abstract class AbstractDatabase implements Database {
      * If it is, the call fails with a {@link IllegalStateException}. Else, the call
      * is passed through to the backing tree.
      * <p>
-     * This wrapper is <b>not</b> thread-safe. 
+     * This wrapper is <b>not</b> thread-safe.
      * 
      * @version 1.0
      * @author ThiagoTGM
@@ -1062,7 +1062,7 @@ public abstract class AbstractDatabase implements Database {
             for ( Graph.Entry<? extends K, ? extends V> entry : g.entrySet() ) {
                 // Update each entry in the cache.
                 cache.update( entry.getPath(), entry.getValue() );
-                
+
             }
             backing.putAll( g );
 
@@ -1161,7 +1161,7 @@ public abstract class AbstractDatabase implements Database {
      * If it is, the call fails with a {@link IllegalStateException}. Else, the call
      * is passed through to the backing map.
      * <p>
-     * This wrapper is <b>not</b> thread-safe. 
+     * This wrapper is <b>not</b> thread-safe.
      * 
      * @version 1.0
      * @author ThiagoTGM
@@ -1280,7 +1280,7 @@ public abstract class AbstractDatabase implements Database {
             for ( Map.Entry<? extends K, ? extends V> entry : m.entrySet() ) {
                 // Update each entry in the cache.
                 cache.update( entry.getKey(), entry.getValue() );
-                
+
             }
             backing.putAll( m );
 
