@@ -767,4 +767,52 @@ public abstract class Utils {
 
     }
 
+    /**
+     * Checks whether the given user has at least one role that is above the given
+     * role. More specifically, determines whether the given user would be able to
+     * modify the given role, if the user had the MANAGE_ROLES permission.
+     * <p>
+     * If the user is the owner of the guild that the role is from, returns
+     * <tt>true</tt> (the owner can always modify any role).
+     * <p>
+     * If the roles in the guild where the role is from are modified (role added or
+     * deleted, reordered, etc) while this operation was in progress, the behavior
+     * is undefined. If the role was deleted from the guild at some point between
+     * when the instance was obtained and this method ended, returns <tt>true</tt>
+     * (everyone is above non-existent role).
+     *
+     * @param user
+     *            The user to check.
+     * @param role
+     *            The role to check.
+     * @return <tt>true</tt> if the user is the guild owner or is above the given
+     *         role. <tt>false</tt> otherwise.
+     * @throws NullPointerException
+     *             if either argument is <tt>null</tt>.
+     */
+    public static boolean isAboveRole( IUser user, IRole role ) throws NullPointerException {
+
+        if ( ( user == null ) || ( role == null ) ) {
+            throw new NullPointerException( "Arguments cannot be null." );
+        }
+
+        if ( user.equals( role.getGuild().getOwner() ) ) {
+            return true; // Owner is above all roles.
+        }
+
+        List<IRole> roles = role.getGuild().getRoles();
+        while ( !( roles.isEmpty() || roles.get( 0 ).equals( role ) ) ) { // Remove roles below the given role.
+
+            roles.remove( 0 );
+
+        }
+        if ( roles.isEmpty() ) { // Role was not found.
+            return true;
+        }
+        roles.remove( 0 ); // Remove the given role itself.
+
+        return user.getRolesForGuild( role.getGuild() ).stream().anyMatch( r -> roles.contains( r ) );
+
+    }
+
 }
