@@ -17,7 +17,7 @@
 
 package com.github.thiagotgm.bot_utils.utils;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.NotSerializableException;
 import java.io.Serializable;
@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.github.thiagotgm.bot_utils.utils.Utils;
 
@@ -75,7 +75,7 @@ public class UtilsTest {
         
         String encoded = Utils.serializableToString( obj );
         T decoded = Utils.stringToSerializable( encoded );
-        assertEquals( "Deserialized object not equal to original.", obj, decoded );
+        assertEquals( obj, decoded, "Deserialized object not equal to original." );
         
     }
     
@@ -110,10 +110,10 @@ public class UtilsTest {
      * 
      * @throws NotSerializableException if an exception happens (expected).
      */
-    @Test( expected = NotSerializableException.class )
+    @Test
     public void testEncodeException() throws NotSerializableException {
         
-        testEncode( new Thread() );
+        assertThrows( NotSerializableException.class, () -> testEncode( new Thread() ) );
         
     }
     
@@ -128,7 +128,7 @@ public class UtilsTest {
         
         String encoded = Utils.encode( obj );
         T decoded = Utils.decode( encoded );
-        assertEquals( "Deserialized object not equal to original.", obj, decoded );
+        assertEquals( obj, decoded, "Deserialized object not equal to original." );
         
     }
     
@@ -161,7 +161,7 @@ public class UtilsTest {
     private void testListEncode( List<String> list ) {
     	
     	String encoded = Utils.encodeList( list );
-    	assertEquals( "Decoded list does not match.", list, Utils.decodeList( encoded ) );
+    	assertEquals( list, Utils.decodeList( encoded ), "Decoded list does not match." );
     	
     }
 

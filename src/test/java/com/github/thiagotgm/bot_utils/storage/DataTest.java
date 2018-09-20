@@ -17,14 +17,14 @@
 
 package com.github.thiagotgm.bot_utils.storage;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.github.thiagotgm.bot_utils.storage.Data;
 
@@ -114,7 +114,7 @@ public class DataTest {
 		Data data = Data.stringData( null );
 		
 		// Check type.
-		assertEquals( "Incorrect data type.", Data.Type.NULL, data.getType() );
+		assertEquals( Data.Type.NULL, data.getType(), "Incorrect data type." );
 		
 		// Check test methods.
 		assertFalse( data.isString() );
@@ -138,7 +138,7 @@ public class DataTest {
 		data = Data.stringData( new String( str ) );
 		
 		// Check type.
-		assertEquals( "Incorrect data type.", Data.Type.STRING, data.getType() );
+		assertEquals( Data.Type.STRING, data.getType(), "Incorrect data type." );
 		
 		// Check test methods.
 		assertTrue( data.isString() );
@@ -162,7 +162,7 @@ public class DataTest {
 		data = Data.stringData( new String( str ) );
 		
 		// Check type.
-		assertEquals( "Incorrect data type.", Data.Type.STRING, data.getType() );
+		assertEquals( Data.Type.STRING, data.getType(), "Incorrect data type." );
 		
 		// Check test methods.
 		assertTrue( data.isString() );
@@ -190,7 +190,7 @@ public class DataTest {
 		Data data = Data.numberData( null );
 		
 		// Check type.
-		assertEquals( "Incorrect data type.", Data.Type.NULL, data.getType() );
+		assertEquals( Data.Type.NULL, data.getType(), "Incorrect data type." );
 		
 		// Check test methods.
 		assertFalse( data.isString() );
@@ -215,7 +215,7 @@ public class DataTest {
 		data = Data.numberData( str );
 		
 		// Check type.
-		assertEquals( "Incorrect data type.", Data.Type.NUMBER, data.getType() );
+		assertEquals( Data.Type.NUMBER, data.getType(), "Incorrect data type." );
 		
 		// Check test methods.
 		assertFalse( data.isString() );
@@ -227,7 +227,7 @@ public class DataTest {
 		assertFalse( data.isMap() );
 		
 		// Check data.
-		assertNull( str, data.getString() );
+		assertNull( data.getString() );
 		assertEquals( str, data.getNumber() );
 		assertEquals( integer, data.getNumberInteger() );
 		assertEquals( integer, data.getNumberFloat(), 0.000001 );
@@ -242,7 +242,7 @@ public class DataTest {
 		data = Data.numberData( integer );
 		
 		// Check type.
-		assertEquals( "Incorrect data type.", Data.Type.NUMBER, data.getType() );
+		assertEquals( Data.Type.NUMBER, data.getType(), "Incorrect data type." );
 		
 		// Check test methods.
 		assertFalse( data.isString() );
@@ -254,7 +254,7 @@ public class DataTest {
 		assertFalse( data.isMap() );
 		
 		// Check data.
-		assertNull( str, data.getString() );
+		assertNull( data.getString() );
 		assertEquals( str, data.getNumber() );
 		assertEquals( integer, data.getNumberInteger() );
 		assertEquals( integer, data.getNumberFloat(), 0.000001 );
@@ -269,7 +269,7 @@ public class DataTest {
 		data = Data.numberData( str );
 		
 		// Check type.
-		assertEquals( "Incorrect data type.", Data.Type.NUMBER, data.getType() );
+		assertEquals( Data.Type.NUMBER, data.getType(), "Incorrect data type." );
 		
 		// Check test methods.
 		assertFalse( data.isString() );
@@ -281,7 +281,7 @@ public class DataTest {
 		assertFalse( data.isMap() );
 		
 		// Check data.
-		assertNull( str, data.getString() );
+		assertNull( data.getString() );
 		assertEquals( str, data.getNumber() );
 		assertEquals( (long) fp, data.getNumberInteger() );
 		assertEquals( fp, data.getNumberFloat(), 0.000001 );
@@ -296,7 +296,7 @@ public class DataTest {
 		data = Data.numberData( fp );
 		
 		// Check type.
-		assertEquals( "Incorrect data type.", Data.Type.NUMBER, data.getType() );
+		assertEquals( Data.Type.NUMBER, data.getType(), "Incorrect data type." );
 		
 		// Check test methods.
 		assertFalse( data.isString() );
@@ -308,7 +308,7 @@ public class DataTest {
 		assertFalse( data.isMap() );
 		
 		// Check data.
-		assertNull( str, data.getString() );
+		assertNull( data.getString() );
 		assertEquals( str, data.getNumber() );
 		assertEquals( (long) fp, data.getNumberInteger() );
 		assertEquals( fp, data.getNumberFloat(), 0.000001 );
@@ -335,7 +335,7 @@ public class DataTest {
 		Data data = Data.booleanData( true );
 		
 		// Check type.
-		assertEquals( "Incorrect data type.", Data.Type.BOOLEAN, data.getType() );
+		assertEquals( Data.Type.BOOLEAN, data.getType(), "Incorrect data type." );
 		
 		// Check test methods.
 		assertFalse( data.isString() );
@@ -359,7 +359,7 @@ public class DataTest {
 		data = Data.booleanData( false );
 		
 		// Check type.
-		assertEquals( "Incorrect data type.", Data.Type.BOOLEAN, data.getType() );
+		assertEquals( Data.Type.BOOLEAN, data.getType(), "Incorrect data type." );
 		
 		// Check test methods.
 		assertFalse( data.isString() );
@@ -386,7 +386,7 @@ public class DataTest {
 		Data data = Data.nullData();
 		
 		// Check type.
-		assertEquals( "Incorrect data type.", Data.Type.NULL, data.getType() );
+		assertEquals( Data.Type.NULL, data.getType(), "Incorrect data type." );
 		
 		// Check test methods.
 		assertFalse( data.isString() );
@@ -414,7 +414,7 @@ public class DataTest {
 		Data data = Data.listData( (List<Data>) null );
 		
 		// Check type.
-		assertEquals( "Incorrect data type.", Data.Type.NULL, data.getType() );
+		assertEquals( Data.Type.NULL, data.getType(), "Incorrect data type." );
 		
 		// Check test methods.
 		assertFalse( data.isString() );
@@ -438,7 +438,7 @@ public class DataTest {
 		data = Data.listData( new ArrayList<>( list ) );
 		
 		// Check type.
-		assertEquals( "Incorrect data type.", Data.Type.LIST, data.getType() );
+		assertEquals( Data.Type.LIST, data.getType(), "Incorrect data type." );
 		
 		// Check test methods.
 		assertFalse( data.isString() );
@@ -466,7 +466,7 @@ public class DataTest {
 		data = Data.listData( new ArrayList<>( list ) );
 		
 		// Check type.
-		assertEquals( "Incorrect data type.", Data.Type.LIST, data.getType() );
+		assertEquals( Data.Type.LIST, data.getType(), "Incorrect data type." );
 		
 		// Check test methods.
 		assertFalse( data.isString() );
@@ -494,7 +494,7 @@ public class DataTest {
 		Data data = Data.mapData( null );
 		
 		// Check type.
-		assertEquals( "Incorrect data type.", Data.Type.NULL, data.getType() );
+		assertEquals( Data.Type.NULL, data.getType(), "Incorrect data type." );
 		
 		// Check test methods.
 		assertFalse( data.isString() );
@@ -518,7 +518,7 @@ public class DataTest {
 		data = Data.mapData( new HashMap<>( map ) );
 		
 		// Check type.
-		assertEquals( "Incorrect data type.", Data.Type.MAP, data.getType() );
+		assertEquals( Data.Type.MAP, data.getType(), "Incorrect data type." );
 		
 		// Check test methods.
 		assertFalse( data.isString() );
@@ -551,7 +551,7 @@ public class DataTest {
 		data = Data.mapData( new HashMap<>( map ) );
 		
 		// Check type.
-		assertEquals( "Incorrect data type.", Data.Type.MAP, data.getType() );
+		assertEquals( Data.Type.MAP, data.getType(), "Incorrect data type." );
 		
 		// Check test methods.
 		assertFalse( data.isString() );

@@ -17,8 +17,6 @@
 
 package com.github.thiagotgm.bot_utils.storage.xml.translate;
 
-import org.junit.Test;
-
 import com.github.thiagotgm.bot_utils.storage.xml.XMLTestHelper;
 import com.github.thiagotgm.bot_utils.storage.xml.translate.XMLBoolean;
 import com.github.thiagotgm.bot_utils.storage.xml.translate.XMLByte;
@@ -30,7 +28,7 @@ import com.github.thiagotgm.bot_utils.storage.xml.translate.XMLShort;
 import com.github.thiagotgm.bot_utils.storage.xml.translate.XMLString;
 import com.github.thiagotgm.bot_utils.storage.xml.translate.XMLTextData;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,6 +37,8 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests for XMLTextData elements.
@@ -62,7 +62,7 @@ public class XMLTextDataTest {
         
         while ( in.next() != XMLStreamConstants.START_ELEMENT ) {} // Skip space.
         T actual = translator.read( in );
-        assertEquals( "Read value does not match expected.", expected, actual );
+        assertEquals( expected, actual, "Read value does not match expected." );
         
     }
 

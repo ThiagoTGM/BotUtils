@@ -17,8 +17,8 @@
 
 package com.github.thiagotgm.bot_utils.storage.impl;
 
-import static org.junit.Assert.*;
-import static org.junit.Assume.assumeTrue;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,9 +30,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.github.thiagotgm.bot_utils.storage.Data;
@@ -75,7 +75,7 @@ public class DynamoDBDatabaseTest {
     private DynamoDBDatabase db;
     private Map<String, Data> map;
 
-    @Before
+    @BeforeEach
     public void setUp() {
 
         db = new DynamoDBDatabase();
@@ -84,7 +84,7 @@ public class DynamoDBDatabaseTest {
 
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
 
         if ( hasTempTable ) {
@@ -337,22 +337,22 @@ public class DynamoDBDatabaseTest {
     @Test
     public void testNullObjects() {
 
-        Map<String,String> map = getTempTable( new StringTranslator(), new StringTranslator() );
-     
+        Map<String, String> map = getTempTable( new StringTranslator(), new StringTranslator() );
+
         assertNull( map.put( "null value", null ) );
         assertNull( map.put( null, "null key" ) );
-        
+
         assertTrue( map.containsKey( "null value" ) );
         assertTrue( map.containsKey( null ) );
-        
+
         assertTrue( map.containsValue( null ) );
         assertTrue( map.containsValue( "null key" ) );
-        
+
         assertNull( map.get( "null value" ) );
         assertEquals( "null key", map.get( null ) );
-        
+
         assertEquals( "null key", map.put( null, null ) );
-        
+
         assertTrue( map.containsKey( null ) );
         assertTrue( map.containsValue( null ) );
         assertNull( map.get( null ) );
@@ -593,10 +593,10 @@ public class DynamoDBDatabaseTest {
 
     }
 
-    @Test( expected = UnsupportedOperationException.class )
+    @Test
     public void testKeySetAdd() {
 
-        getTempTable().keySet().add( "fail" );
+        assertThrows( UnsupportedOperationException.class, () -> getTempTable().keySet().add( "fail" ) );
 
     }
 
@@ -629,10 +629,11 @@ public class DynamoDBDatabaseTest {
 
     }
 
-    @Test( expected = UnsupportedOperationException.class )
+    @Test
     public void testKeySetAddAll() {
 
-        getTempTable().keySet().addAll( TEST_DB_MAPPINGS.keySet() );
+        assertThrows( UnsupportedOperationException.class,
+                () -> getTempTable().keySet().addAll( TEST_DB_MAPPINGS.keySet() ) );
 
     }
 
@@ -943,10 +944,10 @@ public class DynamoDBDatabaseTest {
 
     }
 
-    @Test( expected = UnsupportedOperationException.class )
+    @Test
     public void testValueCollectionAdd() {
 
-        getTempTable().keySet().add( "fail" );
+        assertThrows( UnsupportedOperationException.class, () -> getTempTable().keySet().add( "fail" ) );
 
     }
 
@@ -988,10 +989,11 @@ public class DynamoDBDatabaseTest {
 
     }
 
-    @Test( expected = UnsupportedOperationException.class )
+    @Test
     public void testValueCollectionAddAll() {
 
-        getTempTable().values().addAll( TEST_DB_MAPPINGS.values() );
+        assertThrows( UnsupportedOperationException.class,
+                () -> getTempTable().values().addAll( TEST_DB_MAPPINGS.values() ) );
 
     }
 
@@ -1281,10 +1283,10 @@ public class DynamoDBDatabaseTest {
 
     }
 
-    @Test( expected = UnsupportedOperationException.class )
+    @Test
     public void testEntrySetAdd() {
 
-        getTempTable().keySet().add( "fail" );
+        assertThrows( UnsupportedOperationException.class, () -> getTempTable().keySet().add( "fail" ) );
 
     }
 
@@ -1340,10 +1342,11 @@ public class DynamoDBDatabaseTest {
 
     }
 
-    @Test( expected = UnsupportedOperationException.class )
+    @Test
     public void testEntrySetAddAll() {
 
-        getTempTable().entrySet().addAll( TEST_DB_MAPPINGS.entrySet() );
+        assertThrows( UnsupportedOperationException.class,
+                () -> getTempTable().entrySet().addAll( TEST_DB_MAPPINGS.entrySet() ) );
 
     }
 

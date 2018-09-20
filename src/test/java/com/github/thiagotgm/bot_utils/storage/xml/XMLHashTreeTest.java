@@ -17,13 +17,14 @@
 
 package com.github.thiagotgm.bot_utils.storage.xml;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.io.InputStream;
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 
 import com.github.thiagotgm.bot_utils.storage.xml.XMLElement;
 import com.github.thiagotgm.bot_utils.storage.xml.translate.XMLInteger;
@@ -65,7 +66,7 @@ public class XMLHashTreeTest {
         InputStream in = this.getClass().getResourceAsStream( "/storage/xml/TreeGraph.xml" );
         XMLHashTree<String,Integer> actual = Utils.readXMLDocument( in, TRANSLATOR );
         
-        assertEquals( "Read graph is not correct.", EXPECTED, actual );
+        assertEquals( EXPECTED, actual, "Read graph is not correct." );
         
     }
     

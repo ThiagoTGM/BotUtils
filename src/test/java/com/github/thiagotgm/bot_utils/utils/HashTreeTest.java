@@ -17,11 +17,12 @@
 
 package com.github.thiagotgm.bot_utils.utils;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
-import org.junit.Before;
-import org.junit.Test;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.github.thiagotgm.bot_utils.utils.Utils;
 import com.github.thiagotgm.bot_utils.utils.graph.HashTree;
@@ -38,7 +39,7 @@ public class HashTreeTest {
     
     private HashTree<String,String> graph;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         
         graph = new HashTree<>();
@@ -55,19 +56,19 @@ public class HashTreeTest {
         Tree<String,Integer> graph3 = new HashTree<>();
         
         /* Test getting */
-        assertEquals( "Incorrect value retrieved.", "value 1", graph.get( "hi", "i" ) );
-        assertEquals( "Incorrect value retrieved.", "value 2", graph.get( "hi" ) );
-        assertEquals( "Incorrect value retrieved.", "value 3", graph.get( "hi", "i", "am", "here" ) );
-        assertEquals( "Incorrect value retrieved.", null, graph.get( "potato" ) );
-        assertEquals( "Incorrect value retrieved.", null, graph.get( "potato", "salad" ) );
-        assertEquals( "Incorrect value retrieved.", null, graph.get( "potato", "salad", "with dressing" ) );
+        assertEquals( "value 1", graph.get( "hi", "i" ), "Incorrect value retrieved." );
+        assertEquals( "value 2", graph.get( "hi" ), "Incorrect value retrieved." );
+        assertEquals( "value 3", graph.get( "hi", "i", "am", "here" ), "Incorrect value retrieved." );
+        assertEquals( null, graph.get( "potato" ), "Incorrect value retrieved." );
+        assertEquals( null, graph.get( "potato", "salad" ), "Incorrect value retrieved." );
+        assertEquals( null, graph.get( "potato", "salad", "with dressing" ), "Incorrect value retrieved." );
         
-        assertEquals( "Incorrect value retrieved.", null, graph2.get( 1990L, 420L ) );
-        assertEquals( "Incorrect value retrieved.", null, graph2.get( 0L, -19L ) );
+        assertEquals( null, graph2.get( 1990L, 420L ), "Incorrect value retrieved." );
+        assertEquals( null, graph2.get( 0L, -19L ), "Incorrect value retrieved." );
         
-        assertEquals( "Incorrect value retrieved.", null, graph3.get( "a", "number" ) );
-        assertEquals( "Incorrect value retrieved.", null, graph3.get( "another", "number" ) );
-        assertEquals( "Incorrect value retrieved.", null, graph3.get( "a", "nother", "number" ) );
+        assertEquals( null, graph3.get( "a", "number" ), "Incorrect value retrieved." );
+        assertEquals( null, graph3.get( "another", "number" ), "Incorrect value retrieved." );
+        assertEquals( null, graph3.get( "a", "nother", "number" ), "Incorrect value retrieved." );
 
         /* Test putting */
         assertNull( graph.put( "value 4", "potato" ) );
@@ -82,19 +83,19 @@ public class HashTreeTest {
         assertNull( graph3.put( -1, "a", "nother", "number" ) );
         
         /* Test getting again */
-        assertEquals( "Incorrect value retrieved.", "value 1", graph.get( "hi", "i" ) );
-        assertEquals( "Incorrect value retrieved.", "value 2", graph.get( "hi" ) );
-        assertEquals( "Incorrect value retrieved.", "value 3", graph.get( "hi", "i", "am", "here" ) );
-        assertEquals( "Incorrect value retrieved.", "value 4", graph.get( "potato" ) );
-        assertEquals( "Incorrect value retrieved.", "value 5", graph.get( "potato", "salad" ) );
-        assertEquals( "Incorrect value retrieved.", "value 6", graph.get( "potato", "salad", "with dressing" ) );
+        assertEquals( "value 1", graph.get( "hi", "i" ), "Incorrect value retrieved." );
+        assertEquals( "value 2", graph.get( "hi" ), "Incorrect value retrieved." );
+        assertEquals( "value 3", graph.get( "hi", "i", "am", "here" ), "Incorrect value retrieved." );
+        assertEquals( "value 4", graph.get( "potato" ), "Incorrect value retrieved." );
+        assertEquals( "value 5", graph.get( "potato", "salad" ), "Incorrect value retrieved." );
+        assertEquals( "value 6", graph.get( "potato", "salad", "with dressing" ), "Incorrect value retrieved." );
         
-        assertEquals( "Incorrect value retrieved.", "value 1", graph2.get( 1990L, 420L ) );
-        assertEquals( "Incorrect value retrieved.", "value 2", graph2.get( 0L, -19L ) );
+        assertEquals( "value 1", graph2.get( 1990L, 420L ), "Incorrect value retrieved." );
+        assertEquals( "value 2", graph2.get( 0L, -19L ), "Incorrect value retrieved." );
         
-        assertEquals( "Incorrect value retrieved.", new Integer( 90 ), graph3.get( "a", "number" ) );
-        assertEquals( "Incorrect value retrieved.", new Integer( 404 ), graph3.get( "another", "number" ) );
-        assertEquals( "Incorrect value retrieved.", new Integer( -1 ), graph3.get( "a", "nother", "number" ) );
+        assertEquals( new Integer( 90 ), graph3.get( "a", "number" ), "Incorrect value retrieved." );
+        assertEquals( new Integer( 404 ), graph3.get( "another", "number" ), "Incorrect value retrieved." );
+        assertEquals( new Integer( -1 ), graph3.get( "a", "nother", "number" ), "Incorrect value retrieved." );
         
         /* Test putting repeated */
         assertEquals( "value 1", graph.put( "other", "hi", "i" ) );
@@ -112,19 +113,19 @@ public class HashTreeTest {
         assertEquals( new Integer( -1 ), graph3.put( 0, "a", "nother", "number" ) );
         
         /* Test getting new values */
-        assertEquals( "Incorrect value retrieved.", "other", graph.get( "hi", "i" ) );
-        assertEquals( "Incorrect value retrieved.", "other", graph.get( "hi" ) );
-        assertEquals( "Incorrect value retrieved.", "other", graph.get( "hi", "i", "am", "here" ) );
-        assertEquals( "Incorrect value retrieved.", "other", graph.get( "potato" ) );
-        assertEquals( "Incorrect value retrieved.", "other", graph.get( "potato", "salad" ) );
-        assertEquals( "Incorrect value retrieved.", "other", graph.get( "potato", "salad", "with dressing" ) );
+        assertEquals( "other", graph.get( "hi", "i" ), "Incorrect value retrieved." );
+        assertEquals( "other", graph.get( "hi" ), "Incorrect value retrieved." );
+        assertEquals( "other", graph.get( "hi", "i", "am", "here" ), "Incorrect value retrieved." );
+        assertEquals( "other", graph.get( "potato" ), "Incorrect value retrieved." );
+        assertEquals( "other", graph.get( "potato", "salad" ), "Incorrect value retrieved." );
+        assertEquals( "other", graph.get( "potato", "salad", "with dressing" ), "Incorrect value retrieved." );
         
-        assertEquals( "Incorrect value retrieved.", "other", graph2.get( 1990L, 420L ) );
-        assertEquals( "Incorrect value retrieved.", "other", graph2.get( 0L, -19L ) );
+        assertEquals( "other", graph2.get( 1990L, 420L ), "Incorrect value retrieved." );
+        assertEquals( "other", graph2.get( 0L, -19L ), "Incorrect value retrieved." );
         
-        assertEquals( "Incorrect value retrieved.", new Integer( 0 ), graph3.get( "a", "number" ) );
-        assertEquals( "Incorrect value retrieved.", new Integer( 0 ), graph3.get( "another", "number" ) );
-        assertEquals( "Incorrect value retrieved.", new Integer( 0 ), graph3.get( "a", "nother", "number" ) );
+        assertEquals( new Integer( 0 ), graph3.get( "a", "number" ), "Incorrect value retrieved." );
+        assertEquals( new Integer( 0 ), graph3.get( "another", "number" ), "Incorrect value retrieved." );
+        assertEquals( new Integer( 0 ), graph3.get( "a", "nother", "number" ), "Incorrect value retrieved." );
         
     }
     
@@ -132,42 +133,41 @@ public class HashTreeTest {
     public void testGetAll() {
         
         String[] expected = { "value 2", "value 1", "value 3" };
-        assertEquals( "Incorrect list returned.", Arrays.asList( expected ),
-                graph.getAll( "hi", "i", "am", "here" ) );
+        assertEquals( Arrays.asList( expected ),
+                graph.getAll( "hi", "i", "am", "here" ), "Incorrect list returned." );
         
         String[] expected2 = { "value 2", "value 1" };
-        assertEquals( "Incorrect list returned.", Arrays.asList( expected2 ),
-                graph.getAll( "hi", "i" ) );
+        assertEquals( Arrays.asList( expected2 ),
+                graph.getAll( "hi", "i" ), "Incorrect list returned." );
         
     }
     
     @Test
     public void testRemove() {
         
-        assertEquals( "Wrong value returned by remove.", "value 1", graph.remove( "hi", "i" ) );
-        assertNull( "Value was not deleted.", graph.get( "hi", "i" ) );
-        assertNull( "Delete succeeded in deleted path.", graph.remove( "hi", "i" ) );
-        assertNull( "Deleted a value from an inexistent path.", graph.remove( "does", "not", "exist" ) );
+        assertEquals( "value 1", graph.remove( "hi", "i" ), "Wrong value returned by remove." );
+        assertNull( graph.get( "hi", "i" ), "Value was not deleted." );
+        assertNull( graph.remove( "hi", "i" ), "Delete succeeded in deleted path." );
+        assertNull( graph.remove( "does", "not", "exist" ), "Deleted a value from an inexistent path." );
         
     }
     
     @Test
     public void testSize() {
         
-        assertEquals( "Incorrect graph size.", 3, graph.size() );
+        assertEquals( 3, graph.size(), "Incorrect graph size." );
         graph.remove( "hi" );
-        assertEquals( "Incorrect graph size.", 2, graph.size() );
-        assertEquals( "Incorrect graph size.", 0,
-                new HashTree<String,String>().size() );
+        assertEquals( 2, graph.size(), "Incorrect graph size." );
+        assertEquals( 0,
+                new HashTree<String,String>().size(), "Incorrect graph size." );
         
     }
     
     @Test
     public void testIsEmpty() {
         
-        assertFalse( "Graph should not be empty.", graph.isEmpty() );
-        assertTrue( "Graph should be empty.",
-                new HashTree<String,String>().isEmpty() );
+        assertFalse( graph.isEmpty(), "Graph should not be empty." );
+        assertTrue( new HashTree<String,String>().isEmpty(), "Graph should be empty." );
         
     }
     
@@ -175,17 +175,17 @@ public class HashTreeTest {
     public void testClear() {
         
         graph.clear();
-        assertTrue( "Graph should become empty.", graph.isEmpty() );
+        assertTrue( graph.isEmpty(), "Graph should become empty." );
         
     }
     
     @Test
     public void testRoot() {
 
-        assertNull( "Graph root should be empty.", graph.get() );
+        assertNull( graph.get(), "Graph root should be empty." );
         
         graph.put( "string" );
-        assertEquals( "Incorrect root value.", "string", graph.get() );
+        assertEquals( "string", graph.get(), "Incorrect root value." );
         
     }
     
@@ -194,7 +194,7 @@ public class HashTreeTest {
 
         String encoded = Utils.serializableToString( graph );
         Tree<String,String> decoded = Utils.stringToSerializable( encoded );
-        assertEquals( "Decoded graph not equal to original.", graph, decoded );
+        assertEquals( graph, decoded, "Decoded graph not equal to original." );
         
     }
     
@@ -207,15 +207,15 @@ public class HashTreeTest {
         equalGraph.put( "value 2", "hi" );
         equalGraph.put( "value 3", "hi", "i", "am", "here" );
         
-        assertTrue( "Graphs should be equal.", graph.equals( equalGraph ) );
-        assertTrue( "Graphs should be equal.", equalGraph.equals( graph ) );
+        assertTrue( graph.equals( equalGraph ), "Graphs should be equal." );
+        assertTrue( equalGraph.equals( graph ), "Graphs should be equal." );
         
         /* Test a different graph */
         Tree<String,String> differentGraph1 = new HashTree<>();
         differentGraph1.put( "other", "noob" );
         
-        assertFalse( "Graphs should not be equal.", graph.equals( differentGraph1 ) );
-        assertFalse( "Graphs should not be equal.", differentGraph1.equals( graph ) );
+        assertFalse( graph.equals( differentGraph1 ), "Graphs should not be equal." );
+        assertFalse( differentGraph1.equals( graph ), "Graphs should not be equal." );
         
         /* Test a different graph with the same keys */
         Tree<String,String> differentGraph2 = new HashTree<>();
@@ -223,8 +223,8 @@ public class HashTreeTest {
         differentGraph2.put( "other 2", "hi" );
         differentGraph2.put( "other 3", "hi", "i", "am", "here" );
         
-        assertFalse( "Graphs should not be equal.", graph.equals( differentGraph2 ) );
-        assertFalse( "Graphs should not be equal.", differentGraph2.equals( graph ) );
+        assertFalse( graph.equals( differentGraph2 ), "Graphs should not be equal." );
+        assertFalse( differentGraph2.equals( graph ), "Graphs should not be equal." );
         
         /* Test a different graph with the same values */
         Tree<String,String> differentGraph3 = new HashTree<>();
@@ -232,22 +232,22 @@ public class HashTreeTest {
         differentGraph3.put( "value 2", "other", "key" );
         differentGraph3.put( "value 3", "other", "key", "here" );
         
-        assertFalse( "Graphs should not be equal.", graph.equals( differentGraph3 ) );
-        assertFalse( "Graphs should not be equal.", differentGraph3.equals( graph ) );
+        assertFalse( graph.equals( differentGraph3 ), "Graphs should not be equal." );
+        assertFalse( differentGraph3.equals( graph ), "Graphs should not be equal." );
         
         /* Test a different graph with a single equal mapping */
         Tree<String,String> differentGraph4 = new HashTree<>();
         differentGraph4.put( "value 1", "hi", "i" );
         
-        assertFalse( "Graphs should not be equal.", graph.equals( differentGraph4 ) );
-        assertFalse( "Graphs should not be equal.", differentGraph4.equals( graph ) );
+        assertFalse( graph.equals( differentGraph4 ), "Graphs should not be equal." );
+        assertFalse( differentGraph4.equals( graph ), "Graphs should not be equal." );
         
         /* Test a different graph with different types */
         Tree<Long,Integer> differentGraphTypes = new HashTree<>();
         differentGraphTypes.put( 90, 12L, 100L, 1L );
         
-        assertFalse( "Graphs should not be equal.", graph.equals( differentGraphTypes ) );
-        assertFalse( "Graphs should not be equal.", differentGraphTypes.equals( graph ) );
+        assertFalse( graph.equals( differentGraphTypes ), "Graphs should not be equal." );
+        assertFalse( differentGraphTypes.equals( graph ), "Graphs should not be equal." );
         
     }
 
