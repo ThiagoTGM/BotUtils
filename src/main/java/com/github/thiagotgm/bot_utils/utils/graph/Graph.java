@@ -20,7 +20,9 @@ package com.github.thiagotgm.bot_utils.utils.graph;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -224,8 +226,7 @@ public interface Graph<K, V> {
      *             if the path is empty but such a path is not valid under the
      *             current implementation.
      */
-    V put( List<K> path, V value )
-            throws UnsupportedOperationException, NullPointerException, IllegalArgumentException;
+    V put( List<K> path, V value ) throws UnsupportedOperationException, NullPointerException, IllegalArgumentException;
 
     /**
      * Varargs version of {@link #put(List, Object) put(List, V)}.
@@ -338,11 +339,84 @@ public interface Graph<K, V> {
     default void putAll( Graph<? extends K, ? extends V> g )
             throws UnsupportedOperationException, NullPointerException {
 
+        if ( g == null ) {
+            throw new NullPointerException( "Given graph cannot be null." );
+        }
+
         for ( Entry<? extends K, ? extends V> entry : g.entrySet() ) {
 
             put( new ArrayList<>( entry.getPath() ), entry.getValue() );
 
         }
+
+    }
+
+    /**
+     * Copies all of the mappings from the specified map to this graph. The effect
+     * of this call is equivalent to that of calling {@link #put(List, Object)
+     * put(k, v)} on this graph once for each mapping from key <tt>k</tt> to value
+     * <tt>v</tt> in the specified map. The behavior of this operation is undefined
+     * if the specified map is modified while the operation is in progress.
+     * 
+     * @param m
+     *            Mappings to be stored in this graph.
+     * @throws UnsupportedOperationException
+     *             if the <tt>putAll</tt> operation is not supported by this graph.
+     * @throws NullPointerException
+     *             if the specified graph is <tt>null</tt>, or if the specified map
+     *             contains <tt>null</tt> keys, or if this graph does not permit
+     *             <tt>null</tt> path elements or values, and the specified map
+     *             contains <tt>null</tt> path elements or values.
+     */
+    default void putAll( Map<? extends List<? extends K>, ? extends V> m )
+            throws UnsupportedOperationException, NullPointerException {
+
+        if ( m == null ) {
+            throw new NullPointerException( "Given map cannot be null." );
+        }
+
+        for ( Map.Entry<? extends List<? extends K>, ? extends V> entry : m.entrySet() ) {
+
+            put( new ArrayList<>( entry.getKey() ), entry.getValue() );
+
+        }
+
+    }
+
+    /**
+     * Copies all of the mappings from this graph to specified map. The effect of
+     * this call is equivalent to that of adding each entry in this graph into an
+     * intermediate map <tt>m</tt>, then calling {@link Map#putAll(Map)
+     * Map.putAll(m)} on the given map. The behavior of this operation is undefined
+     * if this graph is modified while the operation is in progress.
+     * 
+     * @param m
+     *            Map to store mappings into.
+     * @return The map.
+     * @throws UnsupportedOperationException
+     *             if the <tt>putAll</tt> operation is not supported by the given
+     *             map.
+     * @throws NullPointerException
+     *             if the specified map is <tt>null</tt>, or if the specified map
+     *             does not permit <tt>null</tt> values and this graph contains
+     *             <tt>null</tt> values.
+     */
+    default Map<? super List<? extends K>, ? super V> toMap( Map<? super List<? extends K>, ? super V> m )
+            throws UnsupportedOperationException, NullPointerException {
+
+        if ( m == null ) {
+            throw new NullPointerException( "Given map cannot be null." );
+        }
+
+        Map<List<K>, V> mappings = new HashMap<>();
+        for ( Entry<K, V> entry : entrySet() ) { // Collect the mappings.
+
+            mappings.put( new ArrayList<>( entry.getPath() ), entry.getValue() );
+
+        }
+
+        m.putAll( mappings ); // Put all mappings.
+        return m;
 
     }
 
@@ -650,8 +724,8 @@ public interface Graph<K, V> {
 
     /**
      * A path-value entry in a Graph. The {@link Graph#entrySet()} method returns a
-     * Set view of the graph with members of this class. The only way to
-     * obtain an entry is through the iterator of that set.<br>
+     * Set view of the graph with members of this class. The only way to obtain an
+     * entry is through the iterator of that set.<br>
      * If the backing graph is modified in any way other than the
      * {@link #setValue(Object) setValue} method of an Entry, the behavior is
      * undefined.
@@ -714,7 +788,7 @@ public interface Graph<K, V> {
          * @throws NullPointerException
          *             if the value given is <tt>null</tt>, and the current
          *             implementation does not allow <tt>null</tt> values.
-         * @throws UnsupportedOperationException 
+         * @throws UnsupportedOperationException
          *             if the put operation is not supported by the backing graph.
          */
         V setValue( V value ) throws NullPointerException, UnsupportedOperationException;
