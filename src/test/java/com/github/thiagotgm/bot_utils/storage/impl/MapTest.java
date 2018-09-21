@@ -18,6 +18,8 @@
 package com.github.thiagotgm.bot_utils.storage.impl;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -29,6 +31,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
@@ -41,6 +44,7 @@ import com.github.thiagotgm.bot_utils.storage.Data;
  * @author ThiagoTGM
  * @since 2018-09-20
  */
+@DisplayName( "Map tests" )
 public interface MapTest {
 
     /**
@@ -934,9 +938,11 @@ public interface MapTest {
     default void testKeySetHashCode() {
 
         Map<String, List<Integer>> map = getMap();
-        assertEquals( new HashMap<>().keySet().hashCode(), map.keySet().hashCode() );
+        assertEquals( new HashMap<>().keySet().hashCode(), map.keySet().hashCode(),
+                "Empty map key set hash code not correct." );
         map.putAll( TEST_MAPPINGS );
-        assertEquals( TEST_MAPPINGS.keySet().hashCode(), map.keySet().hashCode() );
+        assertEquals( TEST_MAPPINGS.keySet().hashCode(), map.keySet().hashCode(),
+                "Filled map key set hash code not correct." );
 
     }
 
@@ -1320,387 +1326,513 @@ public interface MapTest {
 
     }
 
-    /*
-     * Tests for entry set view /
-     * 
-     * @Test default void testEntrySetSize() {
-     * 
-     * assertEquals( TEST_DB_MAPPINGS.size(), map.entrySet().size() ); assertEquals(
-     * 0, getTempTable().entrySet().size() );
-     * 
-     * }
-     * 
-     * @Test default void testEntrySetIsEmpty() {
-     * 
-     * assertFalse( map.entrySet().isEmpty() ); assertTrue(
-     * getTempTable().entrySet().isEmpty() );
-     * 
-     * }
-     * 
-     * @Test
-     * 
-     * @SuppressWarnings( "unlikely-arg-type" ) default void testEntrySetContains()
-     * {
-     * 
-     * Set<Map.Entry<String, Data>> entries = map.entrySet();
-     * 
-     * for ( Map.Entry<String, Data> entry : TEST_DB_MAPPINGS.entrySet() ) {
-     * 
-     * assertTrue( entries.contains( entry ) );
-     * 
-     * }
-     * 
-     * assertFalse( entries.contains( null ) ); assertFalse( entries.contains( new
-     * Integer( 42 ) ) ); assertFalse( entries.contains( "lololol" ) );
-     * 
-     * Map<String, Data> otherMap = new HashMap<>(); otherMap.put( "wolololo",
-     * Data.nullData() ); otherMap.put( "trollface", Data.numberData( "4.999" ) );
-     * 
-     * for ( Map.Entry<String, Data> entry : otherMap.entrySet() ) {
-     * 
-     * assertFalse( entries.contains( entry ) );
-     * 
-     * }
-     * 
-     * }
-     * 
-     * @Test default void testEntrySetIterator() {
-     * 
-     * Iterator<Map.Entry<String, Data>> iter = map.entrySet().iterator();
-     * Set<Map.Entry<String, Data>> expected = new HashSet<>(
-     * TEST_DB_MAPPINGS.entrySet() );
-     * 
-     * while ( iter.hasNext() ) { // Check if iterator only returns expected values.
-     * 
-     * assertTrue( expected.remove( iter.next() ) );
-     * 
-     * }
-     * 
-     * assertTrue( expected.isEmpty() ); // Ensure all expected values were
-     * returned.
-     * 
-     * assertFalse( getTempTable().entrySet().iterator().hasNext() );
-     * 
-     * }
-     * 
-     * @Test default void testEntrySetIteratorRemove() {
-     * 
-     * Map<String, Data> map = getTempTable();
-     * 
-     * map.put( "one", Data.numberData( 1 ) ); map.put( "two", Data.numberData( 2 )
-     * ); map.put( "three", Data.numberData( 3 ) );
-     * 
-     * Set<Map.Entry<String, Data>> toFind = new HashSet<>( map.entrySet() );
-     * Iterator<Map.Entry<String, Data>> iter = map.entrySet().iterator();
-     * 
-     * try { // Try removing before calling next. iter.remove(); fail(
-     * "Should have thrown an exception." ); } catch ( IllegalStateException e ) {
-     * // Normal. }
-     * 
-     * while ( iter.hasNext() ) {
-     * 
-     * Map.Entry<String, Data> next = iter.next(); toFind.remove( next ); if (
-     * next.getKey().equals( "two" ) ) { iter.remove(); // Remove one element.
-     * 
-     * try { // Try removing twice. iter.remove(); fail(
-     * "Should have thrown an exception." ); } catch ( IllegalStateException e ) {
-     * // Normal. } }
-     * 
-     * }
-     * 
-     * assertTrue( toFind.isEmpty() ); // Ensure iterated over everything.
-     * 
-     * assertTrue( map.containsKey( "one" ) ); // Check that only the right one
-     * assertFalse( map.containsKey( "two" ) ); // got removed. assertTrue(
-     * map.containsKey( "three" ) );
-     * 
-     * }
-     * 
-     * @Test default void testEntry() {
-     * 
-     * Map<String, Data> map = getTempTable(); map.put( "one", Data.numberData( 1 )
-     * ); map.put( "two", Data.numberData( 2 ) ); map.put( "three", Data.numberData(
-     * 3 ) );
-     * 
-     * for ( Map.Entry<String, Data> entry : map.entrySet() ) {
-     * 
-     * switch ( entry.getKey() ) {
-     * 
-     * case "one": assertEquals( Data.numberData( 1 ), entry.getValue() ); break;
-     * 
-     * case "two": assertEquals( Data.numberData( 2 ), entry.getValue() );
-     * assertEquals( Data.numberData( 2 ), entry.setValue( Data.numberData( 4 ) ) );
-     * // Try setting value. assertEquals( Data.numberData( 4 ), entry.getValue() );
-     * break;
-     * 
-     * case "three": assertEquals( Data.numberData( 3 ), entry.getValue() ); break;
-     * 
-     * default: fail( "Unexpected key returned" );
-     * 
-     * }
-     * 
-     * }
-     * 
-     * assertEquals( 3, map.size() ); assertEquals( Data.numberData( 1 ), map.get(
-     * "one" ) ); assertEquals( Data.numberData( 4 ), map.get( "two" ) );
-     * assertEquals( Data.numberData( 3 ), map.get( "three" ) );
-     * 
-     * }
-     * 
-     * @Test default void testEntrySetToArrayObj() {
-     * 
-     * List<Object> expected = Arrays.asList( TEST_DB_MAPPINGS.entrySet().toArray()
-     * ); List<Object> actual = Arrays.asList( map.entrySet().toArray() );
-     * 
-     * assertEquals( expected.size(), actual.size() ); assertFalse(
-     * expected.retainAll( actual ) );
-     * 
-     * /* Test with empty map /
-     * 
-     * expected = Arrays.asList( new HashMap<>().entrySet().toArray() ); actual =
-     * Arrays.asList( getTempTable().entrySet().toArray() );
-     * 
-     * assertEquals( expected.size(), actual.size() ); assertFalse(
-     * expected.retainAll( actual ) );
-     * 
-     * assertTrue( Arrays.deepEquals( getTempTable().entrySet().toArray(), new
-     * HashMap<>().entrySet().toArray() ) );
-     * 
-     * }
-     * 
-     * @Test default void testEntrySetToArray() {
-     * 
-     * List<Object> expected = Arrays.asList( TEST_DB_MAPPINGS.entrySet().toArray(
-     * new Object[15] ) ); List<Object> actual = Arrays.asList(
-     * map.entrySet().toArray( new Object[15] ) ); int size =
-     * TEST_DB_MAPPINGS.size();
-     * 
-     * assertEquals( expected.size(), actual.size() ); assertEquals(
-     * expected.subList( size, expected.size() ), actual.subList( size,
-     * expected.size() ) ); assertFalse( expected.retainAll( actual ) );
-     * 
-     * /* Test with empty map /
-     * 
-     * expected = Arrays.asList( new HashMap<>().entrySet().toArray( new Object[15]
-     * ) ); actual = Arrays.asList( getTempTable().entrySet().toArray( new
-     * Object[15] ) ); size = 0;
-     * 
-     * assertEquals( expected.size(), actual.size() ); assertEquals(
-     * expected.subList( size, expected.size() ), actual.subList( size,
-     * expected.size() ) ); assertFalse( expected.retainAll( actual ) );
-     * 
-     * }
-     * 
-     * @Test default void testEntrySetAdd() {
-     * 
-     * assertThrows( UnsupportedOperationException.class, () ->
-     * getTempTable().keySet().add( "fail" ) );
-     * 
-     * }
-     * 
-     * @Test default void testEntrySetRemove() {
-     * 
-     * Map<String, Data> map = getTempTable(); map.putAll( TEST_DB_MAPPINGS );
-     * 
-     * Iterator<Map.Entry<String, Data>> iter =
-     * TEST_DB_MAPPINGS.entrySet().iterator(); Map.Entry<String, Data> toDelete =
-     * iter.next(); // Get a mapping to delete.
-     * 
-     * assertTrue( map.entrySet().remove( toDelete ) ); // Delete the mapping.
-     * 
-     * assertFalse( map.containsKey( toDelete.getKey() ) );
-     * 
-     * while ( iter.hasNext() ) {
-     * 
-     * Map.Entry<String, Data> next = iter.next(); assertEquals( next.getValue(),
-     * map.get( next.getKey() ) );
-     * 
-     * }
-     * 
-     * assertFalse( map.entrySet().remove( toDelete ) ); // Try deleting twice.
-     * 
-     * map.put( "aTest", Data.numberData( -54 ) );
-     * 
-     * Map<String, Data> otherMap = new HashMap<>(); otherMap.put( "aTest",
-     * Data.nullData() );
-     * 
-     * // Try entry with the right key but wrong value. assertFalse(
-     * map.entrySet().remove( otherMap.entrySet().iterator().next() ) );
-     * 
-     * // Now with right value. otherMap.put( "aTest", Data.numberData( -54 ) );
-     * assertTrue( map.entrySet().remove( otherMap.entrySet().iterator().next() ) );
-     * 
-     * assertFalse( map.containsKey( "aTest" ) );
-     * 
-     * assertEquals( TEST_DB_MAPPINGS.size() - 1, map.size() );
-     * 
-     * }
-     * 
-     * @Test default void testEntrySetContainsAll() {
-     * 
-     * assertTrue( map.entrySet().containsAll( TEST_DB_MAPPINGS.entrySet() ) );
-     * 
-     * Map<String, Data> otherMap = new HashMap<>( TEST_DB_MAPPINGS ); otherMap.put(
-     * "plane", Data.booleanData( false ) );
-     * 
-     * assertFalse( map.entrySet().containsAll( otherMap.entrySet() ) );
-     * 
-     * }
-     * 
-     * @Test default void testEntrySetAddAll() {
-     * 
-     * assertThrows( UnsupportedOperationException.class, () ->
-     * getTempTable().entrySet().addAll( TEST_DB_MAPPINGS.entrySet() ) );
-     * 
-     * }
-     * 
-     * @Test default void testEntrySetRemoveAll() {
-     * 
-     * Map<String, Data> map = getTempTable(); map.putAll( TEST_DB_MAPPINGS );
-     * Set<Map.Entry<String, Data>> entries = map.entrySet();
-     * 
-     * Iterator<Map.Entry<String, Data>> iter =
-     * TEST_DB_MAPPINGS.entrySet().iterator();
-     * 
-     * Map<String, Data> toRemove = new HashMap<>(); for ( int i = 0; i <=
-     * TEST_DB_MAPPINGS.size() / 2; i++ ) {
-     * 
-     * Map.Entry<String, Data> next = iter.next(); toRemove.put( next.getKey(),
-     * next.getValue() );
-     * 
-     * }
-     * 
-     * Map<String, Data> toRetain = new HashMap<>(); while ( iter.hasNext() ) {
-     * 
-     * Map.Entry<String, Data> next = iter.next(); toRetain.put( next.getKey(),
-     * next.getValue() );
-     * 
-     * }
-     * 
-     * assertTrue( entries.removeAll( toRemove.entrySet() ) ); // Remove.
-     * 
-     * for ( Map.Entry<String, Data> entry : toRemove.entrySet() ) { // Check
-     * removed.
-     * 
-     * assertFalse( entries.contains( entry ) );
-     * 
-     * }
-     * 
-     * // Check nothing else was removed. assertTrue( entries.containsAll(
-     * toRetain.entrySet() ) );
-     * 
-     * assertFalse( entries.removeAll( toRemove.entrySet() ) ); // Try removing
-     * again.
-     * 
-     * }
-     * 
-     * @Test default void testEntrySetRetainAll() {
-     * 
-     * Map<String, Data> map = getTempTable(); map.putAll( TEST_DB_MAPPINGS );
-     * Set<Map.Entry<String, Data>> entries = map.entrySet();
-     * 
-     * Iterator<Map.Entry<String, Data>> iter =
-     * TEST_DB_MAPPINGS.entrySet().iterator();
-     * 
-     * Map<String, Data> toRemove = new HashMap<>(); for ( int i = 0; i <=
-     * TEST_DB_MAPPINGS.size() / 2; i++ ) {
-     * 
-     * Map.Entry<String, Data> next = iter.next(); toRemove.put( next.getKey(),
-     * next.getValue() );
-     * 
-     * }
-     * 
-     * Map<String, Data> toRetain = new HashMap<>(); while ( iter.hasNext() ) {
-     * 
-     * Map.Entry<String, Data> next = iter.next(); toRetain.put( next.getKey(),
-     * next.getValue() );
-     * 
-     * }
-     * 
-     * assertTrue( entries.retainAll( toRetain.entrySet() ) ); // Remove.
-     * 
-     * for ( Map.Entry<String, Data> entry : toRemove.entrySet() ) { // Check
-     * removed.
-     * 
-     * assertFalse( entries.contains( entry ) );
-     * 
-     * }
-     * 
-     * // Check nothing else was removed. assertTrue( entries.containsAll(
-     * toRetain.entrySet() ) );
-     * 
-     * assertFalse( entries.removeAll( toRemove.entrySet() ) ); // Try removing
-     * again.
-     * 
-     * }
-     * 
-     * @Test default void testEntrySetClear() {
-     * 
-     * Map<String, Data> map = getTempTable(); map.putAll( TEST_DB_MAPPINGS );
-     * 
-     * assertFalse( map.isEmpty() );
-     * 
-     * map.entrySet().clear();
-     * 
-     * assertTrue( map.isEmpty() );
-     * 
-     * }
-     * 
-     * @Test
-     * 
-     * @SuppressWarnings( "unlikely-arg-type" ) default void testEntrySetEquals() {
-     * 
-     * Set<Map.Entry<String, Data>> entries = map.entrySet();
-     * 
-     * // Check correct map. assertTrue( entries.equals( TEST_DB_MAPPINGS.entrySet()
-     * ) ); assertTrue( TEST_DB_MAPPINGS.entrySet().equals( entries ) );
-     * 
-     * // Check correct map but the map itself. assertFalse( entries.equals(
-     * TEST_DB_MAPPINGS ) ); assertFalse( TEST_DB_MAPPINGS.equals( entries ) );
-     * 
-     * // Check non-map. assertFalse( entries.equals( "str" ) ); assertFalse(
-     * "str".equals( entries ) );
-     * 
-     * // Check empty map. Map<String, Data> emptyMap = new HashMap<>();
-     * 
-     * assertFalse( entries.equals( emptyMap.entrySet() ) ); assertFalse(
-     * emptyMap.entrySet().equals( entries ) );
-     * 
-     * // Check other map. Map<String, Data> otherMap = new HashMap<>();
-     * otherMap.put( "one", Data.stringData( "haha" ) );
-     * 
-     * assertFalse( entries.equals( otherMap.entrySet() ) ); assertFalse(
-     * otherMap.entrySet().equals( entries ) );
-     * 
-     * /* Test with empty map /
-     * 
-     * entries = getTempTable().entrySet();
-     * 
-     * // Check correct map. assertTrue( entries.equals( emptyMap.entrySet() ) );
-     * assertTrue( emptyMap.entrySet().equals( entries ) );
-     * 
-     * // Check correct map but the map itself. assertFalse( entries.equals(
-     * emptyMap ) ); assertFalse( emptyMap.equals( entries ) );
-     * 
-     * // Check non-map. assertFalse( entries.equals( "str" ) ); assertFalse(
-     * "str".equals( entries ) );
-     * 
-     * // Check wrong map. assertFalse( entries.equals( TEST_DB_MAPPINGS.entrySet()
-     * ) ); assertFalse( TEST_DB_MAPPINGS.entrySet().equals( entries ) );
-     * 
-     * // Check other map. assertFalse( entries.equals( otherMap.entrySet() ) );
-     * assertFalse( otherMap.entrySet().equals( entries ) );
-     * 
-     * }
-     * 
-     * @Test default void testEntrySetHashCode() {
-     * 
-     * assertEquals( TEST_DB_MAPPINGS.entrySet().hashCode(),
-     * map.entrySet().hashCode() ); assertEquals( new
-     * HashMap<>().entrySet().hashCode(), getTempTable().entrySet().hashCode() );
-     * 
-     * }
-     * 
+    /* Tests for entry set view */
+
+    /**
+     * Test for {@link Set#size()} of {@link Map#entrySet()}.
      */
+    @Test
+    default void testEntrySetSize() {
+
+        Map<String, List<Integer>> map = getMap();
+        assertEquals( 0, map.entrySet().size(), "Wrong size of entry set of empty map." );
+
+        map.putAll( TEST_MAPPINGS );
+        assertEquals( TEST_MAPPINGS.size(), map.entrySet().size(), "Wrong size of entry set of filled map." );
+
+    }
+
+    /**
+     * Test for {@link Set#isEmpty()} of {@link Map#entrySet()}.
+     */
+    @Test
+    default void testEntrySetIsEmpty() {
+
+        Map<String, List<Integer>> map = getMap();
+        assertTrue( map.entrySet().isEmpty(), "Entry set of empty map should be empty." );
+
+        map.putAll( TEST_MAPPINGS );
+        assertFalse( map.entrySet().isEmpty(), "Entry set of filled map should not be empty." );
+
+    }
+
+    /**
+     * Test for {@link Set#contains(Object)} of {@link Map#entrySet()}.
+     */
+    @Test
+    @SuppressWarnings( "unlikely-arg-type" )
+    default void testEntrySetContains() {
+
+        Map<String, List<Integer>> map = getMap();
+        map.putAll( TEST_MAPPINGS );
+        Set<Map.Entry<String, List<Integer>>> entries = map.entrySet();
+
+        for ( Map.Entry<String, List<Integer>> entry : TEST_MAPPINGS.entrySet() ) {
+
+            assertTrue( entries.contains( entry ), "Should contain entry." );
+
+        }
+
+        assertFalse( entries.contains( new Integer( 42 ) ), "Should not contain entry of wrong type." );
+        assertFalse(
+                entries.contains( new AbstractMap.SimpleEntry<String, List<Integer>>( "lololol", Arrays.asList( 0 ) ) ),
+                "Should not contain inexistent entry." );
+        assertFalse(
+                entries.contains(
+                        new AbstractMap.SimpleEntry<String, List<Integer>>( "wroooooooong", Arrays.asList( -1, 0 ) ) ),
+                "Should not contain inexistent entry." );
+
+    }
+
+    /**
+     * Test for {@link Set#iterator()} of {@link Map#entrySet()}.
+     */
+    @Test
+    default void testEntrySetIterator() {
+
+        Map<String, List<Integer>> map = getMap();
+        assertFalse( map.entrySet().iterator().hasNext(), "Iterator on empty entry set shouldn't have a next." );
+
+        map.putAll( TEST_MAPPINGS );
+        Iterator<Map.Entry<String, List<Integer>>> iter = map.entrySet().iterator();
+        Set<Map.Entry<String, List<Integer>>> expected = new HashSet<>( TEST_MAPPINGS.entrySet() );
+
+        while ( iter.hasNext() ) { // Check if iterator only returns expected keys.
+
+            assertTrue( expected.remove( iter.next() ), "Iterator returned unexpected entry." );
+
+        }
+
+        assertTrue( expected.isEmpty(), "Not all expected entries were found." ); // Ensure all expected keys were
+                                                                                  // returned.
+
+    }
+
+    /**
+     * Test for {@link Iterator#remove()} of {@link Map#entrySet()}.
+     */
+    @Test
+    default void testEntrySetIteratorRemove() {
+
+        Map<String, List<Integer>> map = getMap();
+        map.putAll( TEST_MAPPINGS );
+        map.put( "one", Arrays.asList( 1 ) );
+        map.put( "two", Arrays.asList( 1, 2 ) );
+
+        Set<Map.Entry<String, List<Integer>>> toFind = new HashSet<>( map.entrySet() );
+        Iterator<Map.Entry<String, List<Integer>>> iter = map.entrySet().iterator();
+
+        // Try removing before calling next.
+        assertThrows( IllegalStateException.class, () -> iter.remove(),
+                "Should throw an exception when removing before next." );
+
+        while ( iter.hasNext() ) {
+
+            Map.Entry<String, List<Integer>> next = iter.next();
+            assertTrue( toFind.remove( next ), "Found unexpected entry." );
+            if ( next.getKey().equals( "one" ) ) {
+                iter.remove(); // Remove one element.
+                assertThrows( IllegalStateException.class, () -> iter.remove(),
+                        "Should throw an exception when removing twice." );
+            }
+
+        }
+
+        assertTrue( toFind.isEmpty(), "Did not iterate through all entries." ); // Ensure iterated over everything.
+
+        assertFalse( map.containsKey( "one" ), "Did not remove entry." ); // Check removed.
+
+        // Check that only the right one got removed.
+        for ( String key : TEST_MAPPINGS.keySet() ) {
+
+            assertTrue( map.containsKey( key ), "Unrelated entry was removed." );
+
+        }
+        assertTrue( map.containsKey( "two" ), "Unrelated entry was removed." );
+
+    }
+
+    /**
+     * Test for {@link java.util.Map.Entry Map.Entry}.
+     */
+    @Test
+    default void testEntry() {
+
+        Map<String, List<Integer>> map = getMap();
+        map.put( "one", Arrays.asList( 1 ) );
+        map.put( "two", Arrays.asList( 1, 2 ) );
+        map.put( "three", Arrays.asList( 1, 2, 3 ) );
+
+        for ( Map.Entry<String, List<Integer>> entry : map.entrySet() ) {
+
+            switch ( entry.getKey() ) {
+
+                case "one":
+                    assertEquals( Arrays.asList( 1 ), entry.getValue(), "Entry does not have expected value." );
+                    break;
+
+                case "two":
+                    assertEquals( Arrays.asList( 1, 2 ), entry.getValue(), "Entry does not have expected value." );
+                    assertEquals( Arrays.asList( 1, 2 ), entry.setValue( Arrays.asList( 2 ) ),
+                            "Old value was not the expected." ); // Try setting value.
+                    assertEquals( Arrays.asList( 2 ), entry.getValue(), "Entry does not have expected new value." );
+                    break;
+
+                case "three":
+                    assertEquals( Arrays.asList( 1, 2, 3 ), entry.getValue(), "Entry does not have expected value." );
+                    break;
+
+                default:
+                    fail( "Unexpected key returned" );
+
+            }
+
+        }
+
+        assertEquals( 3, map.size(), "Map does not have expected size." );
+        assertEquals( Arrays.asList( 1 ), map.get( "one" ), "Entry does not have expected value." );
+        assertEquals( Arrays.asList( 2 ), map.get( "two" ), "Entry does not have expected value." );
+        assertEquals( Arrays.asList( 1, 2, 3 ), map.get( "three" ), "Entry does not have expected value." );
+
+    }
+
+    /**
+     * Test for {@link Set#toArray()} of {@link Map#entrySet()}.
+     */
+    @Test
+    default void testEntrySetToArrayObj() {
+
+        Map<String, List<Integer>> map = getMap();
+
+        /* Test with empty map */
+
+        assertArrayEquals( new Object[0], map.entrySet().toArray(), "Empty map's key set should become empty array." );
+
+        /* Test with filled map */
+
+        map.putAll( TEST_MAPPINGS );
+        List<Object> actual = Arrays.asList( map.entrySet().toArray() );
+        List<Object> expected = Arrays.asList( TEST_MAPPINGS.entrySet().toArray() );
+
+        assertEquals( expected.size(), actual.size(), "Map entry set array has incorrect size." );
+        assertTrue( actual.containsAll( expected ), "Map entry set array does not have all expected elements." );
+
+    }
+
+    /**
+     * Test for {@link Set#toArray(Object[])} of {@link Map#entrySet()}.
+     */
+    @Test
+    default void testEntrySetToArray() {
+
+        final int arrSize = TEST_MAPPINGS.size() + 10;
+
+        Map<String, List<Integer>> map = getMap();
+
+        /* Test with empty map */
+
+        assertArrayEquals( new Map.Entry[arrSize], map.entrySet().toArray( new Map.Entry[arrSize] ),
+                "Empty map's entry set should become empty array." );
+
+        /* Test with filled map */
+
+        map.putAll( TEST_MAPPINGS );
+        @SuppressWarnings( "unchecked" )
+        Map.Entry<String, List<Integer>>[] actual = map.entrySet()
+                .toArray( (Map.Entry<String, List<Integer>>[]) new Map.Entry[arrSize] );
+
+        assertEquals( arrSize, actual.length, "Map entry set array has incorrect size." );
+        assertEquals( null, actual[TEST_MAPPINGS.size()], "Element after last in array should be null." );
+        actual = Arrays.copyOf( actual, TEST_MAPPINGS.size() ); // Cut off extra spaces.
+        assertTrue( Arrays.asList( actual ).containsAll( TEST_MAPPINGS.entrySet() ),
+                "Map entry set array does not have all expected elements." );
+
+    }
+
+    /**
+     * Test for {@link Set#add(Object)} of {@link Map#entrySet()}.
+     */
+    @Test
+    default void testEntrySetAdd() {
+
+        assertThrows( UnsupportedOperationException.class, () -> getMap().keySet().add( "fail" ),
+                "Attempting to add to entry set should throw an exception." );
+
+    }
+
+    /**
+     * Test for {@link Set#remove(Object)} of {@link Map#entrySet()}.
+     */
+    @Test
+    default void testEntrySetRemove() {
+
+        Map<String, List<Integer>> map = getMap();
+        map.putAll( TEST_MAPPINGS );
+        map.put( "one", Arrays.asList( 1 ) );
+        map.put( "two", Arrays.asList( 1, 2 ) );
+
+        assertTrue( map.entrySet().remove( new AbstractMap.SimpleEntry<>( "one", Arrays.asList( 1 ) ) ),
+                "Entry could not be removed." );
+
+        assertFalse( map.containsKey( "one" ), "Did not remove entry." ); // Check removed.
+
+        // Check that only the right one got removed.
+        for ( String key : TEST_MAPPINGS.keySet() ) {
+
+            assertTrue( map.containsKey( key ), "Unrelated entry was removed." );
+
+        }
+        assertTrue( map.containsKey( "two" ), "Unrelated entry was removed." );
+
+    }
+
+    /**
+     * Test for {@link Set#containsAll(Collection)} of {@link Map#entrySet()}.
+     */
+    @Test
+    default void testEntrySetContainsAll() {
+
+        Map<String, List<Integer>> emptyMap = new HashMap<>();
+        Map<String, List<Integer>> otherMap = new HashMap<>( TEST_MAPPINGS );
+        otherMap.put( "plane", Arrays.asList( 99 ) );
+
+        Map<String, List<Integer>> map = getMap();
+
+        assertTrue( map.entrySet().containsAll( emptyMap.entrySet() ), "Should contain all elements." );
+        assertFalse( map.entrySet().containsAll( TEST_MAPPINGS.entrySet() ), "Should not contain all elements." );
+        assertFalse( map.entrySet().containsAll( otherMap.entrySet() ), "Should not contain all elements." );
+
+        map.putAll( TEST_MAPPINGS );
+
+        assertTrue( map.entrySet().containsAll( emptyMap.entrySet() ), "Should contain all elements." );
+        assertTrue( map.entrySet().containsAll( TEST_MAPPINGS.entrySet() ), "Should contain all elements." );
+        assertFalse( map.entrySet().containsAll( otherMap.entrySet() ), "Should not contain all elements." );
+
+    }
+
+    /**
+     * Test for {@link Set#addAll(Collection)} of {@link Map#entrySet()}.
+     */
+    @Test
+    default void testEntrySetAddAll() {
+
+        assertThrows( UnsupportedOperationException.class, () -> getMap().keySet().addAll( TEST_MAPPINGS.keySet() ),
+                "Attempting to add to entry set should throw an exception." );
+
+    }
+
+    /**
+     * Test for {@link Set#removeAll(Collection)} of {@link Map#entrySet()}.
+     */
+    @Test
+    default void testEntrySetRemoveAll() {
+
+        Map<String, List<Integer>> map = getMap();
+        map.putAll( TEST_MAPPINGS );
+        Set<Map.Entry<String, List<Integer>>> entries = map.entrySet();
+
+        Iterator<Map.Entry<String, List<Integer>>> iter = TEST_MAPPINGS.entrySet().iterator();
+
+        /* Determine keys to remove */
+
+        Map<String, List<Integer>> toRemove = new HashMap<>();
+        for ( int i = 0; i <= TEST_MAPPINGS.size() / 2; i++ ) {
+
+            Map.Entry<String, List<Integer>> next = iter.next();
+            toRemove.put( next.getKey(), next.getValue() );
+
+        }
+
+        /* Determine keys to maintain */
+
+        Map<String, List<Integer>> toRetain = new HashMap<>();
+        while ( iter.hasNext() ) {
+
+            Map.Entry<String, List<Integer>> next = iter.next();
+            toRetain.put( next.getKey(), next.getValue() );
+
+        }
+
+        /* Remove */
+
+        assertTrue( entries.removeAll( toRemove.entrySet() ), "Should have removed something." ); // Remove.
+
+        for ( Map.Entry<String, List<Integer>> entry : toRemove.entrySet() ) { // Check removed.
+
+            assertFalse( entries.contains( entry ), "One of the entries was not removed." );
+
+        }
+
+        // Check nothing else was removed.
+        assertTrue( entries.containsAll( toRetain.entrySet() ), "An unexpected entry was removed." );
+
+        assertFalse( entries.removeAll( toRemove.entrySet() ), "Should have nothing to remove." ); // Try removing
+                                                                                                   // again.
+
+    }
+
+    /**
+     * Test for {@link Set#retainAll(Collection)} of {@link Map#entrySet()}.
+     */
+    @Test
+    default void testEntrySetRetainAll() {
+
+        Map<String, List<Integer>> map = getMap();
+        map.putAll( TEST_MAPPINGS );
+        Set<Map.Entry<String, List<Integer>>> entries = map.entrySet();
+
+        Iterator<Map.Entry<String, List<Integer>>> iter = TEST_MAPPINGS.entrySet().iterator();
+
+        /* Determine keys to remove */
+
+        Map<String, List<Integer>> toRemove = new HashMap<>();
+        for ( int i = 0; i <= TEST_MAPPINGS.size() / 2; i++ ) {
+
+            Map.Entry<String, List<Integer>> next = iter.next();
+            toRemove.put( next.getKey(), next.getValue() );
+
+        }
+
+        /* Determine keys to maintain */
+
+        Map<String, List<Integer>> toRetain = new HashMap<>();
+        while ( iter.hasNext() ) {
+
+            Map.Entry<String, List<Integer>> next = iter.next();
+            toRetain.put( next.getKey(), next.getValue() );
+
+        }
+
+        /* Remove */
+
+        assertTrue( entries.retainAll( toRetain.entrySet() ), "Should have removed something." ); // Remove.
+
+        for ( Map.Entry<String, List<Integer>> entry : toRemove.entrySet() ) { // Check removed.
+
+            assertFalse( entries.contains( entry ), "One of the entries was not removed." );
+
+        }
+
+        // Check nothing else was removed.
+        assertTrue( entries.containsAll( toRetain.entrySet() ), "An unexpected entry was removed." );
+
+        assertFalse( entries.removeAll( toRemove.entrySet() ), "Should have nothing to remove." ); // Try removing
+                                                                                                   // again.
+
+    }
+
+    /**
+     * Test for {@link Set#clear()} of {@link Map#entrySet()}.
+     */
+    @Test
+    default void testEntrySetClear() {
+
+        Map<String, List<Integer>> map = getMap();
+
+        map.entrySet().clear();
+        assertTrue( map.isEmpty(), "Should be empty after clearing." );
+
+        map.putAll( TEST_MAPPINGS );
+
+        assertFalse( map.isEmpty(), "Should not be empty after adding." );
+
+        map.entrySet().clear();
+        assertTrue( map.isEmpty(), "Should be empty after clearing." );
+
+        map.entrySet().clear(); // Try doing it again.
+        assertTrue( map.isEmpty(), "Should still be empty after clearing twice." );
+
+    }
+
+    /**
+     * Test for {@link Set#equals(Object)} of {@link Map#entrySet()}.
+     */
+    @Test
+    @SuppressWarnings( "unlikely-arg-type" )
+    default void testEntrySetEquals() {
+
+        Map<String, Data> emptyMap = new HashMap<>();
+        Map<String, Data> otherMap = new HashMap<>();
+        otherMap.put( "one", Data.stringData( "haha" ) );
+
+        Map<String, List<Integer>> map = getMap();
+        Set<Map.Entry<String, List<Integer>>> entries = map.entrySet();
+
+        /* Test with empty map */
+
+        // Check itself.
+        assertTrue( entries.equals( entries ) );
+
+        // Check the map itself.
+        assertFalse( entries.equals( map ) );
+        assertFalse( map.equals( entries ) );
+
+        // Check right map but the map itself.
+        assertFalse( entries.equals( emptyMap ) );
+        assertFalse( emptyMap.equals( entries ) );
+
+        // Check non-map.
+        assertFalse( entries.equals( "str" ) );
+        assertFalse( "str".equals( entries ) );
+
+        // Check empty map.
+        assertTrue( entries.equals( emptyMap.entrySet() ) );
+        assertTrue( emptyMap.entrySet().equals( entries ) );
+
+        // Check test map.
+        assertFalse( entries.equals( TEST_MAPPINGS.entrySet() ) );
+        assertFalse( TEST_MAPPINGS.entrySet().equals( entries ) );
+
+        // Check other map.
+        assertFalse( entries.equals( otherMap.entrySet() ) );
+        assertFalse( otherMap.entrySet().equals( entries ) );
+
+        /* Test with filled map */
+
+        map.putAll( TEST_MAPPINGS );
+
+        // Check itself.
+        assertTrue( entries.equals( entries ) );
+
+        // Check the map itself.
+        assertFalse( entries.equals( map ) );
+        assertFalse( map.equals( entries ) );
+
+        // Check right map but the map itself.
+        assertFalse( entries.equals( TEST_MAPPINGS ) );
+        assertFalse( TEST_MAPPINGS.equals( entries ) );
+
+        // Check non-map.
+        assertFalse( entries.equals( "str" ) );
+        assertFalse( "str".equals( entries ) );
+
+        // Check empty map.
+        assertFalse( entries.equals( emptyMap.entrySet() ) );
+        assertFalse( emptyMap.entrySet().equals( entries ) );
+
+        // Check test map.
+        assertTrue( entries.equals( TEST_MAPPINGS.entrySet() ) );
+        assertTrue( TEST_MAPPINGS.entrySet().equals( entries ) );
+
+        // Check other map.
+        assertFalse( entries.equals( otherMap.entrySet() ) );
+        assertFalse( otherMap.entrySet().equals( entries ) );
+
+    }
+
+    /**
+     * Test for {@link Set#hashCode()} of {@link Map#entrySet()}.
+     */
+    @Test
+    default void testEntrySetHashCode() {
+
+        Map<String, List<Integer>> map = getMap();
+        assertEquals( new HashMap<>().entrySet().hashCode(), map.entrySet().hashCode(),
+                "Empty map entry set hash code not correct." );
+        map.putAll( TEST_MAPPINGS );
+        assertEquals( TEST_MAPPINGS.entrySet().hashCode(), map.entrySet().hashCode(),
+                "Filled map entry set hash code not correct." );
+
+    }
 
 }
