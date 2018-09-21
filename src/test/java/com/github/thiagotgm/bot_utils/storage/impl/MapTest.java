@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -51,14 +50,11 @@ public abstract class MapTest {
     /**
      * Expected mappings used in some tests.
      */
-    static final Map<String, List<Integer>> TEST_MAPPINGS = new HashMap<>();
+    protected static final Map<String, List<Integer>> TEST_MAPPINGS = new HashMap<>();
 
-    /**
-     * Initializes the map with test mappings.
-     */
-    @BeforeAll
-    static void setUpTestMappings() {
+    static {
 
+        // Initialize map with test mappings.
         TEST_MAPPINGS.put( "foobar", Arrays.asList( 20, 43, -10 ) );
         TEST_MAPPINGS.put( "tryOne", Arrays.asList( 42 ) );
         TEST_MAPPINGS.put( "Boop", Arrays.asList( -1000, 420, 0, 111 ) );
@@ -71,26 +67,27 @@ public abstract class MapTest {
      * 
      * @return The map.
      */
-    public abstract Map<String, List<Integer>> getMap();
+    protected abstract Map<String, List<Integer>> getMap();
 
     /**
      * Determines whether the map accepts <tt>null</tt> keys.
      *
      * @return <tt>true</tt> if the map accepts <tt>null</tt> keys.
      */
-    public abstract boolean acceptsNullKeys();
+    protected abstract boolean acceptsNullKeys();
 
     /**
      * Determines whether the map accepts <tt>null</tt> values.
      *
      * @return <tt>true</tt> if the map accepts <tt>null</tt> values.
      */
-    public abstract boolean acceptsNullValues();
+    protected abstract boolean acceptsNullValues();
 
     /**
      * Test for {@link Map#size()}.
      */
     @Test
+    @DisplayName( "size() test" )
     public void testSize() {
 
         Map<String, List<Integer>> map = getMap();
@@ -107,6 +104,7 @@ public abstract class MapTest {
      * Test for {@link Map#isEmpty()}.
      */
     @Test
+    @DisplayName( "isEmpty() test" )
     public void testIsEmpty() {
 
         Map<String, List<Integer>> map = getMap();
@@ -123,6 +121,7 @@ public abstract class MapTest {
      * Test for {@link Map#containsKey(Object)}.
      */
     @Test
+    @DisplayName( "containsKey(Object) test" )
     @SuppressWarnings( "unlikely-arg-type" )
     public void testContainsKey() {
 
@@ -163,6 +162,7 @@ public abstract class MapTest {
      * Test for {@link Map#containsValue(Object)}.
      */
     @Test
+    @DisplayName( "containsValue(Object) test" )
     @SuppressWarnings( "unlikely-arg-type" )
     public void testContainsValue() {
 
@@ -203,6 +203,7 @@ public abstract class MapTest {
      * Test for {@link Map#put(Object, Object)} and {@link Map#get(Object)}.
      */
     @Test
+    @DisplayName( "put(K,V) and get(Object) test" )
     @SuppressWarnings( "unlikely-arg-type" )
     public void testPutAndGet() {
 
@@ -261,6 +262,7 @@ public abstract class MapTest {
      * Test for {@link Map#remove(Object)}.
      */
     @Test
+    @DisplayName( "remove(Object) test" )
     @SuppressWarnings( "unlikely-arg-type" )
     public void testRemove() {
 
@@ -319,6 +321,7 @@ public abstract class MapTest {
      *             if an unexpected exception was thrown.
      */
     @Test
+    @DisplayName( "null keys and values test" )
     public void testNullObjects() throws Throwable {
 
         Map<String, List<Integer>> map = getMap();
@@ -381,6 +384,7 @@ public abstract class MapTest {
      * Test for {@link Map#putAll(Map)}.
      */
     @Test
+    @DisplayName( "putAll(Map<? extends K,? extends V>) test" )
     public void testPutAll() {
 
         Map<String, List<Integer>> map = getMap();
@@ -403,6 +407,7 @@ public abstract class MapTest {
      * Test for {@link Map#clear()}.
      */
     @Test
+    @DisplayName( "clear() test" )
     public void testClear() {
 
         Map<String, List<Integer>> map = getMap();
@@ -423,6 +428,7 @@ public abstract class MapTest {
      * Test for {@link Map#equals(Object)}.
      */
     @Test
+    @DisplayName( "equals(Object) test" )
     @SuppressWarnings( "unlikely-arg-type" )
     public void testEquals() {
 
@@ -482,6 +488,7 @@ public abstract class MapTest {
      * Test for {@link Map#hashCode()}.
      */
     @Test
+    @DisplayName( "hashCode() test" )
     public void testHashCode() {
 
         Map<String, List<Integer>> map = getMap();
@@ -493,12 +500,12 @@ public abstract class MapTest {
     }
 
     /**
-     *  Tests for the {@link Map#keySet() key set} view.
+     * Tests for the {@link Map#keySet() key set} view.
      */
     @Nested
     @DisplayName( "Key set tests" )
     public class KeySetTest {
-        
+
         /**
          * Test for {@link Set#size()} of {@link Map#keySet()}.
          */
@@ -628,7 +635,8 @@ public abstract class MapTest {
 
             /* Test with empty map */
 
-            assertArrayEquals( new Object[0], map.keySet().toArray(), "Empty map's key set should become empty array." );
+            assertArrayEquals( new Object[0], map.keySet().toArray(),
+                    "Empty map's key set should become empty array." );
 
             /* Test with filled map */
 
@@ -951,16 +959,16 @@ public abstract class MapTest {
                     "Filled map key set hash code not correct." );
 
         }
-        
+
     }
 
     /**
-     *  Tests for the {@link Map#values() value collection} view.
+     * Tests for the {@link Map#values() value collection} view.
      */
     @Nested
     @DisplayName( "Value collection tests" )
     public class ValueCollectionTest {
-        
+
         /**
          * Test for {@link Collection#size()} of {@link Map#values()}.
          */
@@ -1019,7 +1027,8 @@ public abstract class MapTest {
         public void testIterator() {
 
             Map<String, List<Integer>> map = getMap();
-            assertFalse( map.values().iterator().hasNext(), "Iterator on empty value collection shouldn't have a next." );
+            assertFalse( map.values().iterator().hasNext(),
+                    "Iterator on empty value collection shouldn't have a next." );
 
             map.putAll( TEST_MAPPINGS );
             Iterator<List<Integer>> iter = map.values().iterator();
@@ -1108,7 +1117,8 @@ public abstract class MapTest {
             List<Object> expected = Arrays.asList( TEST_MAPPINGS.values().toArray() );
 
             assertEquals( expected.size(), actual.size(), "Map value collection array has incorrect size." );
-            assertTrue( actual.containsAll( expected ), "Map value collection array does not have all expected elements." );
+            assertTrue( actual.containsAll( expected ),
+                    "Map value collection array does not have all expected elements." );
 
         }
 
@@ -1263,7 +1273,8 @@ public abstract class MapTest {
             // Check nothing else was removed.
             assertTrue( values.containsAll( toRetain.values() ), "An unexpected value was removed." );
 
-            assertFalse( values.removeAll( toRemove.values() ), "Should have nothing to remove." ); // Try removing again.
+            assertFalse( values.removeAll( toRemove.values() ), "Should have nothing to remove." ); // Try removing
+                                                                                                    // again.
 
         }
 
@@ -1312,7 +1323,8 @@ public abstract class MapTest {
             // Check nothing else was removed.
             assertTrue( values.containsAll( toRetain.values() ), "An unexpected value was removed." );
 
-            assertFalse( values.removeAll( toRemove.values() ), "Should have nothing to remove." ); // Try removing again.
+            assertFalse( values.removeAll( toRemove.values() ), "Should have nothing to remove." ); // Try removing
+                                                                                                    // again.
 
         }
 
@@ -1338,16 +1350,16 @@ public abstract class MapTest {
             assertTrue( map.isEmpty(), "Should still be empty after clearing twice." );
 
         }
-        
+
     }
 
     /**
-     *  Tests for the {@link Map#entrySet() entry set} view.
+     * Tests for the {@link Map#entrySet() entry set} view.
      */
     @Nested
     @DisplayName( "Entry set tests" )
     public class EntrySetTest {
-        
+
         /**
          * Test for {@link Set#size()} of {@link Map#entrySet()}.
          */
@@ -1395,11 +1407,11 @@ public abstract class MapTest {
 
             assertFalse( entries.contains( new Integer( 42 ) ), "Should not contain entry of wrong type." );
             assertFalse(
-                    entries.contains( new AbstractMap.SimpleEntry<String, List<Integer>>( "lololol", Arrays.asList( 0 ) ) ),
-                    "Should not contain inexistent entry." );
-            assertFalse(
                     entries.contains(
-                            new AbstractMap.SimpleEntry<String, List<Integer>>( "wroooooooong", Arrays.asList( -1, 0 ) ) ),
+                            new AbstractMap.SimpleEntry<String, List<Integer>>( "lololol", Arrays.asList( 0 ) ) ),
+                    "Should not contain inexistent entry." );
+            assertFalse( entries.contains(
+                    new AbstractMap.SimpleEntry<String, List<Integer>>( "wroooooooong", Arrays.asList( -1, 0 ) ) ),
                     "Should not contain inexistent entry." );
 
         }
@@ -1499,7 +1511,8 @@ public abstract class MapTest {
                         break;
 
                     case "three":
-                        assertEquals( Arrays.asList( 1, 2, 3 ), entry.getValue(), "Entry does not have expected value." );
+                        assertEquals( Arrays.asList( 1, 2, 3 ), entry.getValue(),
+                                "Entry does not have expected value." );
                         break;
 
                     default:
@@ -1526,7 +1539,8 @@ public abstract class MapTest {
 
             /* Test with empty map */
 
-            assertArrayEquals( new Object[0], map.entrySet().toArray(), "Empty map's key set should become empty array." );
+            assertArrayEquals( new Object[0], map.entrySet().toArray(),
+                    "Empty map's key set should become empty array." );
 
             /* Test with filled map */
 
@@ -1854,7 +1868,7 @@ public abstract class MapTest {
                     "Filled map entry set hash code not correct." );
 
         }
-        
+
     }
 
 }
