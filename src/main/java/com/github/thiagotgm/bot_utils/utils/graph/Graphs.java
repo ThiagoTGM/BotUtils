@@ -425,7 +425,8 @@ public class Graphs {
     // Unmodifiable wrappers.
 
     /**
-     * Wrapper for a graph that passes through all operations.
+     * Wrapper for a graph that passes through all methods, but throws an exception
+     * on any method that would change the graph.
      * 
      * @author ThiagoTGM
      * @version 1.0
@@ -488,7 +489,7 @@ public class Graphs {
         public V put( List<K> path, V value )
                 throws UnsupportedOperationException, NullPointerException, IllegalArgumentException {
 
-            return backing.put( path, value );
+            throw new UnsupportedOperationException( "Graph does not support the put operation." );
 
         }
 
@@ -496,7 +497,7 @@ public class Graphs {
         public V putIfAbsent( List<K> path, V value )
                 throws UnsupportedOperationException, NullPointerException, IllegalArgumentException {
 
-            return backing.putIfAbsent( path, value );
+            throw new UnsupportedOperationException( "Graph does not support the put operation." );
 
         }
 
@@ -504,18 +505,18 @@ public class Graphs {
         public void putAll( Graph<? extends K, ? extends V> g )
                 throws UnsupportedOperationException, NullPointerException {
 
-            backing.putAll( g );
+            throw new UnsupportedOperationException( "Graph does not support the putAll operation." );
 
         }
-        
+
         @Override
         public void putAll( Map<? extends List<? extends K>, ? extends V> m )
                 throws UnsupportedOperationException, NullPointerException {
 
-            backing.putAll( m );
+            throw new UnsupportedOperationException( "Graph does not support the putAll operation." );
 
         }
-        
+
         @Override
         public Map<? super List<? extends K>, ? super V> toMap( Map<? super List<? extends K>, ? super V> m )
                 throws UnsupportedOperationException, NullPointerException {
@@ -528,7 +529,7 @@ public class Graphs {
         public boolean replace( List<K> path, V oldValue, V newValue )
                 throws UnsupportedOperationException, NullPointerException, IllegalArgumentException {
 
-            return backing.replace( path, oldValue, newValue );
+            throw new UnsupportedOperationException( "Graph does not support the replace operation." );
 
         }
 
@@ -536,7 +537,7 @@ public class Graphs {
         public V replace( List<K> path, V value )
                 throws UnsupportedOperationException, NullPointerException, IllegalArgumentException {
 
-            return backing.replace( path, value );
+            throw new UnsupportedOperationException( "Graph does not support the replace operation." );
 
         }
 
@@ -544,7 +545,7 @@ public class Graphs {
         public V remove( List<?> path )
                 throws UnsupportedOperationException, IllegalArgumentException, NullPointerException {
 
-            return backing.remove( path );
+            throw new UnsupportedOperationException( "Graph does not support the remove operation." );
 
         }
 
@@ -552,7 +553,7 @@ public class Graphs {
         public boolean remove( List<?> path, Object value )
                 throws UnsupportedOperationException, IllegalArgumentException {
 
-            return backing.remove( path, value );
+            throw new UnsupportedOperationException( "Graph does not support the remove operation." );
 
         }
 
@@ -595,7 +596,7 @@ public class Graphs {
         @Override
         public void clear() {
 
-            backing.clear();
+            throw new UnsupportedOperationException( "Graph does not support the clear operation." );
 
         }
 
@@ -793,7 +794,7 @@ public class Graphs {
             backing.putAll( g );
 
         }
-        
+
         @Override
         public synchronized void putAll( Map<? extends List<? extends K>, ? extends V> m )
                 throws UnsupportedOperationException, NullPointerException {
@@ -801,10 +802,11 @@ public class Graphs {
             backing.putAll( m );
 
         }
-        
+
         @Override
-        public synchronized Map<? super List<? extends K>, ? super V> toMap( Map<? super List<? extends K>, ? super V> m )
-                throws UnsupportedOperationException, NullPointerException {
+        public synchronized Map<? super List<? extends K>, ? super V>
+                toMap( Map<? super List<? extends K>, ? super V> m )
+                        throws UnsupportedOperationException, NullPointerException {
 
             return backing.toMap( m );
 
