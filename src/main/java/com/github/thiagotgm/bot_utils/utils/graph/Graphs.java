@@ -507,6 +507,22 @@ public class Graphs {
             backing.putAll( g );
 
         }
+        
+        @Override
+        public void putAll( Map<? extends List<? extends K>, ? extends V> m )
+                throws UnsupportedOperationException, NullPointerException {
+
+            backing.putAll( m );
+
+        }
+        
+        @Override
+        public Map<? super List<? extends K>, ? super V> toMap( Map<? super List<? extends K>, ? super V> m )
+                throws UnsupportedOperationException, NullPointerException {
+
+            return backing.toMap( m );
+
+        }
 
         @Override
         public boolean replace( List<K> path, V oldValue, V newValue )
@@ -727,35 +743,35 @@ public class Graphs {
         }
 
         @Override
-        public boolean containsPath( List<?> path ) throws NullPointerException {
+        public synchronized boolean containsPath( List<?> path ) throws NullPointerException {
 
             return backing.containsPath( path );
 
         }
 
         @Override
-        public boolean containsValue( Object value ) throws NullPointerException {
+        public synchronized boolean containsValue( Object value ) throws NullPointerException {
 
             return backing.containsValue( value );
 
         }
 
         @Override
-        public V get( List<?> path ) throws IllegalArgumentException, NullPointerException {
+        public synchronized V get( List<?> path ) throws IllegalArgumentException, NullPointerException {
 
             return backing.get( path );
 
         }
 
         @Override
-        public List<V> getAll( List<?> path ) throws IllegalArgumentException, NullPointerException {
+        public synchronized List<V> getAll( List<?> path ) throws IllegalArgumentException, NullPointerException {
 
             return backing.getAll( path );
 
         }
 
         @Override
-        public V put( List<K> path, V value )
+        public synchronized V put( List<K> path, V value )
                 throws UnsupportedOperationException, NullPointerException, IllegalArgumentException {
 
             return backing.put( path, value );
@@ -763,7 +779,7 @@ public class Graphs {
         }
 
         @Override
-        public V putIfAbsent( List<K> path, V value )
+        public synchronized V putIfAbsent( List<K> path, V value )
                 throws UnsupportedOperationException, NullPointerException, IllegalArgumentException {
 
             return backing.putIfAbsent( path, value );
@@ -771,15 +787,31 @@ public class Graphs {
         }
 
         @Override
-        public void putAll( Graph<? extends K, ? extends V> g )
+        public synchronized void putAll( Graph<? extends K, ? extends V> g )
                 throws UnsupportedOperationException, NullPointerException {
 
             backing.putAll( g );
 
         }
+        
+        @Override
+        public synchronized void putAll( Map<? extends List<? extends K>, ? extends V> m )
+                throws UnsupportedOperationException, NullPointerException {
+
+            backing.putAll( m );
+
+        }
+        
+        @Override
+        public synchronized Map<? super List<? extends K>, ? super V> toMap( Map<? super List<? extends K>, ? super V> m )
+                throws UnsupportedOperationException, NullPointerException {
+
+            return backing.toMap( m );
+
+        }
 
         @Override
-        public boolean replace( List<K> path, V oldValue, V newValue )
+        public synchronized boolean replace( List<K> path, V oldValue, V newValue )
                 throws UnsupportedOperationException, NullPointerException, IllegalArgumentException {
 
             return backing.replace( path, oldValue, newValue );
@@ -787,7 +819,7 @@ public class Graphs {
         }
 
         @Override
-        public V replace( List<K> path, V value )
+        public synchronized V replace( List<K> path, V value )
                 throws UnsupportedOperationException, NullPointerException, IllegalArgumentException {
 
             return backing.replace( path, value );
@@ -795,14 +827,14 @@ public class Graphs {
         }
 
         @Override
-        public V remove( List<?> path )
+        public synchronized V remove( List<?> path )
                 throws UnsupportedOperationException, IllegalArgumentException, NullPointerException {
 
             return backing.remove( path );
         }
 
         @Override
-        public boolean remove( List<?> path, Object value )
+        public synchronized boolean remove( List<?> path, Object value )
                 throws UnsupportedOperationException, IllegalArgumentException {
 
             return backing.remove( path, value );
@@ -810,21 +842,21 @@ public class Graphs {
         }
 
         @Override
-        public boolean isEmpty() {
+        public synchronized boolean isEmpty() {
 
             return backing.isEmpty();
 
         }
 
         @Override
-        public boolean equals( Object obj ) {
+        public synchronized boolean equals( Object obj ) {
 
             return backing.equals( obj );
 
         }
 
         @Override
-        public int hashCode() {
+        public synchronized int hashCode() {
 
             return backing.hashCode();
 
