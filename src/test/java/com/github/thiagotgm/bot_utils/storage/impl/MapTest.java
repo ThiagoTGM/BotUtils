@@ -507,9 +507,10 @@ public abstract class MapTest {
     public class KeySetTest {
 
         /**
-         * Test for {@link Set#size()} of {@link Map#keySet()}.
+         * Test for {@link Set#size()}.
          */
         @Test
+        @DisplayName( "size() test" )
         public void testSize() {
 
             Map<String, List<Integer>> map = getMap();
@@ -521,9 +522,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Set#isEmpty()} of {@link Map#keySet()}.
+         * Test for {@link Set#isEmpty()}.
          */
         @Test
+        @DisplayName( "isEmpty() test" )
         public void testIsEmpty() {
 
             Map<String, List<Integer>> map = getMap();
@@ -535,9 +537,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Set#contains(Object)} of {@link Map#keySet()}.
+         * Test for {@link Set#contains(Object)}.
          */
         @Test
+        @DisplayName( "contains(Object) test" )
         @SuppressWarnings( "unlikely-arg-type" )
         public void testContains() {
 
@@ -558,9 +561,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Set#iterator()} of {@link Map#keySet()}.
+         * Test for {@link Set#iterator()}.
          */
         @Test
+        @DisplayName( "iterator() test" )
         public void testIterator() {
 
             Map<String, List<Integer>> map = getMap();
@@ -582,9 +586,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Iterator#remove()} of {@link Map#keySet()}.
+         * Test for {@link Iterator#remove()}.
          */
         @Test
+        @DisplayName( "iterator().remove() test" )
         public void testIteratorRemove() {
 
             Map<String, List<Integer>> map = getMap();
@@ -626,9 +631,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Set#toArray()} of {@link Map#keySet()}.
+         * Test for {@link Set#toArray()}.
          */
         @Test
+        @DisplayName( "toArray() test" )
         public void testToArrayObj() {
 
             Map<String, List<Integer>> map = getMap();
@@ -650,9 +656,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Set#toArray(Object[])} of {@link Map#keySet()}.
+         * Test for {@link Set#toArray(Object[])}.
          */
         @Test
+        @DisplayName( "toArray(T[]) test" )
         public void testToArray() {
 
             final int arrSize = TEST_MAPPINGS.size() + 10;
@@ -678,9 +685,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Set#add(Object)} of {@link Map#keySet()}.
+         * Test for {@link Set#add(Object)}.
          */
         @Test
+        @DisplayName( "add(K) test" )
         public void testAdd() {
 
             assertThrows( UnsupportedOperationException.class, () -> getMap().keySet().add( "fail" ),
@@ -689,9 +697,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Set#remove(Object)} of {@link Map#keySet()}.
+         * Test for {@link Set#remove(Object)}.
          */
         @Test
+        @DisplayName( "remove(Object) test" )
         public void testRemove() {
 
             Map<String, List<Integer>> map = getMap();
@@ -714,9 +723,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Set#containsAll(Collection)} of {@link Map#keySet()}.
+         * Test for {@link Set#containsAll(Collection)}.
          */
         @Test
+        @DisplayName( "containsAll(Collection<?>) test" )
         public void testContainsAll() {
 
             Map<String, List<Integer>> emptyMap = new HashMap<>();
@@ -738,9 +748,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Set#addAll(Collection)} of {@link Map#keySet()}.
+         * Test for {@link Set#addAll(Collection)}.
          */
         @Test
+        @DisplayName( "addAll(Collection<? extends K>) test" )
         public void testAddAll() {
 
             assertThrows( UnsupportedOperationException.class, () -> getMap().keySet().addAll( TEST_MAPPINGS.keySet() ),
@@ -749,9 +760,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Set#removeAll(Collection)} of {@link Map#keySet()}.
+         * Test for {@link Set#removeAll(Collection)}.
          */
         @Test
+        @DisplayName( "removeAll(Collection<?>) test" )
         public void testRemoveAll() {
 
             Map<String, List<Integer>> map = getMap();
@@ -798,9 +810,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Set#retainAll(Collection)} of {@link Map#keySet()}.
+         * Test for {@link Set#retainAll(Collection)}.
          */
         @Test
+        @DisplayName( "retainAll(Collection<?>) test" )
         public void testRetainAll() {
 
             Map<String, List<Integer>> map = getMap();
@@ -847,9 +860,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Set#clear()} of {@link Map#keySet()}.
+         * Test for {@link Set#clear()}.
          */
         @Test
+        @DisplayName( "clear() test" )
         public void testClear() {
 
             Map<String, List<Integer>> map = getMap();
@@ -870,9 +884,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Set#equals(Object)} of {@link Map#keySet()}.
+         * Test for {@link Set#equals(Object)}.
          */
         @Test
+        @DisplayName( "equals(Object) test" )
         @SuppressWarnings( "unlikely-arg-type" )
         public void testEquals() {
 
@@ -946,9 +961,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Set#hashCode()} of {@link Map#keySet()}.
+         * Test for {@link Set#hashCode()}.
          */
         @Test
+        @DisplayName( "hashCode() test" )
         public void testHashCode() {
 
             Map<String, List<Integer>> map = getMap();
@@ -970,9 +986,10 @@ public abstract class MapTest {
     public class ValueCollectionTest {
 
         /**
-         * Test for {@link Collection#size()} of {@link Map#values()}.
+         * Test for {@link Collection#size()}.
          */
         @Test
+        @DisplayName( "size() test" )
         public void testSize() {
 
             Map<String, List<Integer>> map = getMap();
@@ -984,9 +1001,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Collection#isEmpty()} of {@link Map#values()}.
+         * Test for {@link Collection#isEmpty()}.
          */
         @Test
+        @DisplayName( "isEmpty() test" )
         public void testIsEmpty() {
 
             Map<String, List<Integer>> map = getMap();
@@ -998,9 +1016,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Collection#contains(Object)} of {@link Map#values()}.
+         * Test for {@link Collection#contains(Object)}.
          */
         @Test
+        @DisplayName( "contains(Object) test" )
         @SuppressWarnings( "unlikely-arg-type" )
         public void testContains() {
 
@@ -1021,9 +1040,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Collection#iterator()} of {@link Map#values()}.
+         * Test for {@link Collection#iterator()}.
          */
         @Test
+        @DisplayName( "iterator() test" )
         public void testIterator() {
 
             Map<String, List<Integer>> map = getMap();
@@ -1046,9 +1066,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Iterator#remove()} of {@link Map#values()}.
+         * Test for {@link Iterator#remove()}.
          */
         @Test
+        @DisplayName( "iterator().remove() test" )
         public void testIteratorRemove() {
 
             Map<String, List<Integer>> map = getMap();
@@ -1098,9 +1119,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Collection#toArray()} of {@link Map#values()}.
+         * Test for {@link Collection#toArray()}.
          */
         @Test
+        @DisplayName( "toArray() test" )
         public void testToArrayObj() {
 
             Map<String, List<Integer>> map = getMap();
@@ -1123,9 +1145,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Collection#toArray(Object[])} of {@link Map#values()}.
+         * Test for {@link Collection#toArray(Object[])}.
          */
         @Test
+        @DisplayName( "toArray(T[]) test" )
         public void testToArray() {
 
             final int arrSize = TEST_MAPPINGS.size() + 10;
@@ -1152,9 +1175,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Collection#add(Object)} of {@link Map#values()}.
+         * Test for {@link Collection#add(Object)}.
          */
         @Test
+        @DisplayName( "add(V) test" )
         public void testAdd() {
 
             assertThrows( UnsupportedOperationException.class, () -> getMap().values().add( Arrays.asList( 101 ) ),
@@ -1163,9 +1187,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Collection#remove(Object)} of {@link Map#values()}.
+         * Test for {@link Collection#remove(Object)}.
          */
         @Test
+        @DisplayName( "remove(Object) test" )
         public void testRemove() {
 
             Map<String, List<Integer>> map = getMap();
@@ -1194,9 +1219,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Collection#containsAll(Collection)} of {@link Map#values()}.
+         * Test for {@link Collection#containsAll(Collection)}.
          */
         @Test
+        @DisplayName( "containsAll(Collection<?>) test" )
         public void testContainsAll() {
 
             Map<String, List<Integer>> emptyMap = new HashMap<>();
@@ -1218,9 +1244,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Collection#addAll(Collection)} of {@link Map#values()}.
+         * Test for {@link Collection#addAll(Collection)}.
          */
         @Test
+        @DisplayName( "addAll(Collection<? extends V>) test" )
         public void testAddAll() {
 
             assertThrows( UnsupportedOperationException.class, () -> getMap().values().addAll( TEST_MAPPINGS.values() ),
@@ -1229,9 +1256,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Collection#removeAll(Collection)} of {@link Map#values()}.
+         * Test for {@link Collection#removeAll(Collection)}.
          */
         @Test
+        @DisplayName( "removeAll(Collection<?>) test" )
         public void testRemoveAll() {
 
             Map<String, List<Integer>> map = getMap();
@@ -1279,9 +1307,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Collection#retainAll(Collection)} of {@link Map#values()}.
+         * Test for {@link Collection#retainAll(Collection)}.
          */
         @Test
+        @DisplayName( "retainAll(Collection<?>) test" )
         public void testRetainAll() {
 
             Map<String, List<Integer>> map = getMap();
@@ -1329,9 +1358,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Collection#clear()} of {@link Map#values()}.
+         * Test for {@link Collection#clear()}.
          */
         @Test
+        @DisplayName( "clear() test" )
         public void testClear() {
 
             Map<String, List<Integer>> map = getMap();
@@ -1361,9 +1391,10 @@ public abstract class MapTest {
     public class EntrySetTest {
 
         /**
-         * Test for {@link Set#size()} of {@link Map#entrySet()}.
+         * Test for {@link Set#size()}.
          */
         @Test
+        @DisplayName( "size() test" )
         public void testSize() {
 
             Map<String, List<Integer>> map = getMap();
@@ -1375,9 +1406,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Set#isEmpty()} of {@link Map#entrySet()}.
+         * Test for {@link Set#isEmpty()}.
          */
         @Test
+        @DisplayName( "isEmpty() test" )
         public void testIsEmpty() {
 
             Map<String, List<Integer>> map = getMap();
@@ -1389,9 +1421,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Set#contains(Object)} of {@link Map#entrySet()}.
+         * Test for {@link Set#contains(Object)}.
          */
         @Test
+        @DisplayName( "contains(Object) test" )
         @SuppressWarnings( "unlikely-arg-type" )
         public void testContains() {
 
@@ -1417,9 +1450,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Set#iterator()} of {@link Map#entrySet()}.
+         * Test for {@link Set#iterator()}.
          */
         @Test
+        @DisplayName( "iterator() test" )
         public void testIterator() {
 
             Map<String, List<Integer>> map = getMap();
@@ -1441,9 +1475,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Iterator#remove()} of {@link Map#entrySet()}.
+         * Test for {@link Iterator#remove()}.
          */
         @Test
+        @DisplayName( "iterator().remove() test" )
         public void testIteratorRemove() {
 
             Map<String, List<Integer>> map = getMap();
@@ -1485,54 +1520,67 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link java.util.Map.Entry Map.Entry}.
+         * Tests for {@link java.util.Map.Entry Map.Entry}.
          */
-        @Test
-        public void testEntry() {
+        @Nested
+        @DisplayName( "Entry tests" )
+        public class EntryTest {
 
-            Map<String, List<Integer>> map = getMap();
-            map.put( "one", Arrays.asList( 1 ) );
-            map.put( "two", Arrays.asList( 1, 2 ) );
-            map.put( "three", Arrays.asList( 1, 2, 3 ) );
+            /**
+             * Tests the entry methods.
+             */
+            @Test
+            @DisplayName( "General test" )
+            public void test() {
 
-            for ( Map.Entry<String, List<Integer>> entry : map.entrySet() ) {
+                Map<String, List<Integer>> map = getMap();
+                map.put( "one", Arrays.asList( 1 ) );
+                map.put( "two", Arrays.asList( 1, 2 ) );
+                map.put( "three", Arrays.asList( 1, 2, 3 ) );
 
-                switch ( entry.getKey() ) {
+                for ( Map.Entry<String, List<Integer>> entry : map.entrySet() ) {
 
-                    case "one":
-                        assertEquals( Arrays.asList( 1 ), entry.getValue(), "Entry does not have expected value." );
-                        break;
+                    switch ( entry.getKey() ) {
 
-                    case "two":
-                        assertEquals( Arrays.asList( 1, 2 ), entry.getValue(), "Entry does not have expected value." );
-                        assertEquals( Arrays.asList( 1, 2 ), entry.setValue( Arrays.asList( 2 ) ),
-                                "Old value was not the expected." ); // Try setting value.
-                        assertEquals( Arrays.asList( 2 ), entry.getValue(), "Entry does not have expected new value." );
-                        break;
+                        case "one":
+                            assertEquals( Arrays.asList( 1 ), entry.getValue(), "Entry does not have expected value." );
+                            break;
 
-                    case "three":
-                        assertEquals( Arrays.asList( 1, 2, 3 ), entry.getValue(),
-                                "Entry does not have expected value." );
-                        break;
+                        case "two":
+                            assertEquals( Arrays.asList( 1, 2 ), entry.getValue(),
+                                    "Entry does not have expected value." );
+                            assertEquals( Arrays.asList( 1, 2 ), entry.setValue( Arrays.asList( 2 ) ),
+                                    "Old value was not the expected." ); // Try setting value.
+                            assertEquals( Arrays.asList( 2 ), entry.getValue(),
+                                    "Entry does not have expected new value." );
+                            break;
 
-                    default:
-                        fail( "Unexpected key returned" );
+                        case "three":
+                            assertEquals( Arrays.asList( 1, 2, 3 ), entry.getValue(),
+                                    "Entry does not have expected value." );
+                            break;
+
+                        default:
+                            fail( "Unexpected key returned" );
+
+                    }
 
                 }
 
-            }
+                assertEquals( 3, map.size(), "Map does not have expected size." );
+                assertEquals( Arrays.asList( 1 ), map.get( "one" ), "Entry does not have expected value." );
+                assertEquals( Arrays.asList( 2 ), map.get( "two" ), "Entry does not have expected value." );
+                assertEquals( Arrays.asList( 1, 2, 3 ), map.get( "three" ), "Entry does not have expected value." );
 
-            assertEquals( 3, map.size(), "Map does not have expected size." );
-            assertEquals( Arrays.asList( 1 ), map.get( "one" ), "Entry does not have expected value." );
-            assertEquals( Arrays.asList( 2 ), map.get( "two" ), "Entry does not have expected value." );
-            assertEquals( Arrays.asList( 1, 2, 3 ), map.get( "three" ), "Entry does not have expected value." );
+            }
 
         }
 
         /**
-         * Test for {@link Set#toArray()} of {@link Map#entrySet()}.
+         * Test for {@link Set#toArray()}.
          */
         @Test
+        @DisplayName( "toArray() test" )
         public void testToArrayObj() {
 
             Map<String, List<Integer>> map = getMap();
@@ -1554,9 +1602,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Set#toArray(Object[])} of {@link Map#entrySet()}.
+         * Test for {@link Set#toArray(Object[])}.
          */
         @Test
+        @DisplayName( "toArray(T[]) test" )
         public void testToArray() {
 
             final int arrSize = TEST_MAPPINGS.size() + 10;
@@ -1584,20 +1633,23 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Set#add(Object)} of {@link Map#entrySet()}.
+         * Test for {@link Set#add(Object)}.
          */
         @Test
+        @DisplayName( "add(Map.Entry<K,V>) test" )
         public void testAdd() {
 
-            assertThrows( UnsupportedOperationException.class, () -> getMap().keySet().add( "fail" ),
+            assertThrows( UnsupportedOperationException.class,
+                    () -> getMap().entrySet().add( new AbstractMap.SimpleEntry<>( "a", Arrays.asList( 1 ) ) ),
                     "Attempting to add to entry set should throw an exception." );
 
         }
 
         /**
-         * Test for {@link Set#remove(Object)} of {@link Map#entrySet()}.
+         * Test for {@link Set#remove(Object)}.
          */
         @Test
+        @DisplayName( "remove(Object) test" )
         public void testRemove() {
 
             Map<String, List<Integer>> map = getMap();
@@ -1621,9 +1673,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Set#containsAll(Collection)} of {@link Map#entrySet()}.
+         * Test for {@link Set#containsAll(Collection)}.
          */
         @Test
+        @DisplayName( "containsAll(Collection<?>) test" )
         public void testContainsAll() {
 
             Map<String, List<Integer>> emptyMap = new HashMap<>();
@@ -1645,20 +1698,22 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Set#addAll(Collection)} of {@link Map#entrySet()}.
+         * Test for {@link Set#addAll(Collection)}.
          */
         @Test
+        @DisplayName( "addAll(Collection<? extends Map.Entry<K,V>>) test" )
         public void testAddAll() {
 
-            assertThrows( UnsupportedOperationException.class, () -> getMap().keySet().addAll( TEST_MAPPINGS.keySet() ),
+            assertThrows( UnsupportedOperationException.class, () -> getMap().entrySet().addAll( TEST_MAPPINGS.entrySet() ),
                     "Attempting to add to entry set should throw an exception." );
 
         }
 
         /**
-         * Test for {@link Set#removeAll(Collection)} of {@link Map#entrySet()}.
+         * Test for {@link Set#removeAll(Collection)}.
          */
         @Test
+        @DisplayName( "removeAll(Collection<?>) test" )
         public void testRemoveAll() {
 
             Map<String, List<Integer>> map = getMap();
@@ -1706,9 +1761,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Set#retainAll(Collection)} of {@link Map#entrySet()}.
+         * Test for {@link Set#retainAll(Collection)}.
          */
         @Test
+        @DisplayName( "retainAll(Collection<?>) test" )
         public void testRetainAll() {
 
             Map<String, List<Integer>> map = getMap();
@@ -1756,9 +1812,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Set#clear()} of {@link Map#entrySet()}.
+         * Test for {@link Set#clear()}.
          */
         @Test
+        @DisplayName( "clear() test" )
         public void testClear() {
 
             Map<String, List<Integer>> map = getMap();
@@ -1779,9 +1836,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Set#equals(Object)} of {@link Map#entrySet()}.
+         * Test for {@link Set#equals(Object)}.
          */
         @Test
+        @DisplayName( "equals(Object) test" )
         @SuppressWarnings( "unlikely-arg-type" )
         public void testEquals() {
 
@@ -1855,9 +1913,10 @@ public abstract class MapTest {
         }
 
         /**
-         * Test for {@link Set#hashCode()} of {@link Map#entrySet()}.
+         * Test for {@link Set#hashCode()}.
          */
         @Test
+        @DisplayName( "hashCode() test" )
         public void testHashCode() {
 
             Map<String, List<Integer>> map = getMap();
