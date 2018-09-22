@@ -363,7 +363,7 @@ public interface Graph<K, V> {
      * @throws UnsupportedOperationException
      *             if the <tt>putAll</tt> operation is not supported by this graph.
      * @throws NullPointerException
-     *             if the specified graph is <tt>null</tt>, or if the specified map
+     *             if the specified map is <tt>null</tt>, or if the specified map
      *             contains <tt>null</tt> keys, or if this graph does not permit
      *             <tt>null</tt> path elements or values, and the specified map
      *             contains <tt>null</tt> path elements or values.

@@ -19,6 +19,7 @@ package com.github.thiagotgm.bot_utils.utils.graph;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,6 +39,44 @@ public class HashTree<K, V> extends AbstractTree<K, V> {
      * UID that represents this class.
      */
     private static final long serialVersionUID = 8979422862524487918L;
+    
+    /**
+     * Initializes an empty tree.
+     */
+    public HashTree() {}
+
+    /**
+     * Initializes a tree with the mappings from the given graph.
+     *
+     * @param g
+     *            The graph to initialize this with.
+     * @throws NullPointerException
+     *             if the specified graph is <tt>null</tt>, or if this tree does not
+     *             permit <tt>null</tt> keys or values, and the specified graph
+     *             contains <tt>null</tt> keys or values.
+     */
+    public HashTree( Graph<? extends K, ? extends V> g ) throws NullPointerException {
+
+        super( g );
+
+    }
+
+    /**
+     * Initializes a tree with the mappings from the given map.
+     *
+     * @param m
+     *            The map to initialize this with.
+     * @throws NullPointerException
+     *             if the specified map is <tt>null</tt>, or if the specified map
+     *             contains <tt>null</tt> keys, or if this tree does not permit
+     *             <tt>null</tt> path elements or values, and the specified map
+     *             contains <tt>null</tt> path elements or values.
+     */
+    public HashTree( Map<? extends List<? extends K>, ? extends V> m ) throws NullPointerException {
+
+        super( m );
+
+    }
 
     @Override
     protected Node makeRoot() {

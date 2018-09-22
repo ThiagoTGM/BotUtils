@@ -73,10 +73,7 @@ public abstract class AbstractTree<K, V> extends AbstractGraph<K, V> implements 
     protected int nMappings;
 
     /**
-     * Constructs an AbstractTree with a root given by {@link #makeRoot()}.
-     * <p>
-     * It is assumed that the root is empty (no value or children). If not,
-     * {@link #nMappings} should be set to the correct initial value.
+     * Initializes an empty tree.
      */
     public AbstractTree() {
 
@@ -86,7 +83,42 @@ public abstract class AbstractTree<K, V> extends AbstractGraph<K, V> implements 
     }
 
     /**
-     * Creates the root of the tree.
+     * Initializes a tree with the mappings from the given graph.
+     *
+     * @param g
+     *            The graph to initialize this with.
+     * @throws NullPointerException
+     *             if the specified graph is <tt>null</tt>, or if this tree does not
+     *             permit <tt>null</tt> keys or values, and the specified graph
+     *             contains <tt>null</tt> keys or values.
+     */
+    public AbstractTree( Graph<? extends K, ? extends V> g ) throws NullPointerException {
+
+        this();
+        putAll( g );
+
+    }
+
+    /**
+     * Initializes a tree with the mappings from the given map.
+     *
+     * @param m
+     *            The map to initialize this with.
+     * @throws NullPointerException
+     *             if the specified map is <tt>null</tt>, or if the specified map
+     *             contains <tt>null</tt> keys, or if this tree does not permit
+     *             <tt>null</tt> path elements or values, and the specified map
+     *             contains <tt>null</tt> path elements or values.
+     */
+    public AbstractTree( Map<? extends List<? extends K>, ? extends V> m ) throws NullPointerException {
+
+        this();
+        putAll( m );
+
+    }
+
+    /**
+     * Creates the root of the tree. It should contain no value or children.
      * 
      * @return The root.
      */
@@ -303,7 +335,7 @@ public abstract class AbstractTree<K, V> extends AbstractGraph<K, V> implements 
 
         }
 
-        if ( !cur.hasValue() ) {
+        if ( ( cur == null ) || !cur.hasValue() ) {
             return null; // There is already no value for this path.
         }
         V value = cur.removeValue(); // Delete its value.
