@@ -714,8 +714,8 @@ public interface Graph<K, V> {
 
     /**
      * Calculates the hash code of the graph. The hash code of a graph is defined to
-     * be the sum of the hash codes of each entry in the graph's entrySet() view.
-     * This ensures that <tt>g1.equals(g2)</tt> implies that
+     * be the sum of the hash codes of each entry in the graph's <tt>entrySet()</tt>
+     * view. This ensures that <tt>g1.equals(g2)</tt> implies that
      * <tt>g1.hashCode()==g2.hashCode()</tt> for any two graphs <tt>g1</tt> and
      * <tt>g2</tt>.
      *

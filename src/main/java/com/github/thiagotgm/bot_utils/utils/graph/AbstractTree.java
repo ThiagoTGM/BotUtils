@@ -20,7 +20,6 @@ package com.github.thiagotgm.bot_utils.utils.graph;
 import java.io.IOException;
 import java.io.ObjectStreamException;
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.AbstractCollection;
 import java.util.AbstractSet;
 import java.util.ArrayList;
@@ -426,32 +425,15 @@ public abstract class AbstractTree<K, V> extends AbstractGraph<K, V> implements 
             }
 
             @Override
-            @SuppressWarnings( "unchecked" )
             public <T> T[] toArray( T[] a ) {
 
-                Entry<K, V>[] arr = entrySet().toArray( new Entry[0] );
-
-                if ( a.length < arr.length ) { // Resize if necessary.
-                    a = (T[]) Array.newInstance( a.getClass().getComponentType(), arr.length );
+                List<List<K>> paths = new LinkedList<>();
+                for ( List<K> path : this ) {
+                    
+                    paths.add( path );
+                    
                 }
-
-                int i;
-                for ( i = 0; i < arr.length; i++ ) {
-
-                    try {
-                        a[i] = (T) arr[i].getPath(); // Insert each element.
-                    } catch ( ClassCastException e ) {
-                        throw new ArrayStoreException( "Cannot store in given array type." );
-                    }
-
-                }
-                if ( i < a.length ) {
-
-                    a[i] = null; // Fill next space with null, if necessary.
-
-                }
-
-                return a;
+                return paths.toArray( a );
 
             }
 
@@ -615,32 +597,15 @@ public abstract class AbstractTree<K, V> extends AbstractGraph<K, V> implements 
             }
 
             @Override
-            @SuppressWarnings( "unchecked" )
             public <T> T[] toArray( T[] a ) {
 
-                Entry<K, V>[] arr = entrySet().toArray( new Entry[0] );
-
-                if ( a.length < arr.length ) { // Resize if necessary.
-                    a = (T[]) Array.newInstance( a.getClass().getComponentType(), arr.length );
+                List<V> values = new LinkedList<>();
+                for ( V value : this ) {
+                    
+                    values.add( value );
+                    
                 }
-
-                int i;
-                for ( i = 0; i < arr.length; i++ ) {
-
-                    try {
-                        a[i] = (T) arr[i].getValue(); // Insert each element.
-                    } catch ( ClassCastException e ) {
-                        throw new ArrayStoreException( "Cannot store in given array type." );
-                    }
-
-                }
-                if ( i < a.length ) {
-
-                    a[i] = null; // Fill next space with null, if necessary.
-
-                }
-
-                return a;
+                return values.toArray( a );
 
             }
 
@@ -829,32 +794,15 @@ public abstract class AbstractTree<K, V> extends AbstractGraph<K, V> implements 
             }
 
             @Override
-            @SuppressWarnings( "unchecked" )
             public <T> T[] toArray( T[] a ) throws ArrayStoreException {
 
-                Set<Entry<K, V>> entries = getEntries();
-
-                if ( a.length < entries.size() ) { // Check if need to resize.
-                    a = (T[]) Array.newInstance( a.getClass().getComponentType(), entries.size() );
+                List<Entry<K,V>> entries = new LinkedList<>();
+                for ( Entry<K,V> entry : this ) {
+                    
+                    entries.add( entry );
+                    
                 }
-
-                int i = 0;
-                for ( Entry<K, V> entry : entries ) {
-
-                    try {
-                        a[i] = (T) entry; // Fill each entry in array.
-                    } catch ( ClassCastException e ) {
-                        throw new ArrayStoreException( "Cannot store in given array type." );
-                    }
-
-                }
-                if ( i < a.length ) {
-
-                    a[i] = null; // Fill next space with null, if necessary.
-
-                }
-
-                return a;
+                return entries.toArray( a );
 
             }
 
