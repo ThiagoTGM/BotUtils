@@ -59,6 +59,10 @@ public abstract class MapTest {
         TEST_MAPPINGS.put( "tryOne", Arrays.asList( 42 ) );
         TEST_MAPPINGS.put( "Boop", Arrays.asList( -1000, 420, 0, 111 ) );
         TEST_MAPPINGS.put( "empty", Arrays.asList() );
+        TEST_MAPPINGS.put( "maven", Arrays.asList( 2018, 9, 21, 5, 32, 30, 999 ) );
+        TEST_MAPPINGS.put( "cards", Arrays.asList( 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 1 ) );
+        TEST_MAPPINGS.put( "JUnit", Arrays.asList( 5, 13 ) );
+        TEST_MAPPINGS.put( "Magic numbers", Arrays.asList( -1, 0, 1 ) );
 
     }
 
