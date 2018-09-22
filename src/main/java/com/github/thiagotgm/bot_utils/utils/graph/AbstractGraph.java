@@ -17,9 +17,11 @@
 
 package com.github.thiagotgm.bot_utils.utils.graph;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -76,8 +78,12 @@ public abstract class AbstractGraph<K, V> implements Graph<K, V> {
      * @version 1.0
      * @author ThiagoTGM
      * @since 2017-08-20
+     * @param <K>
+     *            Type of keys in the path.
+     * @param <V>
+     *            Type of values being stored.
      */
-    protected abstract class AbstractEntry implements Entry<K, V> {
+    protected static abstract class AbstractEntry<K, V> implements Entry<K, V> {
 
         private final List<K> path;
 
@@ -99,7 +105,7 @@ public abstract class AbstractGraph<K, V> implements Graph<K, V> {
          * @param path
          *            The path of this entry.
          */
-        public AbstractEntry( List<K> path ) {
+        public AbstractEntry( List<? extends K> path ) {
 
             this.path = Collections.unmodifiableList( new ArrayList<>( path ) );
 
@@ -136,6 +142,151 @@ public abstract class AbstractGraph<K, V> implements Graph<K, V> {
         public String toString() {
 
             return String.format( "%s=%s", Objects.toString( getPath() ), Objects.toString( getValue() ) );
+
+        }
+
+    }
+
+    /**
+     * An Entry maintaining a path and a value. The value may be changed using the
+     * <tt>setValue</tt> method.
+     * 
+     * @version 1.0
+     * @author ThiagoTGM
+     * @since 2018-09-22
+     * @param <K>
+     *            Type of keys in the path.
+     * @param <V>
+     *            Type of values being stored.
+     */
+    public static class SimpleEntry<K, V> extends AbstractEntry<K, V> implements Serializable {
+
+        /**
+         * UID that represents this class.
+         */
+        private static final long serialVersionUID = 1514888613884891268L;
+        private V value;
+
+        /**
+         * Creates an entry representing a mapping from the specified path to the
+         * specified value.
+         *
+         * @param path
+         *            The path represented by this entry.
+         * @param value
+         *            The value represented by this entry.
+         */
+        public SimpleEntry( List<? extends K> path, V value ) {
+
+            super( path );
+            this.value = value;
+
+        }
+
+        /**
+         * Creates an entry representing the same mapping as the specified entry.
+         *
+         * @param entry
+         *            The entry to copy.
+         */
+        public SimpleEntry( Graph.Entry<? extends K, ? extends V> entry ) {
+
+            this( entry.getPath(), entry.getValue() );
+
+        }
+
+        /**
+         * Creates an entry representing the same mapping as the specified entry.
+         *
+         * @param entry
+         *            The entry to copy.
+         */
+        public SimpleEntry( Map.Entry<? extends List<? extends K>, ? extends V> entry ) {
+
+            this( entry.getKey(), entry.getValue() );
+
+        }
+
+        @Override
+        public V getValue() {
+
+            return value;
+
+        }
+
+        @Override
+        public V setValue( V value ) {
+
+            V old = this.value;
+            this.value = value;
+            return old;
+
+        }
+
+    }
+
+    /**
+     * An Entry maintaining an immutable key and value. This class does not support
+     * method <tt>setValue</tt>.
+     * 
+     * @version 1.0
+     * @author ThiagoTGM
+     * @since 2018-09-22
+     * @param <K>
+     *            Type of keys in the path.
+     * @param <V>
+     *            Type of values being stored.
+     */
+    public static class SimpleImmutableEntry<K, V> extends SimpleEntry<K, V> {
+
+        /**
+         * UID that represents this class.
+         */
+        private static final long serialVersionUID = -7374205275784152408L;
+
+        /**
+         * Creates an entry representing a mapping from the specified path to the
+         * specified value.
+         *
+         * @param path
+         *            The path represented by this entry.
+         * @param value
+         *            The value represented by this entry.
+         */
+        public SimpleImmutableEntry( List<? extends K> path, V value ) {
+
+            super( path, value );
+
+        }
+
+        /**
+         * Creates an entry representing the same mapping as the specified entry.
+         *
+         * @param entry
+         *            The entry to copy.
+         */
+        public SimpleImmutableEntry( Graph.Entry<? extends K, ? extends V> entry ) {
+
+            super( entry );
+
+        }
+
+        /**
+         * Creates an entry representing the same mapping as the specified entry.
+         *
+         * @param entry
+         *            The entry to copy.
+         */
+        public SimpleImmutableEntry( Map.Entry<? extends List<? extends K>, ? extends V> entry ) {
+
+            super( entry );
+
+        }
+
+        @Override
+        public V setValue( V value ) throws UnsupportedOperationException {
+
+            throw new UnsupportedOperationException( "Immutable entry cannot be modified." );
 
         }
 

@@ -137,7 +137,7 @@ class MappedTree<K, V> extends AbstractGraph<K, V> implements Tree<K, V> {
              * @author ThiagoTGM
              * @since 2018-08-10
              */
-            final class BackedEntry extends AbstractEntry {
+            final class BackedEntry extends AbstractEntry<K,V> {
 
                 private final Map.Entry<List<K>, V> backing;
 

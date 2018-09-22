@@ -1535,7 +1535,7 @@ public abstract class AbstractTree<K, V> extends AbstractGraph<K, V> implements 
      * @author ThiagoTGM
      * @since 2017-08-20
      */
-    protected class TreeGraphEntry extends AbstractEntry {
+    protected class TreeGraphEntry extends AbstractEntry<K,V> {
 
         private final Node node;
 
