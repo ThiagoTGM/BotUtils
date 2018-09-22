@@ -390,6 +390,8 @@ public interface Graph<K, V> {
      * Map.putAll(m)} on the given map. The behavior of this operation is undefined
      * if this graph is modified while the operation is in progress.
      * 
+     * @param <T>
+     *            The type of the map.
      * @param m
      *            Map to store mappings into.
      * @return The map.
@@ -401,7 +403,7 @@ public interface Graph<K, V> {
      *             does not permit <tt>null</tt> values and this graph contains
      *             <tt>null</tt> values.
      */
-    default Map<? super List<? extends K>, ? super V> toMap( Map<? super List<? extends K>, ? super V> m )
+    default <T extends Map<? super List<K>, ? super V>> T toMap( T m )
             throws UnsupportedOperationException, NullPointerException {
 
         if ( m == null ) {
