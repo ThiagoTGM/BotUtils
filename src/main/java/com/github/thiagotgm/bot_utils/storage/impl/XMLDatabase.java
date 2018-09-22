@@ -27,10 +27,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -76,7 +74,20 @@ public class XMLDatabase extends AbstractDatabase implements Saveable {
 	/**
 	 * Trees managed by this database.
 	 */
-	private final Collection<XMLEntry> storage = new LinkedList<>();
+	private final Map<String,XMLEntry> storage = new HashMap<>();
+	
+	/**
+	 * Determines the file that stores data under the given name.
+	 *
+	 * @param dataName The name the data is stored under.
+	 * @return The storage file.
+	 */
+	private File getFile( String dataName ) {
+        
+	    String filename = dataName + ".xml";
+        return path.resolve( filename ).toFile();
+        
+    }
 	
 	@Override
 	public List<Parameter> getLoadParams() {
@@ -163,9 +174,8 @@ public class XMLDatabase extends AbstractDatabase implements Saveable {
 	 */
 	private XMLEntry load( String dataName, XMLElement element ) throws DatabaseException {
 		
-		String filename = dataName + ".xml";
-		LOG.debug( "Loading file {}.", filename );
-		File file = path.resolve( filename ).toFile();
+	    File file = getFile( dataName );
+		LOG.debug( "Loading file {}.", file.getPath() );
 		if ( file.exists() ) {
 			FileInputStream in;
 			try {
@@ -177,6 +187,28 @@ public class XMLDatabase extends AbstractDatabase implements Saveable {
 		}
 		return new XMLEntry( dataName, element );
 		
+	}
+	
+	/**
+	 * Removes the data stored under the given name. Prevents it from being autosaved in the
+	 * future, and deletes the existing file if one exists.
+	 *
+	 * @param dataName The name that the data is stored under.
+	 */
+	private void delete( String dataName ) {
+	    
+	    if ( storage.remove( dataName ) == null ) {
+	        LOG.error( "Attempted to delete nonexistent data '{}'.", dataName );
+	        return; // Data not found.
+	    }
+	    File file = getFile( dataName );
+        LOG.debug( "Deleting file {}.", file.getPath() );
+        try {
+            Files.deleteIfExists( path ); // Try to delete file.
+        } catch ( IOException e ) {
+            LOG.error( "Could not delete data file.", e );
+        }
+	    
 	}
 
 	@Override
@@ -191,10 +223,17 @@ public class XMLDatabase extends AbstractDatabase implements Saveable {
 		XMLHashTree<K,V> tree = new XMLHashTree<>( keyXMLTranslator, valueXMLTranslator );
 		
 		// Load and register tree.
-		storage.add( load( dataName, tree ) );
+		storage.put( dataName, load( dataName, tree ) );
 		
 		return tree;
 		
+	}
+	
+	@Override
+	protected void deleteTree( String treeName ) {
+	    
+	    delete( treeName );
+	    
 	}
 
 	@Override
@@ -210,11 +249,18 @@ public class XMLDatabase extends AbstractDatabase implements Saveable {
 		XMLMap.WrappedMap<K,V> map = new XMLMap.WrappedMap<>( mapClass, keyXMLTranslator, valueXMLTranslator );
 		
 		// Load and register map.
-		storage.add( load( dataName, map ) );
+		storage.put( dataName, load( dataName, map ) );
 		
 		return map;
 		
 	}
+	
+	@Override
+    protected void deleteMap( String mapName ) {
+        
+        delete( mapName );
+        
+    }
 	
 	@Override
 	public synchronized void save() {
@@ -225,11 +271,10 @@ public class XMLDatabase extends AbstractDatabase implements Saveable {
 		
 		LOG.info( "Saving database files." );
 		
-		for ( XMLEntry data : storage ) { // Save each storage element.
+		for ( XMLEntry data : storage.values() ) { // Save each storage element.
 			
-			String filename = data.getName() + ".xml";
-			LOG.debug( "Saving file {}.", filename );
-			File file = path.resolve( filename ).toFile();
+	        File file = getFile( data.getName() );
+			LOG.debug( "Saving file {}.", file.getPath() );
 			try {
 				FileOutputStream out = new FileOutputStream( file );
 				Utils.writeXMLDocument( out, data.getElement() );
