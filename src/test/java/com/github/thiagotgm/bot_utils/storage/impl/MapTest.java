@@ -23,6 +23,7 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -50,19 +51,23 @@ public abstract class MapTest {
     /**
      * Expected mappings used in some tests.
      */
-    protected static final Map<String, List<Integer>> TEST_MAPPINGS = new HashMap<>();
+    protected static final Map<String, List<Integer>> TEST_MAPPINGS;
 
     static {
 
+        Map<String, List<Integer>> testMappings = new HashMap<>();
+
         // Initialize map with test mappings.
-        TEST_MAPPINGS.put( "foobar", Arrays.asList( 20, 43, -10 ) );
-        TEST_MAPPINGS.put( "tryOne", Arrays.asList( 42 ) );
-        TEST_MAPPINGS.put( "Boop", Arrays.asList( -1000, 420, 0, 111 ) );
-        TEST_MAPPINGS.put( "empty", Arrays.asList() );
-        TEST_MAPPINGS.put( "maven", Arrays.asList( 2018, 9, 21, 5, 32, 30, 999 ) );
-        TEST_MAPPINGS.put( "cards", Arrays.asList( 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 1 ) );
-        TEST_MAPPINGS.put( "JUnit", Arrays.asList( 5, 13 ) );
-        TEST_MAPPINGS.put( "Magic numbers", Arrays.asList( -1, 0, 1 ) );
+        testMappings.put( "foobar", Arrays.asList( 20, 43, -10 ) );
+        testMappings.put( "tryOne", Arrays.asList( 42 ) );
+        testMappings.put( "Boop", Arrays.asList( -1000, 420, 0, 111 ) );
+        testMappings.put( "empty", Arrays.asList() );
+        testMappings.put( "maven", Arrays.asList( 2018, 9, 21, 5, 32, 30, 999 ) );
+        testMappings.put( "cards", Arrays.asList( 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 1 ) );
+        testMappings.put( "JUnit", Arrays.asList( 5, 13 ) );
+        testMappings.put( "Magic numbers", Arrays.asList( -1, 0, 1 ) );
+
+        TEST_MAPPINGS = Collections.unmodifiableMap( testMappings );
 
     }
 
@@ -1708,7 +1713,8 @@ public abstract class MapTest {
         @DisplayName( "addAll(Collection<? extends Map.Entry<K,V>>) test" )
         public void testAddAll() {
 
-            assertThrows( UnsupportedOperationException.class, () -> getMap().entrySet().addAll( TEST_MAPPINGS.entrySet() ),
+            assertThrows( UnsupportedOperationException.class,
+                    () -> getMap().entrySet().addAll( TEST_MAPPINGS.entrySet() ),
                     "Attempting to add to entry set should throw an exception." );
 
         }
