@@ -203,7 +203,7 @@ public abstract class AbstractDatabase implements Database {
     protected abstract void deleteTree( String treeName );
 
     @Override
-    public boolean deleteDataTree( String treeName ) {
+    public synchronized boolean deleteDataTree( String treeName ) {
 
         if ( trees.remove( treeName ) != null ) { // Found tree.
             deleteTree( treeName );
@@ -286,7 +286,7 @@ public abstract class AbstractDatabase implements Database {
     protected abstract void deleteMap( String mapName );
 
     @Override
-    public boolean deleteDataMap( String mapName ) {
+    public synchronized boolean deleteDataMap( String mapName ) {
 
         if ( maps.remove( mapName ) != null ) { // Found map.
             deleteTree( mapName );

@@ -17,16 +17,16 @@
 
 package com.github.thiagotgm.bot_utils.storage.impl;
 
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
-
 import com.github.thiagotgm.bot_utils.storage.Database;
 import com.github.thiagotgm.bot_utils.storage.translate.IntegerTranslator;
 import com.github.thiagotgm.bot_utils.storage.translate.ListTranslator;
@@ -41,9 +41,11 @@ import com.github.thiagotgm.bot_utils.utils.graph.TreeTest;
  * @author ThiagoTGM
  * @since 2018-09-21
  */
-@Execution( ExecutionMode.SAME_THREAD )
 @DisplayName( "Database test" )
 public abstract class DatabaseTest {
+
+    private static final AtomicInteger mapCount = new AtomicInteger();
+    private static final AtomicInteger treeCount = new AtomicInteger();
 
     /**
      * The database being used in a test.
@@ -86,7 +88,6 @@ public abstract class DatabaseTest {
     @AfterEach
     public void cleanUp() {
 
-        db.clear(); // Delete all used data.
         if ( closeAfterTest() ) {
             db.close();
         }
@@ -105,13 +106,14 @@ public abstract class DatabaseTest {
     @DisplayName( "Data map test" )
     public class DataMapTest extends MapTest {
 
-        int mapCount = 0;
+        private final List<String> maps = Collections.synchronizedList( new LinkedList<>() );
 
         @Override
         protected Map<String, List<Integer>> getMap() {
 
-            return db.getDataMap( "map-" + mapCount++, new StringTranslator(),
-                    new ListTranslator<>( new IntegerTranslator() ) );
+            String name = "map-" + mapCount.getAndIncrement();
+            maps.add( name );
+            return db.getDataMap( name, new StringTranslator(), new ListTranslator<>( new IntegerTranslator() ) );
 
         }
 
@@ -129,8 +131,27 @@ public abstract class DatabaseTest {
 
         }
 
+        /**
+         * Deletes all the used data maps after each test.
+         */
+        @AfterEach
+        public void deleteMaps() {
+
+            synchronized ( maps ) {
+
+                for ( String map : maps ) {
+
+                    db.deleteDataMap( map ); // Delete each map.
+
+                }
+                maps.clear(); // Clear map list.
+
+            }
+
+        }
+
     }
-    
+
     /**
      * Tests for a data tree in the database.
      * 
@@ -142,13 +163,14 @@ public abstract class DatabaseTest {
     @DisplayName( "Data tree test" )
     public class DataTreeTest extends TreeTest {
 
-        int treeCount = 0;
+        private final List<String> trees = Collections.synchronizedList( new LinkedList<>() );
 
         @Override
         protected Tree<String, List<Integer>> getTree() {
 
-            return db.getDataTree( "tree-" + treeCount++, new StringTranslator(),
-                    new ListTranslator<>( new IntegerTranslator() ) );
+            String name = "tree-" + treeCount.getAndIncrement();
+            trees.add( name );
+            return db.getDataTree( name, new StringTranslator(), new ListTranslator<>( new IntegerTranslator() ) );
 
         }
 
@@ -163,6 +185,25 @@ public abstract class DatabaseTest {
         protected boolean acceptsNullValues() {
 
             return true;
+
+        }
+
+        /**
+         * Deletes all the used data trees after each test.
+         */
+        @AfterEach
+        public void deleteTrees() {
+
+            synchronized ( trees ) {
+
+                for ( String tree : trees ) {
+
+                    db.deleteDataTree( tree ); // Delete each tree.
+
+                }
+                trees.clear(); // Clear tree list.
+
+            }
 
         }
 
