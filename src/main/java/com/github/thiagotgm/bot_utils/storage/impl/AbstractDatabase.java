@@ -276,7 +276,7 @@ public abstract class AbstractDatabase implements Database {
         return map;
 
     }
-    
+
     /**
      * Deletes a data map from the backing storage system.
      *
@@ -966,7 +966,7 @@ public abstract class AbstractDatabase implements Database {
                 throw new IllegalStateException( "The backing database is already closed." );
             }
 
-            return cache.fetch( path, p -> backing.get( p ), p -> backing.containsPath( p ) );
+            return cache.fetch( path, p -> backing.get( (List<?>) p ), p -> backing.containsPath( p ) );
 
         }
 
