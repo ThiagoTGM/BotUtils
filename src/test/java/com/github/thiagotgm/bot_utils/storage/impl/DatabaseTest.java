@@ -56,7 +56,8 @@ public abstract class DatabaseTest {
      * Retrieves the (already loaded) database to be used for testing.
      * <p>
      * Implementations are free to load the database once and always return that
-     * instance, as it will be cleared after each test.
+     * instance, as each test will use maps with unique names and delete them once
+     * the test is over.
      *
      * @return The database.
      */
@@ -75,8 +76,8 @@ public abstract class DatabaseTest {
     /**
      * Determines whether the database received from {@link #getDatabase()} should
      * be closed at the end of a test. If <tt>false</tt>, it will be cleared after
-     * each test, but will not be closed. This would usually be necessary if a
-     * single static instance of the database is to be used for all tests.
+     * each test, but will not be closed (would usually be necessary if a single
+     * static instance of the database is to be used for all tests).
      *
      * @return Whether the database should be closed after each test.
      */
