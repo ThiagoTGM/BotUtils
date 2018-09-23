@@ -18,6 +18,7 @@
 package com.github.thiagotgm.bot_utils.storage;
 
 import java.io.Closeable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -252,13 +253,13 @@ public interface Database extends Closeable {
      */
     default void clear() {
 
-        for ( TreeEntry<?, ?> tree : getDataTrees() ) { // Delete trees.
+        for ( TreeEntry<?, ?> tree : new ArrayList<>( getDataTrees() ) ) { // Delete trees.
 
             deleteDataTree( tree.getName() );
 
         }
 
-        for ( MapEntry<?, ?> map : getDataMaps() ) { // Delete maps.
+        for ( MapEntry<?, ?> map : new ArrayList<>( getDataMaps() ) ) { // Delete maps.
 
             deleteDataMap( map.getName() );
 
