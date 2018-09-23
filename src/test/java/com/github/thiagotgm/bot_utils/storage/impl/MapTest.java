@@ -36,8 +36,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
-import com.github.thiagotgm.bot_utils.storage.Data;
-
 /**
  * Unit tests for an implementation of the {@link Map} interface.
  *
@@ -287,11 +285,11 @@ public abstract class MapTest {
         List<Integer> extraValue = Arrays.asList( 1, 2, 3, 4, 5 );
         map.put( extraKey, extraValue );
 
-        /* Try removing non-existant values */
+        /* Try removing non-existent values */
 
-        assertNull( map.remove( "none" ) );
-        assertNull( map.remove( "I do not exist" ) );
-        assertNull( map.remove( new Integer( 0 ) ) );
+        assertNull( map.remove( "none" ), "Should fail to remove inexistent key." );
+        assertNull( map.remove( "I do not exist" ), "Should fail to remove inexistent key." );
+        assertNull( map.remove( new Integer( 0 ) ), "Should fail to remove wrong-type key." );
 
         // Ensure existing keys weren't changed.
         for ( Map.Entry<String, List<Integer>> entry : TEST_MAPPINGS.entrySet() ) {
@@ -444,8 +442,8 @@ public abstract class MapTest {
         Map<String, List<Integer>> map = getMap();
 
         Map<String, List<Integer>> emptyMap = new HashMap<>();
-        Map<String, List<Integer>> otherMap = new HashMap<>();
-        otherMap.put( "one", Arrays.asList( 1 ) );
+        Map<String, List<Integer>> otherMap = new HashMap<>( TEST_MAPPINGS );
+        otherMap.put( "one", Arrays.asList( 6, 7, 6 ) );
 
         /* Test while empty */
 
@@ -900,9 +898,9 @@ public abstract class MapTest {
         @SuppressWarnings( "unlikely-arg-type" )
         public void testEquals() {
 
-            Map<String, Data> emptyMap = new HashMap<>();
-            Map<String, Data> otherMap = new HashMap<>();
-            otherMap.put( "one", Data.stringData( "haha" ) );
+            Map<String, List<Integer>> emptyMap = new HashMap<>();
+            Map<String, List<Integer>> otherMap = new HashMap<>( TEST_MAPPINGS );
+            otherMap.put( "one", Arrays.asList( 6, 7, 6 ) );
 
             Map<String, List<Integer>> map = getMap();
             Set<String> keys = map.keySet();
@@ -1853,9 +1851,9 @@ public abstract class MapTest {
         @SuppressWarnings( "unlikely-arg-type" )
         public void testEquals() {
 
-            Map<String, Data> emptyMap = new HashMap<>();
-            Map<String, Data> otherMap = new HashMap<>();
-            otherMap.put( "one", Data.stringData( "haha" ) );
+            Map<String, List<Integer>> emptyMap = new HashMap<>();
+            Map<String, List<Integer>> otherMap = new HashMap<>( TEST_MAPPINGS );
+            otherMap.put( "one", Arrays.asList( 6, 7, 6 ) );
 
             Map<String, List<Integer>> map = getMap();
             Set<Map.Entry<String, List<Integer>>> entries = map.entrySet();
