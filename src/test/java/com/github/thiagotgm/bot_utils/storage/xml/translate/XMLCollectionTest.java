@@ -17,7 +17,7 @@
 
 package com.github.thiagotgm.bot_utils.storage.xml.translate;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,8 +27,8 @@ import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import com.github.thiagotgm.bot_utils.storage.xml.XMLTestHelper;
 import com.github.thiagotgm.bot_utils.storage.xml.translate.XMLCollection;
@@ -46,7 +46,7 @@ public class XMLCollectionTest {
     
     private static final Collection<String> EXPECTED = new ArrayList<>( 5 );
     
-    @BeforeClass
+    @BeforeAll
 	public static void setUpExpected() throws Exception {
     	
     	EXPECTED.add( "hi" );
@@ -65,7 +65,7 @@ public class XMLCollectionTest {
 		Collection<String> collection = Utils.readXMLDocument( in,
         		new XMLCollection<String>( (Class<List<String>>) (Class<?>) ArrayList.class, new XMLString() ) );
         
-        assertEquals( "Read collection is not correct.", EXPECTED, collection );
+        assertEquals( EXPECTED, collection, "Read collection is not correct." );
         
     }
     

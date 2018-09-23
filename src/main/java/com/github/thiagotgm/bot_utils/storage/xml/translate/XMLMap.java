@@ -24,6 +24,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import javax.xml.stream.XMLStreamConstants;
@@ -544,6 +547,97 @@ public class XMLMap<K,V> extends AbstractXMLTranslator<Map<K,V>> {
 		}
 
 		@Override
+        public boolean equals( Object o ) {
+
+            return backing.equals( o );
+            
+        }
+
+        @Override
+        public int hashCode() {
+
+            return backing.hashCode();
+            
+        }
+
+        @Override
+        public V getOrDefault( Object key, V defaultValue ) {
+
+            return backing.getOrDefault( key, defaultValue );
+            
+        }
+
+        @Override
+        public void forEach( BiConsumer<? super K, ? super V> action ) {
+
+            backing.forEach( action );
+            
+        }
+
+        @Override
+        public void replaceAll( BiFunction<? super K, ? super V, ? extends V> function ) {
+
+            backing.replaceAll( function );
+            
+        }
+
+        @Override
+        public V putIfAbsent( K key, V value ) {
+
+            return backing.putIfAbsent( key, value );
+            
+        }
+
+        @Override
+        public boolean remove( Object key, Object value ) {
+
+            return backing.remove( key, value );
+            
+        }
+
+        @Override
+        public boolean replace( K key, V oldValue, V newValue ) {
+
+            return backing.replace( key, oldValue, newValue );
+            
+        }
+
+        @Override
+        public V replace( K key, V value ) {
+
+            return backing.replace( key, value );
+            
+        }
+
+        @Override
+        public V computeIfAbsent( K key, Function<? super K, ? extends V> mappingFunction ) {
+
+            return backing.computeIfAbsent( key, mappingFunction );
+            
+        }
+
+        @Override
+        public V computeIfPresent( K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction ) {
+
+            return backing.computeIfPresent( key, remappingFunction );
+            
+        }
+
+        @Override
+        public V compute( K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction ) {
+
+            return backing.compute( key, remappingFunction );
+            
+        }
+
+        @Override
+        public V merge( K key, V value, BiFunction<? super V, ? super V, ? extends V> remappingFunction ) {
+
+            return backing.merge( key, value, remappingFunction );
+            
+        }
+
+        @Override
 		public void read( XMLStreamReader in ) throws XMLStreamException {
 
 			backing.clear();

@@ -17,7 +17,7 @@
 
 package com.github.thiagotgm.bot_utils.storage.xml.translate;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,8 +26,8 @@ import java.util.Map;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import com.github.thiagotgm.bot_utils.storage.xml.XMLTestHelper;
 import com.github.thiagotgm.bot_utils.storage.xml.translate.XMLInteger;
@@ -46,7 +46,7 @@ public class XMLMapTest {
 	
 	private static final Map<String,Integer> EXPECTED = new HashMap<>( 3 );
 
-	@BeforeClass
+	@BeforeAll
 	public static void setUpBeforeClass() throws Exception {
 		
 		EXPECTED.put( "hi", 2523 );
@@ -81,7 +81,7 @@ public class XMLMapTest {
         		new XMLMap<>( (Class<Map<String,Integer>>) (Class<?>) HashMap.class,
         		new XMLString(), new XMLInteger() ) );
         
-        assertEquals( "Read map is not correct.", EXPECTED, map );
+        assertEquals( EXPECTED, map, "Read map is not correct." );
 		
 	}
 	

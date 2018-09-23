@@ -19,23 +19,27 @@ package com.github.thiagotgm.bot_utils.storage.impl;
 
 import static org.junit.jupiter.api.Assumptions.*;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 
 import com.github.thiagotgm.bot_utils.storage.Database;
-import com.github.thiagotgm.bot_utils.storage.impl.DynamoDBDatabase;
 
 /**
- * Unit tests for {@link DynamoDBDatabase}.
+ * Unit tests for {@link XMLDatabase}.
  *
  * @version 2.0
  * @author ThiagoTGM
  * @since 2018-08-30
  */
-@DisplayName( "DynamoDB database test" )
-public class DynamoDBDatabaseTest extends DatabaseTest {
+@DisplayName( "XML database test" )
+public class XMLDatabaseTest extends DatabaseTest {
+
+    private static final String PATH = "test";
 
     private static Database db;
 
@@ -45,22 +49,26 @@ public class DynamoDBDatabaseTest extends DatabaseTest {
     @BeforeAll
     public static void load() {
 
-        Database db = new DynamoDBDatabase();
-        assumeTrue( db.load( Arrays.asList( "yes", "8000", "", "" ) ) );
-        DynamoDBDatabaseTest.db = db;
+        Database db = new XMLDatabase();
+        assumeTrue( db.load( Arrays.asList( PATH ) ) );
+        XMLDatabaseTest.db = db;
 
     }
 
     /**
      * Closes the database after all tests are done.
+     * 
+     * @throws IOException
+     *             if an error happened while deleting the temporary storage folder.
      */
     @AfterAll
-    public static void close() {
+    public static void close() throws IOException {
 
         if ( db != null ) {
             db.close();
             db = null;
         }
+        Files.deleteIfExists( Paths.get( PATH ) );
 
     }
 
@@ -68,14 +76,14 @@ public class DynamoDBDatabaseTest extends DatabaseTest {
     protected Database getDatabase() {
 
         return db;
-        
+
     }
 
     @Override
     protected boolean closeAfterTest() {
 
         return false;
-        
+
     }
 
 }

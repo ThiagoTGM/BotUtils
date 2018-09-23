@@ -57,6 +57,7 @@ import com.amazonaws.services.dynamodbv2.model.KeySchemaElement;
 import com.amazonaws.services.dynamodbv2.model.KeyType;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.amazonaws.services.dynamodbv2.model.ResourceInUseException;
+import com.amazonaws.services.dynamodbv2.model.ResourceNotFoundException;
 import com.amazonaws.services.dynamodbv2.model.ReturnValue;
 import com.amazonaws.services.dynamodbv2.model.ScalarAttributeType;
 import com.github.thiagotgm.bot_utils.storage.Data;
@@ -249,6 +250,28 @@ public class DynamoDBDatabase extends TableDatabase {
 		
 		return new TableMap<>( getTable( dataName ), keyTranslator, valueTranslator );
 		
+	}
+	
+	@Override
+	protected void deleteMap( String mapName ) {
+	    
+	    LOG.debug( "Deleting table '{}'.", mapName );
+	    Table table;
+	    try {
+	        table = dynamoDB.getTable( mapName );
+	    } catch ( ResourceNotFoundException e ) {
+	        LOG.error( "Attempted to delete nonexistent table '{}'.", mapName );
+	        return; // Did not find table.
+	    }
+	    
+        table.delete(); // Delete table.
+        try {
+            table.waitForDelete();
+        } catch ( InterruptedException e ) {
+            LOG.warn( "Interrupted while waiting for table deletion.", e );
+        }
+        LOG.info( "Table deleted." );
+	    
 	}
 	
 	/**
@@ -643,14 +666,7 @@ public class DynamoDBDatabase extends TableDatabase {
 
 			String tableName = table.getTableName();
 			
-			LOG.debug( "Deleting table '{}'.", tableName );
-			table.delete(); // Delete table.
-			try {
-				table.waitForDelete();
-			} catch ( InterruptedException e ) {
-				LOG.warn( "Interrupted while waiting for table deletion.", e );
-			}
-			LOG.info( "Table cleared." );
+			deleteMap( tableName ); // Delete table.
 			
 			table = getTable( tableName ); // Recreate table.
 			

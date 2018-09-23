@@ -195,6 +195,26 @@ public abstract class AbstractDatabase implements Database {
     }
 
     /**
+     * Deletes a data tree from the backing storage system.
+     *
+     * @param treeName
+     *            The name that identifies the data set.
+     */
+    protected abstract void deleteTree( String treeName );
+
+    @Override
+    public synchronized boolean deleteDataTree( String treeName ) {
+
+        if ( trees.remove( treeName ) != null ) { // Found tree.
+            deleteTree( treeName );
+            return true;
+        } else { // No tree found.
+            return false;
+        }
+
+    }
+
+    /**
      * Creates a new data map backed by the storage system.
      * <p>
      * The arguments are guaranteed to not be <tt>null</tt>.
@@ -254,6 +274,26 @@ public abstract class AbstractDatabase implements Database {
         }
 
         return map;
+
+    }
+
+    /**
+     * Deletes a data map from the backing storage system.
+     *
+     * @param mapName
+     *            The name that identifies the data set.
+     */
+    protected abstract void deleteMap( String mapName );
+
+    @Override
+    public synchronized boolean deleteDataMap( String mapName ) {
+
+        if ( maps.remove( mapName ) != null ) { // Found map.
+            deleteTree( mapName );
+            return true;
+        } else { // No map found.
+            return false;
+        }
 
     }
 
@@ -926,7 +966,7 @@ public abstract class AbstractDatabase implements Database {
                 throw new IllegalStateException( "The backing database is already closed." );
             }
 
-            return cache.fetch( path, p -> backing.get( p ), p -> backing.containsPath( p ) );
+            return cache.fetch( path, p -> backing.get( (List<?>) p ), p -> backing.containsPath( p ) );
 
         }
 

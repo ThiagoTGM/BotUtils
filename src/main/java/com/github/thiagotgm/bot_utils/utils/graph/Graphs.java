@@ -518,7 +518,7 @@ public class Graphs {
         }
 
         @Override
-        public Map<? super List<? extends K>, ? super V> toMap( Map<? super List<? extends K>, ? super V> m )
+        public <T extends Map<? super List<K>, ? super V>> T toMap( T m )
                 throws UnsupportedOperationException, NullPointerException {
 
             return backing.toMap( m );
@@ -804,9 +804,8 @@ public class Graphs {
         }
 
         @Override
-        public synchronized Map<? super List<? extends K>, ? super V>
-                toMap( Map<? super List<? extends K>, ? super V> m )
-                        throws UnsupportedOperationException, NullPointerException {
+        public synchronized <T extends Map<? super List<K>, ? super V>> T toMap( T m )
+                throws UnsupportedOperationException, NullPointerException {
 
             return backing.toMap( m );
 

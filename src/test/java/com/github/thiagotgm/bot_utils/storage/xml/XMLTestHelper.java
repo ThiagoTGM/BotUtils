@@ -17,7 +17,7 @@
 
 package com.github.thiagotgm.bot_utils.storage.xml;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -141,7 +141,7 @@ public class XMLTestHelper {
     	
     	byte[] data = toByteArray( expected, translator );
         T actual = fromByteArray( translator, data );
-        assertEquals( "Read element is not correct.", expected, actual );
+        assertEquals( expected, actual, "Read element is not correct." );
     	
     }
     
@@ -163,7 +163,7 @@ public class XMLTestHelper {
     	
     	byte[] data = toByteArray( expected, translator );
         T actual = fromByteArray( translator, data );
-        assertEquals( "Read element is not correct.", expected, actual );
+        assertEquals( expected, actual, "Read element is not correct." );
     	
     }
     
@@ -185,7 +185,7 @@ public class XMLTestHelper {
         
         byte[] data = toByteArray( expected );
         fromByteArray( target, data );
-        assertEquals( "Read element is not correct.", expected, target );
+        assertEquals( expected, target, "Read element is not correct." );
         
     }
 

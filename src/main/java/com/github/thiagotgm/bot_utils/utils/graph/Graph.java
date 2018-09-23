@@ -363,7 +363,7 @@ public interface Graph<K, V> {
      * @throws UnsupportedOperationException
      *             if the <tt>putAll</tt> operation is not supported by this graph.
      * @throws NullPointerException
-     *             if the specified graph is <tt>null</tt>, or if the specified map
+     *             if the specified map is <tt>null</tt>, or if the specified map
      *             contains <tt>null</tt> keys, or if this graph does not permit
      *             <tt>null</tt> path elements or values, and the specified map
      *             contains <tt>null</tt> path elements or values.
@@ -390,6 +390,8 @@ public interface Graph<K, V> {
      * Map.putAll(m)} on the given map. The behavior of this operation is undefined
      * if this graph is modified while the operation is in progress.
      * 
+     * @param <T>
+     *            The type of the map.
      * @param m
      *            Map to store mappings into.
      * @return The map.
@@ -401,7 +403,7 @@ public interface Graph<K, V> {
      *             does not permit <tt>null</tt> values and this graph contains
      *             <tt>null</tt> values.
      */
-    default Map<? super List<? extends K>, ? super V> toMap( Map<? super List<? extends K>, ? super V> m )
+    default <T extends Map<? super List<K>, ? super V>> T toMap( T m )
             throws UnsupportedOperationException, NullPointerException {
 
         if ( m == null ) {
@@ -712,8 +714,8 @@ public interface Graph<K, V> {
 
     /**
      * Calculates the hash code of the graph. The hash code of a graph is defined to
-     * be the sum of the hash codes of each entry in the graph's entrySet() view.
-     * This ensures that <tt>g1.equals(g2)</tt> implies that
+     * be the sum of the hash codes of each entry in the graph's <tt>entrySet()</tt>
+     * view. This ensures that <tt>g1.equals(g2)</tt> implies that
      * <tt>g1.hashCode()==g2.hashCode()</tt> for any two graphs <tt>g1</tt> and
      * <tt>g2</tt>.
      *

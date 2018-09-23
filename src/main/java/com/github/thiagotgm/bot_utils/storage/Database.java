@@ -18,6 +18,7 @@
 package com.github.thiagotgm.bot_utils.storage;
 
 import java.io.Closeable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -133,6 +134,17 @@ public interface Database extends Closeable {
             throws NullPointerException, IllegalStateException, IllegalArgumentException, DatabaseException;
 
     /**
+     * Deletes a tree managed by this database. The data in the backing storage is
+     * also deleted.
+     *
+     * @param treeName
+     *            The name of the tree to be deleted.
+     * @return <tt>true</tt> if the tree was deleted. <tt>false</tt> if this
+     *         database is not managing any tree with the given name.
+     */
+    boolean deleteDataTree( String treeName );
+
+    /**
      * Obtains a data map backed by this database that maps objects to objects.
      * 
      * @param mapName
@@ -160,6 +172,17 @@ public interface Database extends Closeable {
      */
     <K, V> Map<K, V> getDataMap( String mapName, Translator<K> keyTranslator, Translator<V> valueTranslator )
             throws NullPointerException, IllegalStateException, IllegalArgumentException, DatabaseException;
+
+    /**
+     * Deletes a map managed by this database. The data in the backing storage is
+     * also deleted.
+     *
+     * @param mapName
+     *            The name of the map to be deleted.
+     * @return <tt>true</tt> if the map was deleted. <tt>false</tt> if this database
+     *         is not managing any map with the given name.
+     */
+    boolean deleteDataMap( String mapName );
 
     /**
      * Retrieves the number of trees and maps contained by this database.<br>
@@ -218,6 +241,31 @@ public interface Database extends Closeable {
      *             already closed.
      */
     Collection<MapEntry<?, ?>> getDataMaps() throws IllegalStateException;
+
+    /**
+     * Clears all data managed by this database.
+     * <p>
+     * This is equivalent to calling
+     * {@link #deleteDataTree(String)}/{@link #deleteDataMap(String)} for each tree
+     * and map managed by this database. This means that if there is some data in
+     * the backing storage that is not within a tree or map managed by this
+     * instance, it will not be affected.
+     */
+    default void clear() {
+
+        for ( TreeEntry<?, ?> tree : new ArrayList<>( getDataTrees() ) ) { // Delete trees.
+
+            deleteDataTree( tree.getName() );
+
+        }
+
+        for ( MapEntry<?, ?> map : new ArrayList<>( getDataMaps() ) ) { // Delete maps.
+
+            deleteDataMap( map.getName() );
+
+        }
+
+    }
 
     /**
      * A parameter required to load the database.

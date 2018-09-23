@@ -46,6 +46,13 @@ public abstract class TableDatabase extends AbstractDatabase {
 		return Graphs.mappedTree( newMap( dataName, new ListTranslator<>( keyTranslator ), valueTranslator ) );
 		
 	}
+    
+    @Override
+    protected void deleteTree( String treeName ) {
+        
+        deleteMap( treeName ); // Trees are just maps.
+        
+    }
 	
 	/* Partial implementation of the map. */
 	
