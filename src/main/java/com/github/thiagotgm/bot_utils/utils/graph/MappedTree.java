@@ -17,7 +17,6 @@
 
 package com.github.thiagotgm.bot_utils.utils.graph;
 
-import java.lang.reflect.Array;
 import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,12 +26,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Tree that uses a map as backing storage, by using the path list as a key.
  * <p>
- * This wrapper is thread-safe if the backing map is, with the exception of
- * the entry set view (which is not thread-safe).
+ * This wrapper is thread-safe if the backing map is, with the exception of the
+ * entry set view (which is not thread-safe).
  * 
  * @version 1.0
  * @author ThiagoTGM
@@ -59,7 +59,11 @@ class MappedTree<K, V> extends AbstractGraph<K, V> implements Tree<K, V> {
     }
 
     @Override
-    public boolean containsPath( List<?> path ) {
+    public boolean containsPath( List<?> path ) throws NullPointerException {
+
+        if ( path == null ) {
+            throw new NullPointerException( "Path cannot be null." );
+        }
 
         return backing.containsKey( path );
 
@@ -74,6 +78,10 @@ class MappedTree<K, V> extends AbstractGraph<K, V> implements Tree<K, V> {
 
     @Override
     public V get( List<?> path ) throws IllegalArgumentException {
+
+        if ( path == null ) {
+            throw new NullPointerException( "Path cannot be null." );
+        }
 
         return backing.get( path );
 
@@ -98,6 +106,10 @@ class MappedTree<K, V> extends AbstractGraph<K, V> implements Tree<K, V> {
     @Override
     public V put( List<K> path, V value )
             throws UnsupportedOperationException, NullPointerException, IllegalArgumentException {
+
+        if ( path == null ) {
+            throw new NullPointerException( "Path cannot be null." );
+        }
 
         return backing.put( path, value );
 
@@ -137,7 +149,7 @@ class MappedTree<K, V> extends AbstractGraph<K, V> implements Tree<K, V> {
              * @author ThiagoTGM
              * @since 2018-08-10
              */
-            final class BackedEntry extends AbstractEntry<K,V> {
+            final class BackedEntry extends AbstractEntry<K, V> {
 
                 private final Map.Entry<List<K>, V> backing;
 
@@ -311,18 +323,10 @@ class MappedTree<K, V> extends AbstractGraph<K, V> implements Tree<K, V> {
 
             }
 
-            @SuppressWarnings( "unchecked" )
             @Override
             public <T> T[] toArray( T[] a ) {
 
-                Object[] content = backing.toArray();
-                a = (T[]) Array.newInstance( a.getClass().getComponentType(), content.length );
-                for ( int i = 0; i < content.length; i++ ) {
-
-                    a[i] = (T) new BackedEntry( (Map.Entry<List<K>, V>) content[i] );
-
-                }
-                return a;
+                return backing.stream().map( e -> new BackedEntry( e ) ).collect( Collectors.toSet() ).toArray( a );
 
             }
 

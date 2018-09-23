@@ -20,6 +20,8 @@ package com.github.thiagotgm.bot_utils.utils.graph;
 import java.util.HashMap;
 import java.util.List;
 
+import org.junit.jupiter.api.DisplayName;
+
 /**
  * Unit tests for {@link Graphs#mappedTree(java.util.Map) MappedTree}.
  * 
@@ -27,6 +29,7 @@ import java.util.List;
  * @author ThiagoTGM
  * @since 2018-09-22
  */
+@DisplayName( "MappedTree tests" )
 public class MappedTreeTest extends TreeTest {
 
     @Override

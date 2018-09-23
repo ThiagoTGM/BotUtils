@@ -19,6 +19,8 @@ package com.github.thiagotgm.bot_utils.utils.graph;
 
 import java.util.List;
 
+import org.junit.jupiter.api.DisplayName;
+
 
 /**
  * Unit tests for {@link HashTree}.
@@ -27,6 +29,7 @@ import java.util.List;
  * @author ThiagoTGM
  * @since 2018-09-21
  */
+@DisplayName( "HashTree tests" )
 public class HashTreeTest extends TreeTest {
 
     @Override
