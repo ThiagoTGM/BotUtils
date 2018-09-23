@@ -52,7 +52,8 @@ public class Cache<K, V> {
      * Initializes a cache with the given capacity.
      * 
      * @param capacity
-     *            The capacity of the cache.
+     *            The capacity of the cache. If 0 or negative, the cache
+     *            simply won't store anything.
      */
     public Cache( int capacity ) {
 
@@ -146,6 +147,9 @@ public class Cache<K, V> {
             return node.setValue( value ); // Set new value.
         } else { // No existing node.
             if ( keyMap.size() >= capacity ) { // Already reached capacity.
+                if ( capacity <= 0 ) {
+                    return null; // Can't store anything.
+                }
                 nodeMap.remove( data.removeLast() ); // Remove least recently used node.
             }
             keyMap.put( key, data.add( value ) ); // Add new data.
